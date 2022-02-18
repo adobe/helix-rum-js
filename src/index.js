@@ -9,16 +9,18 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-
+/* eslint-env browser */
 
 /**
  * log RUM if part of the sample.
  * @param {string} checkpoint identifies the checkpoint in funnel
  * @param {Object} data additional data for RUM sample
- * @param {string} data.source DOM node that is the source of a checkpoint event, identified by #id or .classname
- * @param {string} data.target subject of the checkpoint event, for instance the href of a link, or a search term
+ * @param {string} data.source DOM node that is the source of a checkpoint event,
+ * identified by #id or .classname
+ * @param {string} data.target subject of the checkpoint event,
+ * for instance the href of a link, or a search term
  */
- export function sampleRUM(checkpoint, data = {}) {
+export function sampleRUM(checkpoint, data = {}) {
   try {
     window.hlx = window.hlx || {};
     if (!window.hlx.rum) {
@@ -35,8 +37,15 @@
     const { random, weight, id } = window.hlx.rum;
     if (random && (random * weight < 1)) {
       const sendPing = () => {
-        // eslint-disable-next-line object-curly-newline, max-len, no-use-before-define
-        const body = JSON.stringify({ weight, id, referer: window.location.href, generation: RUM_GENERATION || '__HELIX_RUM_JS_VERSION__', checkpoint, ...data });
+        // eslint-disable-next-line no-use-before-define
+        const body = JSON.stringify({
+          weight,
+          id,
+          referer: window.location.href,
+          generation: window.RUM_GENERATION || '__HELIX_RUM_JS_VERSION__',
+          checkpoint,
+          ...data,
+        });
         const url = `https://rum.hlx3.page/.rum/${weight}`;
         // eslint-disable-next-line no-unused-expressions
         navigator.sendBeacon(url, body);
@@ -49,7 +58,9 @@
         script.src = 'https://rum.hlx3.page/.rum/web-vitals/dist/web-vitals.iife.js';
         script.onload = () => {
           const storeCWV = (measurement) => {
+            // eslint-disable-next-line no-param-reassign
             data.cwv = {};
+            // eslint-disable-next-line no-param-reassign
             data.cwv[measurement.name] = measurement.value;
             sendPing();
           };
