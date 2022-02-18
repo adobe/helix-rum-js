@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": " c8 mocha",
-    "test-ci": "c8 mocha && codecov",
+    "test-ci": "c8 mocha --check-coverage=no && codecov",
     "lint": "eslint .",
     "docs": "npx jsdoc2md -c .jsdoc.json --files 'src/*.js'  > docs/API.md",
     "semantic-release": "semantic-release",
