@@ -12,13 +12,24 @@
 
 ## Installation
 
-```bash
-$ npm install @adobe/helix-rum-js
+Add the following to your page to add the basic RUM instrumentation:
+
+```html
+<script src="https://rum.hlx3.page/.rum/@adobe/helix-rum-js@^1/src/index.js" type="module"></script>
 ```
+
+You can pin a version number by using a URL like `https://rum.hlx3.page/.rum/@adobe/helix-rum-js@1.0.0/src/index.js` instead.
 
 ## Usage
 
-See the [API documentation](docs/API.md).
+If you want to collect a RUM event programmatically, use this in your JavaScript code:
+
+
+```javascript
+import { sampleRUM } from 'https://rum.hlx3.page/.rum/@adobe/helix-rum-js@^1/src/index.js';
+```
+
+For usage of the `sampleRUM` function, follow the [API documentation](docs/API.md).
 
 ## Development
 
