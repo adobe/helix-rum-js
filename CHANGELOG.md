@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/adobe/helix-rum-js/compare/v1.0.0...v1.0.1) (2023-01-12)
+
+
+### Bug Fixes
+
+* Use node 18 for circleci and AWS ([#44](https://github.com/adobe/helix-rum-js/issues/44)) ([ef58e12](https://github.com/adobe/helix-rum-js/commit/ef58e12db11bcbe601fa8728bf491caede2956ea))
+
 # 1.0.0 (2022-02-18)
 
 
