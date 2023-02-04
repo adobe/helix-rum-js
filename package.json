@@ -38,7 +38,7 @@
     "codecov": "3.8.3",
     "commitizen": "4.3.0",
     "cz-conventional-changelog": "3.3.0",
-    "eslint": "8.32.0",
+    "eslint": "8.33.0",
     "husky": "8.0.3",
     "jsdoc-to-markdown": "8.0.0",
     "junit-report-builder": "3.0.1",
