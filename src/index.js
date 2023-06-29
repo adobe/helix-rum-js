@@ -21,6 +21,23 @@
  * for instance the href of a link, or a search term
  */
 export function sampleRUM(checkpoint, data = {}) {
+  sampleRUM.defer = sampleRUM.defer || [];
+  const defer = (fnname) => {
+    sampleRUM[fnname] = sampleRUM[fnname]
+      || ((...args) => sampleRUM.defer.push({ fnname, args }));
+  };
+  sampleRUM.drain = sampleRUM.drain
+    || ((dfnname, fn) => {
+      sampleRUM[dfnname] = fn;
+      sampleRUM.defer
+        .filter(({ fnname }) => dfnname === fnname)
+        .forEach(({ fnname, args }) => sampleRUM[fnname](...args));
+    });
+  sampleRUM.on = (chkpnt, fn) => {
+    sampleRUM.cases[chkpnt] = fn;
+  };
+  defer('observe');
+  defer('cwv');
   try {
     window.hlx = window.hlx || {};
     if (!window.hlx.rum) {
@@ -31,49 +48,41 @@ export function sampleRUM(checkpoint, data = {}) {
       const id = `${hashCode(window.location.href)}-${new Date().getTime()}-${Math.random().toString(16).substr(2, 14)}`;
       const random = Math.random();
       const isSelected = (random * weight < 1);
-      // eslint-disable-next-line object-curly-newline
-      window.hlx.rum = { weight, id, random, isSelected };
+      const urlSanitizers = {
+        full: () => window.location.href,
+        origin: () => window.location.origin,
+        path: () => window.location.href.replace(/\?.*$/, ''),
+      };
+      // eslint-disable-next-line object-curly-newline, max-len
+      window.hlx.rum = { weight, id, random, isSelected, sampleRUM, sanitizeURL: urlSanitizers[window.hlx.RUM_MASK_URL || 'path'] };
     }
-    const { random, weight, id } = window.hlx.rum;
-    if (random && (random * weight < 1)) {
-      const sendPing = () => {
-        // eslint-disable-next-line no-use-before-define
-        const body = JSON.stringify({
-          weight,
-          id,
-          referer: window.location.href,
-          generation: window.RUM_GENERATION || '__HELIX_RUM_JS_VERSION__',
-          checkpoint,
-          ...data,
-        });
-        const url = `https://rum.hlx3.page/.rum/${weight}`;
+    const { weight, id } = window.hlx.rum;
+    if (window.hlx && window.hlx.rum && window.hlx.rum.isSelected) {
+      const sendPing = (pdata = data) => {
+        // eslint-disable-next-line object-curly-newline, max-len, no-use-before-define
+        const body = JSON.stringify({ weight, id, referer: window.hlx.rum.sanitizeURL(), checkpoint, ...data });
+        const url = `https://rum.hlx.page/.rum/${weight}`;
         // eslint-disable-next-line no-unused-expressions
         navigator.sendBeacon(url, body);
+        // eslint-disable-next-line no-console
+        console.debug(`ping:${checkpoint}`, pdata);
       };
-      sendPing();
-      // special case CWV
-      if (checkpoint === 'cwv') {
-        // use classic script to avoid CORS issues
-        const script = document.createElement('script');
-        script.src = 'https://rum.hlx3.page/.rum/web-vitals/dist/web-vitals.iife.js';
-        script.onload = () => {
-          const storeCWV = (measurement) => {
-            // eslint-disable-next-line no-param-reassign
-            data.cwv = {};
-            // eslint-disable-next-line no-param-reassign
-            data.cwv[measurement.name] = measurement.value;
-            sendPing();
-          };
-            // When loading `web-vitals` using a classic script, all the public
-            // methods can be found on the `webVitals` global namespace.
-          window.webVitals.getCLS(storeCWV);
-          window.webVitals.getFID(storeCWV);
-          window.webVitals.getLCP(storeCWV);
-        };
-        document.head.appendChild(script);
+      sampleRUM.cases = sampleRUM.cases || {
+        cwv: () => sampleRUM.cwv(data) || true,
+        lazy: () => {
+          // use classic script to avoid CORS issues
+          const script = document.createElement('script');
+          script.src = 'https://rum.hlx.page/.rum/@adobe/helix-rum-enhancer@^1/src/index.js';
+          document.head.appendChild(script);
+          return true;
+        },
+      };
+      sendPing(data);
+      if (sampleRUM.cases[checkpoint]) {
+        sampleRUM.cases[checkpoint]();
       }
     }
-  } catch (e) {
+  } catch (error) {
     // something went wrong
   }
 }
