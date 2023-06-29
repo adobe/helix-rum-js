@@ -16,7 +16,7 @@ If you want to collect a RUM event programmatically, use this in your JavaScript
 
 
 ```javascript
-import { sampleRUM } from 'https://rum.hlx3.page/.rum/@adobe/helix-rum-js@^1/src/index.js';
+import { sampleRUM } from 'https://rum.hlx.page/.rum/@adobe/helix-rum-js@^1/src/index.js';
 
 sampleRUM('top');
 window.addEventListener('load', () => sampleRUM('load'));
