@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/adobe/helix-rum-js/compare/v1.0.1...v1.1.0) (2023-06-29)
+
+
+### Features
+
+* **rum:** update to latest boilerplate RUM code ([b2216c2](https://github.com/adobe/helix-rum-js/commit/b2216c29287ebfcf4653da33028889db1784b285))
+
 ## [1.0.1](https://github.com/adobe/helix-rum-js/compare/v1.0.0...v1.0.1) (2023-01-12)
 
 
