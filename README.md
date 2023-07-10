@@ -23,12 +23,14 @@ window.addEventListener('load', () => sampleRUM('load'));
 document.addEventListener('click', () => sampleRUM('click'));
 ```
 
-In order to distinguish between site versions or code variants that may affect Core Web Vitals Performance, you can add a `generation` parameter in two ways:
-
-1. import the script from `'https://rum.hlx.page/.rum/@adobe/helix-rum-js@^1/src/index.js?generation=my_generation'`
-2. set a global variable `RUM_GENERATION` (this will take precedence over the above)
-
 You can pin a version number by using a URL like `https://rum.hlx.page/.rum/@adobe/helix-rum-js@1.0.0/src/index.js` instead.
+
+To enable advanced RUM functionality, such as reporting of Core Web Vitals, fire the `lazy` checkpoint as soon as your render-critical Javascript has executed.
+
+```javascript
+// after all render-critical Javascript has been run
+sampleRUM('lazy');
+```
 
 For usage of the `sampleRUM` function, follow the [API documentation](docs/API.md).
 
