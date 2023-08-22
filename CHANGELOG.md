@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/adobe/helix-rum-js/compare/v1.1.0...v1.2.0) (2023-08-22)
+
+
+### Features
+
+* enable listeners to all RUM events, not just the sampled ones ([26d9b2e](https://github.com/adobe/helix-rum-js/commit/26d9b2e8afd00458d3b050d3fd152fb55a26adcb))
+
 # [1.1.0](https://github.com/adobe/helix-rum-js/compare/v1.0.1...v1.1.0) (2023-06-29)
 
 
