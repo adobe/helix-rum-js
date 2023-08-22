@@ -33,6 +33,10 @@ export function sampleRUM(checkpoint, data = {}) {
         .filter(({ fnname }) => dfnname === fnname)
         .forEach(({ fnname, args }) => sampleRUM[fnname](...args));
     });
+  sampleRUM.always = sampleRUM.always || [];
+  sampleRUM.always.on = (chkpnt, fn) => {
+    sampleRUM.always[chkpnt] = fn;
+  };
   sampleRUM.on = (chkpnt, fn) => {
     sampleRUM.cases[chkpnt] = fn;
   };
@@ -81,6 +85,9 @@ export function sampleRUM(checkpoint, data = {}) {
       if (sampleRUM.cases[checkpoint]) {
         sampleRUM.cases[checkpoint]();
       }
+    }
+    if (sampleRUM.always[checkpoint]) {
+      sampleRUM.always[checkpoint](data);
     }
   } catch (error) {
     // something went wrong
