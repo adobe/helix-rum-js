@@ -1,3 +1,11 @@
+# [1.3.0](https://github.com/adobe/helix-rum-js/compare/v1.2.0...v1.3.0) (2023-09-05)
+
+
+### Features
+
+* lower entropy of rum id. Add millis since first read ([5295681](https://github.com/adobe/helix-rum-js/commit/5295681b6c6f7e5c7f541e058a6bde55892ecc32))
+* lower entropy of rum id. Add millis since first read ([51c0a59](https://github.com/adobe/helix-rum-js/commit/51c0a5954c70128fde553c6ab0e0438799b56db0))
+
 # [1.2.0](https://github.com/adobe/helix-rum-js/compare/v1.1.0...v1.2.0) (2023-08-22)
 
 
