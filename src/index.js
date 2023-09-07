@@ -11,6 +11,41 @@
  */
 /* eslint-env browser */
 
+const handler = {
+  defers: {},
+  defercalls: [],
+  get(target, prop) {
+    // eslint-disable-next-line no-prototype-builtins
+    if (target.hasOwnProperty(prop)) {
+      return target[prop];
+    }
+    if (this.defers[prop]) {
+      return this.defers[prop];
+    }
+    if (prop === 'drain') {
+      return (...args) => this.drain(target, args[0], args[1]);
+    }
+    this.defers[prop] = (...deferargs) => {
+      this.defercalls.push([prop, deferargs]);
+    };
+    return this.defers[prop];
+  },
+  set(target, prop, value) {
+    const ret = Reflect.set(target, prop, value);
+    if (typeof value === 'function') {
+      this.drain(target, prop);
+    }
+    return ret;
+  },
+
+  drain(target, fnname) {
+    this.defercalls
+      .map((defercall) => ({ name: defercall[0], callargs: defercall[1] }))
+      .filter(({ name }) => name === fnname)
+      .forEach(({ name, callargs }) => target[name](...callargs));
+  },
+};
+
 /**
  * log RUM if part of the sample.
  * @param {string} checkpoint identifies the checkpoint in funnel
@@ -20,28 +55,18 @@
  * @param {string} data.target subject of the checkpoint event,
  * for instance the href of a link, or a search term
  */
-export function sampleRUM(checkpoint, data = {}) {
-  sampleRUM.defer = sampleRUM.defer || [];
-  const defer = (fnname) => {
-    sampleRUM[fnname] = sampleRUM[fnname]
-      || ((...args) => sampleRUM.defer.push({ fnname, args }));
+// eslint-disable-next-line no-use-before-define
+export const sampleRUM = new Proxy(internalSampleRUM, handler);
+
+function internalSampleRUM(checkpoint, data = {}) {
+  internalSampleRUM.always = internalSampleRUM.always || [];
+  internalSampleRUM.always.on = (chkpnt, fn) => {
+    internalSampleRUM.always[chkpnt] = fn;
   };
-  sampleRUM.drain = sampleRUM.drain
-    || ((dfnname, fn) => {
-      sampleRUM[dfnname] = fn;
-      sampleRUM.defer
-        .filter(({ fnname }) => dfnname === fnname)
-        .forEach(({ fnname, args }) => sampleRUM[fnname](...args));
-    });
-  sampleRUM.always = sampleRUM.always || [];
-  sampleRUM.always.on = (chkpnt, fn) => {
-    sampleRUM.always[chkpnt] = fn;
+  internalSampleRUM.on = (chkpnt, fn) => {
+    internalSampleRUM.cases[chkpnt] = fn;
   };
-  sampleRUM.on = (chkpnt, fn) => {
-    sampleRUM.cases[chkpnt] = fn;
-  };
-  defer('observe');
-  defer('cwv');
+
   try {
     window.hlx = window.hlx || {};
     if (!window.hlx.rum) {
@@ -71,7 +96,7 @@ export function sampleRUM(checkpoint, data = {}) {
         // eslint-disable-next-line no-console
         console.debug(`ping:${checkpoint}`, pdata);
       };
-      sampleRUM.cases = sampleRUM.cases || {
+      internalSampleRUM.cases = internalSampleRUM.cases || {
         cwv: () => sampleRUM.cwv(data) || true,
         lazy: () => {
           // use classic script to avoid CORS issues
@@ -82,12 +107,12 @@ export function sampleRUM(checkpoint, data = {}) {
         },
       };
       sendPing(data);
-      if (sampleRUM.cases[checkpoint]) {
-        sampleRUM.cases[checkpoint]();
+      if (internalSampleRUM.cases[checkpoint]) {
+        internalSampleRUM.cases[checkpoint]();
       }
     }
-    if (sampleRUM.always[checkpoint]) {
-      sampleRUM.always[checkpoint](data);
+    if (internalSampleRUM.always[checkpoint]) {
+      internalSampleRUM.always[checkpoint](data);
     }
   } catch (error) {
     // something went wrong
