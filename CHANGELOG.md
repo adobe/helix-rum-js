@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/adobe/helix-rum-js/compare/v1.3.0...v1.4.0) (2023-09-07)
+
+
+### Features
+
+* filter unknown properties out from the beacon ([629feb7](https://github.com/adobe/helix-rum-js/commit/629feb7e113c33a7533a64fb9091f75d478d0272))
+
 # [1.3.0](https://github.com/adobe/helix-rum-js/compare/v1.2.0...v1.3.0) (2023-09-05)
 
 
