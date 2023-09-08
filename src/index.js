@@ -11,10 +11,13 @@
  */
 /* eslint-env browser */
 
-const handler = {
+const rumHandler = {
   defers: {},
   defercalls: [],
   get(target, prop) {
+    if (prop === 'always') {
+      target.loadEnhancer();
+    }
     // eslint-disable-next-line no-prototype-builtins
     if (target.hasOwnProperty(prop)) {
       return target[prop];
@@ -56,7 +59,7 @@ const handler = {
  * for instance the href of a link, or a search term
  */
 // eslint-disable-next-line no-use-before-define
-export const sampleRUM = new Proxy(internalSampleRUM, handler);
+export const sampleRUM = new Proxy(internalSampleRUM, rumHandler);
 
 function internalSampleRUM(checkpoint, data = {}) {
   internalSampleRUM.always = internalSampleRUM.always || [];
@@ -65,6 +68,17 @@ function internalSampleRUM(checkpoint, data = {}) {
   };
   internalSampleRUM.on = (chkpnt, fn) => {
     internalSampleRUM.cases[chkpnt] = fn;
+  };
+  internalSampleRUM.loadEnhancer = () => {
+    if (internalSampleRUM.enhancerLoaded) {
+      return false;
+    }
+    internalSampleRUM.enhancerLoaded = true;
+    // use classic script to avoid CORS issues
+    const script = document.createElement('script');
+    script.src = 'https://rum.hlx.page/.rum/@adobe/helix-rum-enhancer@^1/src/index.js';
+    document.head.appendChild(script);
+    return true;
   };
 
   try {
@@ -98,13 +112,7 @@ function internalSampleRUM(checkpoint, data = {}) {
       };
       internalSampleRUM.cases = internalSampleRUM.cases || {
         cwv: () => sampleRUM.cwv(data) || true,
-        lazy: () => {
-          // use classic script to avoid CORS issues
-          const script = document.createElement('script');
-          script.src = 'https://rum.hlx.page/.rum/@adobe/helix-rum-enhancer@^1/src/index.js';
-          document.head.appendChild(script);
-          return true;
-        },
+        lazy: () => internalSampleRUM.loadEnhancer(),
       };
       sendPing(data);
       if (internalSampleRUM.cases[checkpoint]) {
