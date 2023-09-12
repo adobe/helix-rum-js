@@ -32,6 +32,12 @@ To enable advanced RUM functionality, such as reporting of Core Web Vitals, fire
 sampleRUM('lazy');
 ```
 
+While the above line enables collection of Core Web Vitals as a prerequisite, the `cwv` checkpoint must also be fired to actually perform the collection.  Typically this is called with a 3-second delay after page load to not interfere with performance.
+
+```javascript
+sampleRUM('cwv');
+```
+
 For usage of the `sampleRUM` function, follow the [API documentation](docs/API.md).
 
 ## Development
