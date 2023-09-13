@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Adobe. All rights reserved.
+ * Copyright 2023 Adobe. All rights reserved.
  * This file is licensed to you under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License. You may obtain a copy
  * of the License at http://www.apache.org/licenses/LICENSE-2.0
@@ -9,11 +9,22 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-
-module.exports = {
-  root: true,
-  extends: '@adobe/helix',
-  env: {
-    browser: true,
+export default {
+  coverageConfig: {
+    report: true,
+    reportDir: 'coverage',
+    threshold: {
+      statements: 100,
+      branches: 100,
+      functions: 100,
+      lines: 100,
+    },
+    exclude: [
+      'test/fixtures/**',
+      'node_modules/**',
+    ],
   },
+  files: [
+    'test/**/*.test.{html,js}',
+  ],
 };
