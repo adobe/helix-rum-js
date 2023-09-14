@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/adobe/helix-rum-js/compare/v1.4.0...v1.4.1) (2023-09-14)
+
+
+### Bug Fixes
+
+* **cwv:** add cwv metrics to known properties ([a8048c5](https://github.com/adobe/helix-rum-js/commit/a8048c5e9eb399b992acc71a3a6bba3164f8c239))
+
 # [1.4.0](https://github.com/adobe/helix-rum-js/compare/v1.3.0...v1.4.0) (2023-09-07)
 
 
