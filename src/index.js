@@ -21,6 +21,8 @@
  * for instance the href of a link, or a search term
  */
 export function sampleRUM(checkpoint, data = {}) {
+  sampleRUM.baseURL = sampleRUM.baseURL || window.rumBase || 'https://rum.hlx.page';
+  sampleRUM.baseURL = sampleRUM.baseURL.startsWith('/') ? `${window.location.origin}${sampleRUM.baseURL}` : sampleRUM.baseURL;
   sampleRUM.defer = sampleRUM.defer || [];
   const defer = (fnname) => {
     sampleRUM[fnname] = sampleRUM[fnname]
@@ -65,7 +67,7 @@ export function sampleRUM(checkpoint, data = {}) {
       const sendPing = (pdata = data) => {
         // eslint-disable-next-line object-curly-newline, max-len, no-use-before-define
         const body = JSON.stringify({ weight, id, referer: window.hlx.rum.sanitizeURL(), checkpoint, t: (Date.now() - firstReadTime), ...data }, knownProperties);
-        const url = new URL(`.rum/${weight}`, window.location).href;
+        const url = new URL(`.rum/${weight}`, sampleRUM.baseURL).href;
         // eslint-disable-next-line no-unused-expressions
         navigator.sendBeacon(url, body);
         // eslint-disable-next-line no-console
@@ -76,7 +78,7 @@ export function sampleRUM(checkpoint, data = {}) {
         lazy: () => {
           // use classic script to avoid CORS issues
           const script = document.createElement('script');
-          script.src = 'https://rum.hlx.page/.rum/@adobe/helix-rum-enhancer@^1/src/index.js';
+          script.src = new URL('.rum/@adobe/helix-rum-enhancer@^1/src/index.js', sampleRUM.baseURL).href;
           document.head.appendChild(script);
           return true;
         },
