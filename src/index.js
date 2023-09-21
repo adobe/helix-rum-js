@@ -21,8 +21,7 @@
  * for instance the href of a link, or a search term
  */
 export function sampleRUM(checkpoint, data = {}) {
-  sampleRUM.baseURL = sampleRUM.baseURL || window.rumBase || 'https://rum.hlx.page';
-  sampleRUM.baseURL = sampleRUM.baseURL.startsWith('/') ? `${window.location.origin}${sampleRUM.baseURL}` : sampleRUM.baseURL;
+  sampleRUM.baseURL = sampleRUM.baseURL || new URL(window.RUM_BASE == null ? 'https://rum.hlx.page' : window.RUM_BASE, window.location);
   sampleRUM.defer = sampleRUM.defer || [];
   const defer = (fnname) => {
     sampleRUM[fnname] = sampleRUM[fnname]
