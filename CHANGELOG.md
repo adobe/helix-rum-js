@@ -1,3 +1,12 @@
+# [1.5.0](https://github.com/adobe/helix-rum-js/compare/v1.4.1...v1.5.0) (2023-09-21)
+
+
+### Features
+
+* **index:** enable configurable base url ([b1dace5](https://github.com/adobe/helix-rum-js/commit/b1dace5f11288117b92b0a3eb55b74fb58811a7c))
+* **index:** enable relative URL as beacon destination ([528ce77](https://github.com/adobe/helix-rum-js/commit/528ce775e0ed7ffe3d8b9a4801cf47ec8decef52))
+* **index:** simplify code ([7085202](https://github.com/adobe/helix-rum-js/commit/7085202da0237dfebb3fab88c5d15f9c5942259e))
+
 ## [1.4.1](https://github.com/adobe/helix-rum-js/compare/v1.4.0...v1.4.1) (2023-09-14)
 
 
