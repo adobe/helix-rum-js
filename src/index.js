@@ -26,7 +26,7 @@ const rumHandler = {
       return this.defers[prop];
     }
     if (prop === 'drain') {
-      return (...args) => this.drain(target, args[0], args[1]);
+      return (...args) => this.set(target, args[0], args[1]);
     }
     this.defers[prop] = (...deferargs) => {
       this.defercalls.push([prop, deferargs]);
