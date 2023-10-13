@@ -40,7 +40,9 @@ const rumHandler = {
     }
     return ret;
   },
-
+  apply(target, thisArg, args) {
+    return args && args.length > 0 && args[0] === 'top' ? undefined : target(args);
+  },
   drain(target, fnname) {
     this.defercalls
       .map((defercall) => ({ name: defercall[0], callargs: defercall[1] }))
@@ -58,9 +60,6 @@ const rumHandler = {
  * @param {string} data.target subject of the checkpoint event,
  * for instance the href of a link, or a search term
  */
-// eslint-disable-next-line no-use-before-define
-export const sampleRUM = new Proxy(internalSampleRUM, rumHandler);
-
 function internalSampleRUM(checkpoint, data = {}) {
   internalSampleRUM.always = internalSampleRUM.always || [];
   internalSampleRUM.always.on = (chkpnt, fn) => {
@@ -126,3 +125,7 @@ function internalSampleRUM(checkpoint, data = {}) {
     // something went wrong
   }
 }
+
+// eslint-disable-next-line no-use-before-define
+export const sampleRUM = new Proxy(internalSampleRUM, rumHandler);
+internalSampleRUM('top');
