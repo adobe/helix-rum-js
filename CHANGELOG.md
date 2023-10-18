@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/adobe/helix-rum-js/compare/v1.5.0...v1.6.0) (2023-10-18)
+
+
+### Features
+
+* **cwv:** add support for TTFB ([70b283a](https://github.com/adobe/helix-rum-js/commit/70b283a142bedb3a45142e876b2177bc3091ec93))
+
 # [1.5.0](https://github.com/adobe/helix-rum-js/compare/v1.4.1...v1.5.0) (2023-09-21)
 
 
