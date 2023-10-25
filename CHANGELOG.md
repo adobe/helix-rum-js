@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/adobe/helix-rum-js/compare/v1.6.0...v1.7.0) (2023-10-25)
+
+
+### Features
+
+* **checkpoint:** track pages viewed per session ([d224c64](https://github.com/adobe/helix-rum-js/commit/d224c64919b92a0b9915ef9a7ee8205e99704cef))
+
 # [1.6.0](https://github.com/adobe/helix-rum-js/compare/v1.5.0...v1.6.0) (2023-10-18)
 
 
