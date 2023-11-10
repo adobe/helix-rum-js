@@ -11,14 +11,15 @@
  */
 /* eslint-env browser */
 const KNOWN_PROPERTIES = ['weight', 'id', 'referer', 'checkpoint', 't', 'source', 'target', 'cwv', 'CLS', 'FID', 'LCP', 'INP', 'TTFB'];
+const DEFAULT_CHECKPOINTS = ['click', 'cwv', 'form', 'enterleave', 'observeblock', 'observemedia'];
 const SESSION_STORAGE_KEY = 'aem-rum';
+const { sampleRUM, queue, isSelected } = window.hlx.rum;
+
 const urlSanitizers = {
   full: () => window.location.href,
   origin: () => window.location.origin,
   path: () => window.location.href.replace(/\?.*$/, ''),
 };
-const { sampleRUM, queue, isSelected } = window.hlx.rum;
-let left = false;
 
 const targetselector = (element) => {
   let value = element.getAttribute('href') || element.currentSrc || element.getAttribute('src')
@@ -53,10 +54,22 @@ const sourceselector = (element) => {
   return sourceselector(element.parentElement);
 };
 
+const formSubmitListener = (e) => sampleRUM('formsubmit', { target: targetselector(e.target), source: sourceselector(e.target) });
+// eslint-disable-next-line no-use-before-define
+const mutationObserver = window.MutationObserver ? new MutationObserver(mutationsCallback) : null;
+
 // eslint-disable-next-line no-unused-vars
 function optedIn(checkpoint, data) {
   // TODO: check config service to know if
   return true;
+}
+// Gets configured collection from the config service for the current domain
+function getCollectionConfig() {
+  if (window.location.hostname === 'blog.adobe.com') {
+    return ['loadresource', ...DEFAULT_CHECKPOINTS];
+  }
+  // TODO: configured collection should come from config service
+  return DEFAULT_CHECKPOINTS;
 }
 
 export function trackCheckpoint(checkpoint, data, t) {
@@ -115,10 +128,10 @@ function addEnterLeaveTracking() {
     sampleRUM('enter', { target: undefined, source: document.referrer });
   }
   const leave = ((event) => {
-    if (left || (event.type === 'visibilitychange' && document.visibilityState !== 'hidden')) {
+    if (leave.left || (event.type === 'visibilitychange' && document.visibilityState !== 'hidden')) {
       return;
     }
-    left = true;
+    leave.left = true;
     sampleRUM('leave');
   });
   window.addEventListener('visibilitychange', ((event) => leave(event)));
@@ -140,7 +153,20 @@ function addLoadResourceTracking() {
   }
 }
 
-function addObserveBlockTracking() {
+function activateBlocksMutationObserver() {
+  if (!mutationObserver || mutationObserver.active) {
+    return;
+  }
+  mutationObserver.active = true;
+  mutationObserver.observe(
+    document.querySelector('main'),
+    // eslint-disable-next-line object-curly-newline
+    { subtree: true, attributes: true, attributeFilter: ['data-block-status'] },
+  );
+}
+
+function addViewBlockTracking(element) {
+  activateBlocksMutationObserver();
   if (window.IntersectionObserver) {
     const blockobserver = new IntersectionObserver((entries) => {
       entries
@@ -152,11 +178,12 @@ function addObserveBlockTracking() {
           sampleRUM('viewblock', { target, source });
         });
     }, { threshold: 0.25 });
-    blockobserver.observe(window.document.querySelectorAll('div[data-block-name]'));
+    blockobserver.observe(element.getAttribute('data-block-status') ? element : element.querySelectorAll('div[data-block-status="loaded"]'));
   }
 }
 
-function addObserveMediaTracking() {
+function addViewMediaTracking(parent) {
+  activateBlocksMutationObserver();
   if (window.IntersectionObserver) {
     const mediaobserver = new IntersectionObserver((entries) => {
       entries
@@ -168,13 +195,31 @@ function addObserveMediaTracking() {
           sampleRUM('viewmedia', { target, source });
         });
     }, { threshold: 0.25 });
-    mediaobserver.observe(window.document.querySelectorAll('picture > img'));
+    mediaobserver.observe(parent.querySelectorAll('picture > img'));
   }
 }
 
+function addFormTracking(parent) {
+  activateBlocksMutationObserver();
+  parent.querySelectorAll('form').forEach((form) => {
+    form.removeEventListener('submit', formSubmitListener); // listen only once
+    form.addEventListener('submit', formSubmitListener);
+  });
+}
+
+function mutationsCallback(mutations) {
+  const addObserver = (ck, fn, block) => getCollectionConfig().contains(ck) && fn(block);
+  mutations.filter((m) => m.type === 'attributes')
+    .filter((m) => m.attributeName === 'data-block-status')
+    .filter((m) => m.target.dataset.blockStatus === 'loaded')
+    .forEach((m) => {
+      addObserver('form', addFormTracking, m.target);
+      addObserver('observeblock', addViewBlockTracking, m.target);
+      addObserver('observemedia', addViewMediaTracking, m.target);
+    });
+}
+
 function addTrackingFromConfig() {
-  // configured collection should come from config service
-  const collectConfig = ['click', 'cwv', 'form', 'enterleave', 'loadresource', 'observeblock', 'observemedia'];
   const trackingFunctions = {
     click: () => {
       document.addEventListener('click', (event) => {
@@ -182,20 +227,14 @@ function addTrackingFromConfig() {
       });
     },
     cwv: () => addCWVTracking(),
-    form: () => {
-      document.querySelectorAll('form').forEach((form) => {
-        form.addEventListener('submit', (event) => {
-          sampleRUM('formsubmit', { target: targetselector(event.target), source: sourceselector(event.target) });
-        });
-      });
-    },
+    form: () => addFormTracking(window.document),
     enterleave: () => addEnterLeaveTracking(),
     loadresource: () => addLoadResourceTracking(),
-    observeblock: () => addObserveBlockTracking(),
-    observemedia: () => addObserveMediaTracking(),
+    observeblock: () => addViewBlockTracking(window.document),
+    observemedia: () => addViewMediaTracking(window.document),
   };
 
-  collectConfig.filter((ck) => trackingFunctions[ck])
+  getCollectionConfig().filter((ck) => trackingFunctions[ck])
     .forEach((ck) => trackingFunctions[ck]());
 }
 
