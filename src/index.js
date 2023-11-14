@@ -49,7 +49,14 @@ export function sampleRUM(checkpoint, data = {}) {
     if (!window.hlx.rum) {
       const usp = new URLSearchParams(window.location.search);
       const weight = (usp.get('rum') === 'on') ? 1 : 100; // with parameter, weight is 1. Defaults to 100.
-      const id = Array.from({ length: 75 }, (_, i) => String.fromCharCode(48 + i)).filter((a) => /\d|[A-Z]/i.test(a)).filter(() => Math.random() * 75 > 70).join('');
+      const uuid = typeof crypto.randomUUID === 'function'
+        ? crypto.randomUUID
+        : () => ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(
+          /[018]/g,
+          // eslint-disable-next-line no-bitwise
+          (c) => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4))).toString(16),
+        );
+      const id = uuid();
       const random = Math.random();
       const isSelected = (random * weight < 1);
       const firstReadTime = Date.now();
