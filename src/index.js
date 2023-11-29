@@ -71,8 +71,10 @@ export function sampleRUM(checkpoint, data = {}) {
     if (window.hlx && window.hlx.rum && window.hlx.rum.isSelected) {
       const knownProperties = ['weight', 'id', 'referer', 'checkpoint', 't', 'source', 'target', 'cwv', 'CLS', 'FID', 'LCP', 'INP', 'TTFB'];
       const sendPing = (pdata = data) => {
+        // eslint-disable-next-line max-len
+        const t = Math.round(window.performance ? window.performance.now() : (Date.now() - firstReadTime));
         // eslint-disable-next-line object-curly-newline, max-len, no-use-before-define
-        const body = JSON.stringify({ weight, id, referer: window.hlx.rum.sanitizeURL(), checkpoint, t: window.performance ? window.performance.now() : (Date.now() - firstReadTime), ...data }, knownProperties);
+        const body = JSON.stringify({ weight, id, referer: window.hlx.rum.sanitizeURL(), checkpoint, t, ...data }, knownProperties);
         const url = new URL(`.rum/${weight}`, sampleRUM.baseURL).href;
         navigator.sendBeacon(url, body);
         // eslint-disable-next-line no-console
