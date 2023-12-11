@@ -1,3 +1,16 @@
+# [1.8.0](https://github.com/adobe/helix-rum-js/compare/v1.7.0...v1.8.0) (2023-12-11)
+
+
+### Bug Fixes
+
+* round timestamp ([69ab356](https://github.com/adobe/helix-rum-js/commit/69ab3564bb45679b1aa59d2f9bb348ac819487fd))
+
+
+### Features
+
+* add noise to page view counter for privacy ([e7048e6](https://github.com/adobe/helix-rum-js/commit/e7048e69fe54f7173b6c45a6e7820fbda800a8ef))
+* use performance api when available for timing ([d5adf48](https://github.com/adobe/helix-rum-js/commit/d5adf48dfc1d355c958a6db7b6772c588216cc09))
+
 # [1.7.0](https://github.com/adobe/helix-rum-js/compare/v1.6.0...v1.7.0) (2023-10-25)
 
 
