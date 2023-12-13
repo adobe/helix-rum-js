@@ -27,11 +27,11 @@ describe('sampleRUM', () => {
     const usp = new URLSearchParams(window.location.search);
     usp.delete('rum');
     window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
+    // eslint-disable-next-line no-underscore-dangle
+    window.hlx.rum = undefined;
   });
-
-  it('basic rum sampling', async () => {
+  it('rum initialization', async () => {
     const sendBeaconArgs = {};
-
     // eslint-disable-next-line no-underscore-dangle
     navigator._sendBeacon = navigator.sendBeacon;
     navigator.sendBeacon = (url, data) => {
@@ -39,26 +39,67 @@ describe('sampleRUM', () => {
       sendBeaconArgs.data = JSON.parse(data);
       return true;
     };
-
-    sampleRUM('test', {
-      foo: 'bar',
-      int: 1,
-      bool: true,
-      obj: { foo: 'bar' },
-      arr: ['foo', 'bar'],
-    });
-
-    console.log('sendBeaconArgs.data', sendBeaconArgs.data);
+    sampleRUM();
     expect(sendBeaconArgs.url).to.equal('https://rum.hlx.page/.rum/1');
     expect(sendBeaconArgs.data.id).to.exist;
     expect(sendBeaconArgs.data.weight).to.equal(1);
-    expect(sendBeaconArgs.data.checkpoint).to.equal('test');
-    // expect(sendBeaconArgs.data.foo).to.equal('bar');
-    // expect(sendBeaconArgs.data.int).to.equal(1);
-    // expect(sendBeaconArgs.data.bool).to.equal(true);
-    // expect(sendBeaconArgs.data.obj).to.deep.equal({ foo: 'bar' });
-    // expect(sendBeaconArgs.data.arr).to.deep.equal(['foo', 'bar']);
-
+    expect(sendBeaconArgs.data.checkpoint).to.equal('top');
+    // eslint-disable-next-line no-underscore-dangle
+    navigator.sendBeacon = navigator._sendBeacon;
+  });
+  it('rum checkpoint queuing', async () => {
+    sampleRUM();
+    sampleRUM('test', {
+      foo: 'bar',
+      int: 1,
+    });
+    const [checkpoint, data, time] = window.hlx.rum.queue.pop();
+    expect(checkpoint).to.equal('test');
+    expect(data.foo).to.equal('bar');
+    expect(data.int).to.equal(1);
+    expect(time).to.exist;
+  });
+  it('rum initialization not selected', async () => {
+    const sendBeaconArgs = {};
+    // eslint-disable-next-line no-underscore-dangle
+    navigator._sendBeacon = navigator.sendBeacon;
+    navigator.sendBeacon = (url, data) => {
+      sendBeaconArgs.url = url;
+      sendBeaconArgs.data = JSON.parse(data);
+      return true;
+    };
+    const usp = new URLSearchParams(window.location.search);
+    usp.delete('rum');
+    window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
+    window.hlx.rum = undefined;
+    sampleRUM();
+    expect(Object.keys(sendBeaconArgs).length).to.equal(0);
+    // eslint-disable-next-line no-underscore-dangle
+    navigator.sendBeacon = navigator._sendBeacon;
+  });
+  it('rum checkpoint queuing not selected', async () => {
+    sampleRUM();
+    window.hlx.rum.isSelected = false;
+    sampleRUM('test', {
+      foo: 'bar',
+      int: 1,
+    });
+    expect(window.hlx.rum.queue.length).to.equal(0);
+  });
+  it('rum error selected', async () => {
+    const sendBeaconArgs = {};
+    // eslint-disable-next-line no-underscore-dangle
+    navigator._sendBeacon = navigator.sendBeacon;
+    navigator.sendBeacon = (url, data) => {
+      if (data && JSON.parse(data).checkpoint === 'top') {
+        throw Error('test error');
+      }
+      sendBeaconArgs.url = url;
+      sendBeaconArgs.data = JSON.parse(data);
+      return true;
+    };
+    sampleRUM();
+    expect(Object.keys(sendBeaconArgs).length).to.equal(0);
     // eslint-disable-next-line no-underscore-dangle
     navigator.sendBeacon = navigator._sendBeacon;
   });
