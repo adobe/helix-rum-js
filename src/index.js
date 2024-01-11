@@ -30,7 +30,7 @@ export function sampleRUM(checkpoint, data) {
         const body = JSON.stringify({ weight, id, referer: window.location.href, checkpoint: 'top', t: 0, target: document.visibilityState });
         const url = new URL(`.rum/${weight}`, sampleRUM.baseURL).href;
         navigator.sendBeacon(url, body);
-        window.addEventListener('load', import(new URL('./enhancer.js', sampleRUM.baseURL)));
+        window.addEventListener('load', import(new URL('.rum/@adobe/helix-rum-enhancer@^2/src/index.js', sampleRUM.baseURL)));
       }
     }
     if (window.hlx.rum && window.hlx.rum.isSelected && checkpoint) {
