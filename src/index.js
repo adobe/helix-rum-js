@@ -15,36 +15,6 @@ export function sampleRUM(checkpoint, data) {
   try {
     window.hlx = window.hlx || {};
     if (!window.hlx.rum) {
-<<<<<<< HEAD
-      const usp = new URLSearchParams(window.location.search);
-      const weight = (usp.get('rum') === 'on') ? 1 : 100; // with parameter, weight is 1. Defaults to 100.
-      const id = Array.from({ length: 75 }, (_, i) => String.fromCharCode(48 + i)).filter((a) => /\d|[A-Z]/i.test(a)).filter(() => Math.random() * 75 > 70).join('');
-      const random = Math.random();
-      const isSelected = (random * weight < 1);
-      const firstReadTime = window.performance ? window.performance.timeOrigin : Date.now();
-      const urlSanitizers = {
-        full: () => window.location.href,
-        origin: () => window.location.origin,
-        path: () => window.location.href.replace(/\?.*$/, ''),
-      };
-      // eslint-disable-next-line max-len
-      const rumSessionStorage = sessionStorage.getItem(SESSION_STORAGE_KEY) ? JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)) : {};
-      // eslint-disable-next-line max-len
-      rumSessionStorage.pages = (rumSessionStorage.pages ? rumSessionStorage.pages : 0) + 1 + /* noise */ (Math.floor(Math.random() * 20) - 10);
-      sessionStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(rumSessionStorage));
-      // eslint-disable-next-line object-curly-newline, max-len
-      window.hlx.rum = { weight, id, random, isSelected, firstReadTime, sampleRUM, sanitizeURL: urlSanitizers[window.hlx.RUM_MASK_URL || 'path'], rumSessionStorage };
-    }
-
-    const { weight, id, firstReadTime } = window.hlx.rum;
-    if (window.hlx && window.hlx.rum && window.hlx.rum.isSelected) {
-      const knownProperties = ['weight', 'id', 'referer', 'checkpoint', 't', 'source', 'target', 'cwv', 'CLS', 'FID', 'LCP', 'INP', 'TTFB'];
-      const sendPing = (pdata = data) => {
-        // eslint-disable-next-line max-len
-        const t = Math.round(window.performance ? window.performance.now() : (Date.now() - firstReadTime));
-        // eslint-disable-next-line object-curly-newline, max-len, no-use-before-define
-        const body = JSON.stringify({ weight, id, referer: window.hlx.rum.sanitizeURL(), checkpoint, t, ...data }, knownProperties);
-=======
       // eslint-disable-next-line max-len
       const rumStorage = sessionStorage.getItem(SESSION_STORAGE_KEY) ? JSON.parse(sessionStorage.getItem(SESSION_STORAGE_KEY)) : {};
       rumStorage.pages = (rumStorage.pages ?? 0) + (Math.floor(Math.random() * 20) - 10) + 1;
@@ -58,7 +28,6 @@ export function sampleRUM(checkpoint, data) {
       if (isSelected) {
         // eslint-disable-next-line object-curly-newline, max-len
         const body = JSON.stringify({ weight, id, referer: window.location.href, checkpoint: 'top', t: 0, target: document.visibilityState });
->>>>>>> 1849413 (chore(test): add unit tests)
         const url = new URL(`.rum/${weight}`, sampleRUM.baseURL).href;
         navigator.sendBeacon(url, body);
         window.addEventListener('load', import(new URL('./enhancer.js', sampleRUM.baseURL)));
