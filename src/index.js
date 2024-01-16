@@ -11,6 +11,8 @@
  */
 /* eslint-env browser */
 export function sampleRUM(checkpoint, data) {
+  // eslint-disable-next-line max-len
+  const timeShift = () => (window.performance ? window.performance.now() : Date.now() - window.hlx.rum.firstReadTime);
   const SESSION_STORAGE_KEY = 'aem-rum';
   try {
     window.hlx = window.hlx || {};
@@ -27,15 +29,17 @@ export function sampleRUM(checkpoint, data) {
       window.hlx.rum = { weight, id, isSelected, firstReadTime: window.performance ? window.performance.timeOrigin : Date.now(), sampleRUM, queue: [], collector: (...args) => window.hlx.rum.queue.push(args) };
       if (isSelected) {
         // eslint-disable-next-line object-curly-newline, max-len
-        const body = JSON.stringify({ weight, id, referer: window.location.href, checkpoint: 'top', t: 0, target: document.visibilityState });
+        const body = JSON.stringify({ weight, id, referer: window.location.href, checkpoint: 'top', t: timeShift(), target: document.visibilityState });
         const url = new URL(`.rum/${weight}`, sampleRUM.baseURL).href;
         navigator.sendBeacon(url, body);
-        window.addEventListener('load', import(new URL('.rum/@adobe/helix-rum-enhancer@^2/src/index.js', sampleRUM.baseURL)));
+        // eslint-disable-next-line max-statements-per-line, brace-style
+        window.addEventListener('load', () => { sampleRUM('load'); import(new URL('.rum/@adobe/helix-rum-enhancer@^2/src/index.js', sampleRUM.baseURL));
+        });
       }
     }
     if (window.hlx.rum && window.hlx.rum.isSelected && checkpoint) {
       // eslint-disable-next-line object-curly-newline, max-len
-      window.hlx.rum.collector(checkpoint, data, window.performance ? window.performance.now() : Date.now() - window.hlx.rum.firstReadTime);
+      window.hlx.rum.collector(checkpoint, data, timeShift());
     }
     document.dispatchEvent(new CustomEvent('rum', { checkpoint, data }));
   } catch (error) {
