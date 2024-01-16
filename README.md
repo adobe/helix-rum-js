@@ -11,11 +11,6 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 ## Usage
-// Usage in aem-lib.js
-// sampleRUM();
-// Usage in non-boilerplate
-// import(sampleRUM.js).then((f)=> f.sampleRUM());
-
 If you want to use `sampleRUM` in project based on the boilerplate, and you are using a compatible aem-lib version
 there is no need for you to do any specific action.
 `sampleRUM` will be initialized in aem-lib and the main checkpoints will be tracked automatically for you.
@@ -36,6 +31,31 @@ import('https://rum.hlx.page/.rum/@adobe/helix-rum-js@^2/src/index.js').then((f)
 
 You can pin a version number by using a URL like `https://rum.hlx.page/.rum/@adobe/helix-rum-js@1.0.0/src/index.js` instead.
 For usage of the `sampleRUM` function, follow the [API documentation](docs/API.md).
+
+## BREAKING CHANGES
+
+`sampleRUM.on` and `sampleRUM.always.on` hooks are no longer available.
+
+They are replaced by a `CustomEvent` called `rum`.
+The `detail` of the custom event is an object containing the keys:
+```
+{
+  checkpoint: checkpoint-name,
+  data: { checkpoint-data},
+}
+```
+
+Simplified sample code to listen to this event:
+```
+  document.addEventListener('rum', (event) => {
+    if(event.detail) {
+      const checkpoint = event.detail.checkpoint;
+      const data = event.detail.data;
+      console.log(`RUM Event: checkpoint ${checkpoint} source: ${data.source}`};
+    }
+  });
+```
+
 
 ## Development
 
