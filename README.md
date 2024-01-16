@@ -11,33 +11,30 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 ## Usage
+// Usage in aem-lib.js
+// sampleRUM();
+// Usage in non-boilerplate
+// import(sampleRUM.js).then((f)=> f.sampleRUM());
 
-If you want to collect a RUM event programmatically, use this in your JavaScript code:
+If you want to use `sampleRUM` in project based on the boilerplate, and you are using a compatible aem-lib version
+there is no need for you to do any specific action.
+`sampleRUM` will be initialized in aem-lib and the main checkpoints will be tracked automatically for you.
 
-
+If you are not sure if your aem-lib version is compatible, open `aem.js` find the `init()` function and replace any
+existing `sampleRUM` call by simply:
 ```javascript
-import { sampleRUM } from 'https://rum.hlx.page/.rum/@adobe/helix-rum-js@^1/src/index.js';
+sampleRUM()
+```
+`error` and `load` listeners are added automatically in the rum enhancer code. There's no need to add them in the `init()` of `aem.js`.
 
-sampleRUM('top');
-window.addEventListener('load', () => sampleRUM('load'));
-document.addEventListener('click', () => sampleRUM('click'));
+
+If you want to use `sampleRUM` in a project not based on boilerplate, simply add the following code, at the very beginning
+of the page load:
+```javascript
+import('https://rum.hlx.page/.rum/@adobe/helix-rum-js@^2/src/index.js').then((f)=> f.sampleRUM());
 ```
 
 You can pin a version number by using a URL like `https://rum.hlx.page/.rum/@adobe/helix-rum-js@1.0.0/src/index.js` instead.
-
-To enable advanced RUM functionality, such as reporting of Core Web Vitals, fire the `lazy` checkpoint as soon as your render-critical Javascript has executed.
-
-```javascript
-// after all render-critical Javascript has been run
-sampleRUM('lazy');
-```
-
-While the above line enables collection of Core Web Vitals as a prerequisite, the `cwv` checkpoint must also be fired to actually perform the collection.  Typically this is called with a 3-second delay after page load to not interfere with performance.
-
-```javascript
-sampleRUM('cwv');
-```
-
 For usage of the `sampleRUM` function, follow the [API documentation](docs/API.md).
 
 ## Development

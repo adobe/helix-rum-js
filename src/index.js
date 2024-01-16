@@ -42,8 +42,3 @@ export function sampleRUM(checkpoint, data) {
     // something went wrong
   }
 }
-
-// Usage in aem-lib.js
-// sampleRUM();
-// Usage in non-boilerplate
-// import(sampleRUM.js).then((f)=> f.sampleRUM());
