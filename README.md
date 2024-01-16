@@ -25,7 +25,7 @@ existing `sampleRUM` call by simply:
 ```javascript
 sampleRUM()
 ```
-`error` and `load` listeners are added automatically in the rum enhancer code. There's no need to add them in the `init()` of `aem.js`.
+`load` checkpoint is automatically tracked by the rum code. There's no need to add a listener to track it in the `init()` of `aem.js`.
 
 
 If you want to use `sampleRUM` in a project not based on boilerplate, simply add the following code, at the very beginning
