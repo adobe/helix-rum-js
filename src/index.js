@@ -38,7 +38,6 @@ export function sampleRUM(checkpoint, data) {
       }
     }
     if (window.hlx.rum && window.hlx.rum.isSelected && checkpoint) {
-      // eslint-disable-next-line object-curly-newline, max-len
       window.hlx.rum.collector(checkpoint, data, timeShift());
     }
     document.dispatchEvent(new CustomEvent('rum', { checkpoint, data }));
