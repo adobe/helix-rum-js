@@ -6,10 +6,11 @@
   "type": "module",
   "scripts": {
     "test": " c8 mocha",
-    "test-ci": "c8 --check-coverage=no mocha && codecov",
+    "test-ci": "c8 --check-coverage=no mocha",
     "lint": "eslint .",
     "docs": "npx jsdoc2md -c .jsdoc.json --files 'src/*.js'  > docs/API.md",
     "semantic-release": "semantic-release",
+    "semantic-release-dry": "semantic-release --dry-run --branches $CI_BRANCH",
     "commit": "git-cz",
     "prepare": "husky install"
   },
