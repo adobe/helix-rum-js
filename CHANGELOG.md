@@ -1,3 +1,20 @@
+# [2.0.0](https://github.com/adobe/helix-rum-js/compare/v1.8.0...v2.0.0) (2024-01-19)
+
+
+### Bug Fixes
+
+* add checkpoint in downstream event ([ca432e5](https://github.com/adobe/helix-rum-js/commit/ca432e581a2bfb5ff19253f31fa6301258c08159))
+
+
+### Features
+
+* **minirum:** reduce overall code size by 50% ([e8dbd19](https://github.com/adobe/helix-rum-js/commit/e8dbd195b4da7ea073cd7ab4bcf0f7e04f49a215))
+
+
+### BREAKING CHANGES
+
+* **minirum:** instrumentation has been simplified, this requires changes in project code. Enhancer is requested from same origin, which requires CDN config change.
+
 # [1.8.0](https://github.com/adobe/helix-rum-js/compare/v1.7.0...v1.8.0) (2023-12-11)
 
 
