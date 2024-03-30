@@ -49,7 +49,7 @@
     "jsdoc-to-markdown": "8.0.1",
     "junit-report-builder": "3.2.1",
     "lint-staged": "15.2.2",
-    "mocha": "10.3.0",
+    "mocha": "10.4.0",
     "mocha-multi-reporters": "1.5.1",
     "semantic-release": "22.0.12"
   },
