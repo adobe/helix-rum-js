@@ -49,7 +49,7 @@ export function sampleRUM(checkpoint, data = {}) {
     if (!window.hlx.rum) {
       const usp = new URLSearchParams(window.location.search);
       const weight = (usp.get('rum') === 'on') ? 1 : 100; // with parameter, weight is 1. Defaults to 100.
-      const id = Array.from({ length: 75 }, (_, i) => String.fromCharCode(48 + i)).filter((a) => /\d|[A-Z]/i.test(a)).filter(() => Math.random() * 75 > 70).join('');
+      const id = Math.random().toString(36).slice(-4);
       const random = Math.random();
       const isSelected = (random * weight < 1);
       const firstReadTime = window.performance ? window.performance.timeOrigin : Date.now();
