@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/adobe/helix-rum-js/compare/v2.0.0...v2.0.1) (2024-04-18)
+
+
+### Bug Fixes
+
+* change id generation ([e27cc90](https://github.com/adobe/helix-rum-js/commit/e27cc9087fc9984a1e3c07dbf8f1b9dab0af0a09))
+
 # [2.0.0](https://github.com/adobe/helix-rum-js/compare/v1.8.0...v2.0.0) (2024-01-19)
 
 
