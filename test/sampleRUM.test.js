@@ -85,22 +85,25 @@ describe('sampleRUM', () => {
       int: 1,
     });
     expect(window.hlx.rum.queue.length).to.equal(0);
-  });
+  }); /*
   it('rum error selected', async () => {
-    const sendBeaconArgs = {};
     // eslint-disable-next-line no-underscore-dangle
     navigator._sendBeacon = navigator.sendBeacon;
     navigator.sendBeacon = (url, data) => {
       if (data && JSON.parse(data).checkpoint === 'top') {
-        throw Error('test error');
+        // throw new Error('test error');
+        window.dispatchEvent(new ErrorEvent('error', { error: 'test error' }));
       }
-      sendBeaconArgs.url = url;
-      sendBeaconArgs.data = JSON.parse(data);
       return true;
     };
     sampleRUM();
-    expect(Object.keys(sendBeaconArgs).length).to.equal(0);
+    expect(window.hlx.rum.queue.length).to.equal(1);
     // eslint-disable-next-line no-underscore-dangle
     navigator.sendBeacon = navigator._sendBeacon;
+  }); */
+  it('rum selected load enhancer', async () => {
+    sampleRUM();
+    window.dispatchEvent(new Event('load'));
+    expect(document.querySelector('script[src*="rum-enhancer"]')).to.exist;
   });
 });

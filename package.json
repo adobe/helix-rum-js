@@ -8,6 +8,7 @@
     "test": "web-test-runner --node-resolve --coverage",
     "test-ci": "web-test-runner --node-resolve --coverage",
     "test:watch": "web-test-runner --node-resolve --watch --coverage",
+    "build-standalone": "rollup --config",
     "lint": "eslint .",
     "docs": "npx jsdoc2md -c .jsdoc.json --files 'src/*.js'  > docs/API.md",
     "semantic-release": "semantic-release",
@@ -51,7 +52,9 @@
     "lint-staged": "15.2.2",
     "mocha": "10.4.0",
     "mocha-multi-reporters": "1.5.1",
-    "semantic-release": "23.1.1"
+    "semantic-release": "23.1.1",
+    "rollup": "4.17.2",
+    "rollup-plugin-cleanup": "3.2.1"
   },
   "lint-staged": {
     "*.js": "eslint",
