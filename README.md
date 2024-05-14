@@ -38,7 +38,7 @@ simply add the following script, at the very beginning of the page:
 <script type="text/javascript" src="https://rum.hlx.page/.rum/@adobe/helix-rum-js@^2/dist/rum-standalone.js"/>
 ```
 
-You can pin a version number by using a URL like `https://rum.hlx.page/.rum/@adobe/helix-rum-js@^2/dist/rum-standalone.js` instead.
+You can pin a version number by using a URL like `https://rum.hlx.page/.rum/@adobe/helix-rum-js@2.3.4/dist/rum-standalone.js` instead.
 
 <u>Customizing Origins: extra scripts and data collection</u>u>
 
