@@ -16,19 +16,32 @@ export function sampleRUM(checkpoint, data) {
   try {
     window.hlx = window.hlx || {};
     if (!window.hlx.rum) {
-      sampleRUM.baseURL = sampleRUM.baseURL || new URL(window.RUM_BASE == null ? 'https://rum.hlx.page' : window.RUM_BASE, window.location);
       const weight = new URLSearchParams(window.location.search).get('rum') === 'on' ? 1 : 100;
       const id = Math.random().toString(36).slice(-4);
       const isSelected = (Math.random() * weight < 1);
       // eslint-disable-next-line object-curly-newline, max-len
       window.hlx.rum = { weight, id, isSelected, firstReadTime: window.performance ? window.performance.timeOrigin : Date.now(), sampleRUM, queue: [], collector: (...args) => window.hlx.rum.queue.push(args) };
       if (isSelected) {
+        ['error', 'unhandledrejection'].forEach((event) => {
+          window.addEventListener(event, ({ reason, error }) => {
+            const source = (reason || error).stack.split('\n')
+              .filter((line) => line.match(/https?:\/\//)).shift()
+              .replace(/at ([^ ]+) \((.+)\)/, '$1@$2');
+            const target = (reason || error).toString();
+            sampleRUM('error', { source, target });
+          });
+        });
+        sampleRUM.baseURL = sampleRUM.baseURL || new URL(window.RUM_BASE || '/', new URL('https://rum.hlx.page'));
+        sampleRUM.collectBaseURL = sampleRUM.collectBaseURL || sampleRUM.baseURL;
         // eslint-disable-next-line object-curly-newline, max-len
         const body = JSON.stringify({ weight, id, referer: window.location.href, checkpoint: 'top', t: timeShift(), target: document.visibilityState });
         const url = new URL(`.rum/${weight}`, sampleRUM.baseURL).href;
         navigator.sendBeacon(url, body);
-        // eslint-disable-next-line max-statements-per-line, brace-style
-        window.addEventListener('load', () => { sampleRUM('load'); import(new URL('.rum/@adobe/helix-rum-enhancer@^2/src/index.js', sampleRUM.baseURL));
+        // get enhancer on load
+        window.addEventListener('load', () => {
+          const script = document.createElement('script');
+          script.src = new URL('.rum/@adobe/helix-rum-enhancer@^2/src/index.js', sampleRUM.baseURL).href;
+          document.head.appendChild(script);
         });
       }
     }

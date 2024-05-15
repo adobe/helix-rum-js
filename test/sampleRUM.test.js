@@ -86,21 +86,9 @@ describe('sampleRUM', () => {
     });
     expect(window.hlx.rum.queue.length).to.equal(0);
   });
-  it('rum error selected', async () => {
-    const sendBeaconArgs = {};
-    // eslint-disable-next-line no-underscore-dangle
-    navigator._sendBeacon = navigator.sendBeacon;
-    navigator.sendBeacon = (url, data) => {
-      if (data && JSON.parse(data).checkpoint === 'top') {
-        throw Error('test error');
-      }
-      sendBeaconArgs.url = url;
-      sendBeaconArgs.data = JSON.parse(data);
-      return true;
-    };
+  it('rum selected load enhancer', async () => {
     sampleRUM();
-    expect(Object.keys(sendBeaconArgs).length).to.equal(0);
-    // eslint-disable-next-line no-underscore-dangle
-    navigator.sendBeacon = navigator._sendBeacon;
+    window.dispatchEvent(new Event('load'));
+    expect(document.querySelector('script[src*="rum-enhancer"]')).to.exist;
   });
 });
