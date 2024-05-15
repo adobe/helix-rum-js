@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/adobe/helix-rum-js/compare/v2.0.1...v2.1.0) (2024-05-15)
+
+
+### Features
+
+* **rum-standalone:** adapt rum for using standalone ([9ce880c](https://github.com/adobe/helix-rum-js/commit/9ce880ce475715068ea969d25d91bdda774086f6))
+
 ## [2.0.1](https://github.com/adobe/helix-rum-js/compare/v2.0.0...v2.0.1) (2024-04-18)
 
 
