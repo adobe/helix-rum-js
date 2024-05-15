@@ -9,7 +9,7 @@
     "test-ci": "web-test-runner --node-resolve --coverage",
     "test:watch": "web-test-runner --node-resolve --watch --coverage",
     "build-standalone": "rollup --config",
-    "prepack": "build-standalone",
+    "prepack": "npm run build-standalone",
     "lint": "eslint .",
     "docs": "npx jsdoc2md -c .jsdoc.json --files 'src/*.js'  > docs/API.md",
     "semantic-release": "semantic-release",
