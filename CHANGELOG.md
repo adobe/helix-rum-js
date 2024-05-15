@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/adobe/helix-rum-js/compare/v2.1.0...v2.1.1) (2024-05-15)
+
+
+### Bug Fixes
+
+* semantic release standalone ([8be7e79](https://github.com/adobe/helix-rum-js/commit/8be7e7943f54bb9186b9061775a00247e1a7b82f))
+
 # [2.1.0](https://github.com/adobe/helix-rum-js/compare/v2.0.1...v2.1.0) (2024-05-15)
 
 
