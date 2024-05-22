@@ -9,6 +9,8 @@
 [![GitHub issues](https://img.shields.io/github/issues/adobe/helix-rum-js.svg)](https://github.com/adobe/helix-rum-js/issues)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
+
+
 ## Instrument your website with RUM
 
 If your website is not built using AEM Edge Delivery Services it is recommended to setup RUM in standalone mode.
@@ -30,7 +32,13 @@ that the origin `https://rum.hlx.page` is allowed both as a script source and as
 1. Access a page of your website where you have included the RUM script.
 2. Adding to the url the request parameter `rum=on` and reload the page
 3. Open browser console and check that `ping` messages are being written.
+   
+   ![ping-messages-in-console](https://github.com/adobe/helix-rum-js/assets/43381734/0a2f4b25-0198-41b2-b386-740489b1f7b3)
+
 4. Open the network tab of your browser and validate that ping requests using `POST` method to domain `rum.hlx.page` are being sent and that the response status is `201`
+   
+   ![rum-requests-in-network-tab](https://github.com/adobe/helix-rum-js/assets/43381734/766f1c45-223b-40e3-ba57-1237f44c9c15)
+
 
 
 ## Edge Delivery Service Projects
