@@ -17,9 +17,20 @@ To do it, simply add the following script to your pages.
 ```
 <script defer type="text/javascript" src="https://rum.hlx.page/.rum/@adobe/helix-rum-js@^2/dist/rum-standalone.js"/>
 ```
-It is recommended to add the script tag, after the [LCP](https://web.dev/articles/lcp) of your page. If you don't know where the LCP of your page is, simply add the script at the bottom of the page.
+If you understand the details of a high performance page, it might be advisable to load the script after the [LCP](https://web.dev/articles/lcp) event
 
 Check the following link for [advanced configuration options](docs/STANDALONE-ADVANCED-CONFIG.md).
+
+### Content Security Policy
+If your website implements a [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) it is important to ensure
+that the origin `https://rum.hlx.page` is allowed both as a script source and as a destination for `navigator.sendBeacon` API.
+
+### Testing the setup
+
+1. Access a page of your website where you have included the RUM script.
+2. Adding to the url the request parameter `rum=on` and reload the page
+3. Open browser console and check that `ping` messages are being written.
+4. Open the network tab of your browser and validate that ping requests using `POST` method to domain `rum.hlx.page` are being sent and that the response status is `201`
 
 
 ## Edge Delivery Service Projects
