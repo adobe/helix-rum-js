@@ -50,11 +50,11 @@
     "husky": "9.0.11",
     "jsdoc-to-markdown": "8.0.1",
     "junit-report-builder": "3.2.1",
-    "lint-staged": "15.2.2",
+    "lint-staged": "15.2.5",
     "mocha": "10.4.0",
     "mocha-multi-reporters": "1.5.1",
     "semantic-release": "23.1.1",
-    "rollup": "4.17.2",
+    "rollup": "4.18.0",
     "rollup-plugin-cleanup": "3.2.1"
   },
   "lint-staged": {
