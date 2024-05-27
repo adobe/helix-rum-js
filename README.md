@@ -1,6 +1,6 @@
-# Helix RUM JS
+# AEM RUM JS
 
-> Helix RUM Event Generator for JavaScript
+> AEM RUM Event Generator for JavaScript
 
 ## Status
 [![codecov](https://img.shields.io/codecov/c/github/adobe/helix-rum-js.svg)](https://codecov.io/gh/adobe/helix-rum-js)
@@ -9,81 +9,43 @@
 [![GitHub issues](https://img.shields.io/github/issues/adobe/helix-rum-js.svg)](https://github.com/adobe/helix-rum-js/issues)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
-## Usage
-### A. Edge Deliver Service Projects
-If you want to use `sampleRUM` in project based on the boilerplate, and you are using a compatible aem-lib version
-there is no need for you to do any specific action.
-`sampleRUM` will be initialized in aem-lib and the main checkpoints will be tracked automatically for you.
 
 
-<u>Customizing Origins: extra scripts and data collection</u>
+## Instrument your website with RUM
 
-Loading of additional scripts such as RUM enhancer and data tracking are using the same origin, by default `https://rum.hlx.page`.
+If your website is not built using AEM Edge Delivery Services it is recommended to setup RUM in standalone mode.
 
-These origins can be customized by setting the variables, after importing `sampleRUM` and before invoking the function.
-* `sampleRUM.baseURL`: <b>URL</b> used as a base for loading additional scripts
-* `sampleRUM.collectBaseURL` : <b>URL</b> used as a base for data collection.
-
-Starting on *Helix5 architecture* it is possible collect data using the current website domain, which would optimize data collection and prevent it from being blocked:
-```javascript
-sampleRUM.collectBaseURL = new URL(window.origin);
+To do it, simply add the following script to your pages.
 ```
-
-### B. Standalone
-Available from version 2.x on.
-
-If you want to use RUM in non Edge Delivery Service Project or an  Edge Delivery Service Project which is not based on boilerplate,
-simply add the following script, at the very beginning of the page:
+<script defer type="text/javascript" src="https://rum.hlx.page/.rum/@adobe/helix-rum-js@^2/dist/rum-standalone.js"/>
 ```
-<script type="text/javascript" src="https://rum.hlx.page/.rum/@adobe/helix-rum-js@^2/dist/rum-standalone.js"/>
-```
+If you understand the details of a high performance page, it might be advisable to load the script after the [LCP](https://web.dev/articles/lcp) event
 
-You can pin a version number by using a URL like `https://rum.hlx.page/.rum/@adobe/helix-rum-js@2.3.4/dist/rum-standalone.js` instead.
+Check the following link for [advanced configuration options](docs/STANDALONE-ADVANCED-CONFIG.md).
 
-<u>Customizing Origins: extra scripts and data collection</u>u>
+### Content Security Policy
+If your website implements a [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) it is important to ensure
+that the origin `https://rum.hlx.page` is allowed both as a script source and as a destination for `navigator.sendBeacon` API.
 
-If you use RUM in an standalone mode and you want to route any RUM requests via a custom domain, you can do it by setting the global variable `window.RUM_BASE` before loading the script.
-Please note, that the origin you set, must route `/.rum/*` requests to `https://rum.hlx.page/.rum/*`
+### Testing the setup
 
-E.g.
-```javascript
-window.RUM_BASE = window.origin;
-```
+1. Access a page of your website where you have included the RUM script.
+2. Adding to the url the request parameter `rum=on` and reload the page
+3. Open browser console and check that `ping` messages are being written.
+   
+   ![ping-messages-in-console](https://github.com/adobe/helix-rum-js/assets/43381734/0a2f4b25-0198-41b2-b386-740489b1f7b3)
 
-## UPGRADES FROM RUM-JS 1.X
-1. Find the `function sampleRUM()` definition in your `aem.js` or `lib-franklin.js`
-2. Replace the content of the function by the content of the file `src/index.js`
-3. Find the `init()` function and replace any existing `sampleRUM` call by simply:
-```javascript
-sampleRUM()
-```
-
-`load`, `error`, and other default checkpoints are automatically tracked by the RUM code. There's no need to add additional listeners
+4. Open the network tab of your browser and validate that ping requests using `POST` method to domain `rum.hlx.page` are being sent and that the response status is `201`
+   
+   ![rum-requests-in-network-tab](https://github.com/adobe/helix-rum-js/assets/43381734/766f1c45-223b-40e3-ba57-1237f44c9c15)
 
 
-### BREAKING CHANGES
 
-`sampleRUM.on` and `sampleRUM.always.on` hooks are no longer available.
+## Edge Delivery Service Projects
 
-They are replaced by a `CustomEvent` called `rum`.
-The `detail` of the custom event is an object containing the keys:
-```
-{
-  checkpoint: checkpoint-name,
-  data: { checkpoint-data},
-}
-```
+Note that websites implemented with Adobe Edge Delivery Services, based on the boilerplate are already instrumented with RUM.
 
-Simplified sample code to listen to this event:
-```
-  document.addEventListener('rum', (event) => {
-    if(event.detail) {
-      const checkpoint = event.detail.checkpoint;
-      const data = event.detail.data;
-      console.log(`RUM Event: checkpoint ${checkpoint} source: ${data.source}`};
-    }
-  });
-```
+For more details about RUM in Edge Delivery Projects, upgrading from previous versions of RUM, or customization options, you can check the page [RUM in Edge Delivery Services projects](docs/RUM-IN-EDGE-DELIVERY-SERVICES.md)
 
 
 ## Development
