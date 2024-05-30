@@ -19,15 +19,3 @@ Please note, that the origin you set, must route `/.rum/*` requests to `https://
 E.g.
 ```javascript
 window.RUM_BASE = window.origin;
-```
-
-## Adjusting the sampling rate
-
-The default sampling rate for RUM data is 1 out of 100 requests. For some use cases, like when running experiments on low traffic pages, or during specific short-lived marketing campaigns, you may want to sample at a higher rate to gather more data for your reporting.
-You can achieve this by setting the global variable `window.RUM_SAMPLING_RATE` before loading the script.
-Please note that the maximum sampling rate we accept is `10` so we can guarantee the privacy-first principle, and any value > 10 will be accepted.
-
-E.g.
-```javascript
-window.RUM_BASE = 10;
-```
