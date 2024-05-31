@@ -38,7 +38,7 @@ export default [...bundles.map(({ outputFile, source }) => ({
   output: [
     {
       file: `${outputFile}.js`,
-      format: 'es',
+      format: 'iife',
       sourcemap: false,
       exports: 'auto',
     },
