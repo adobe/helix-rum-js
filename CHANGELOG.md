@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/adobe/helix-rum-js/compare/v2.1.1...v2.1.2) (2024-05-31)
+
+
+### Bug Fixes
+
+* avoid exceptions when error events don't have the expected structure ([ac388d8](https://github.com/adobe/helix-rum-js/commit/ac388d811378b9945a57c5b3d7ba8223e436e3b3))
+
 ## [2.1.1](https://github.com/adobe/helix-rum-js/compare/v2.1.0...v2.1.1) (2024-05-15)
 
 
