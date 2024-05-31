@@ -24,7 +24,7 @@ export function sampleRUM(checkpoint, data) {
       if (isSelected) {
         ['error', 'unhandledrejection'].forEach((event) => {
           window.addEventListener(event, ({ reason, error }) => {
-            const errData = {};
+            const errData = { source: 'undefined error' };
             try {
               errData.target = (reason || error).toString();
               errData.source = (reason || error).stack.split('\n')
