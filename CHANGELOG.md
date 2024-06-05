@@ -1,3 +1,10 @@
+## [2.1.4](https://github.com/adobe/helix-rum-js/compare/v2.1.3...v2.1.4) (2024-06-05)
+
+
+### Bug Fixes
+
+* **docs:** don't use self-closing HTML tags ([5cbe559](https://github.com/adobe/helix-rum-js/commit/5cbe5599ef8f3df84fe7d4f4d87cdcccf6824ad2))
+
 ## [2.1.3](https://github.com/adobe/helix-rum-js/compare/v2.1.2...v2.1.3) (2024-06-05)
 
 
