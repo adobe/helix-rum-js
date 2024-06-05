@@ -1,3 +1,10 @@
+## [2.1.3](https://github.com/adobe/helix-rum-js/compare/v2.1.2...v2.1.3) (2024-06-05)
+
+
+### Bug Fixes
+
+* immediately load the enhancer ([#164](https://github.com/adobe/helix-rum-js/issues/164)) ([aa5aafc](https://github.com/adobe/helix-rum-js/commit/aa5aafc28e3e83c29cc78565ec084904e8a5bc85))
+
 ## [2.1.2](https://github.com/adobe/helix-rum-js/compare/v2.1.1...v2.1.2) (2024-05-31)
 
 
