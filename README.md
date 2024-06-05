@@ -16,8 +16,8 @@
 If your website is not built using AEM Edge Delivery Services it is recommended to setup RUM in standalone mode.
 
 To do it, simply add the following script to your pages.
-```
-<script defer type="text/javascript" src="https://rum.hlx.page/.rum/@adobe/helix-rum-js@^2/dist/rum-standalone.js"/>
+```html
+<script defer type="text/javascript" src="https://rum.hlx.page/.rum/@adobe/helix-rum-js@^2/dist/rum-standalone.js"></script>
 ```
 If you understand the details of a high performance page, it might be advisable to load the script after the [LCP](https://web.dev/articles/lcp) event
 
