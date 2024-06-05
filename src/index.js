@@ -46,8 +46,9 @@ export function sampleRUM(checkpoint, data) {
           const script = document.createElement('script');
           script.src = new URL('.rum/@adobe/helix-rum-enhancer@^2/src/index.js', sampleRUM.baseURL).href;
           document.head.appendChild(script);
-        }
-        if (window.performance && window.performance.getEntriesByType("navigation").every((e) => e.loadEventEnd)) {
+        };
+
+        if (window.performance && window.performance.getEntriesByType('navigation').every((e) => e.loadEventEnd)) {
           // load event ended
           loadEnhancer();
         } else {
