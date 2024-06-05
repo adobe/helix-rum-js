@@ -16,12 +16,10 @@ export function sampleRUM(checkpoint, data) {
   try {
     window.hlx = window.hlx || {};
     if (!window.hlx.rum) {
-      // Experiments & marketing campaigns
-      const defaultWeight = document.head.querySelector('[name^="experiment"],[name^="campaign-"],[name^="audience-"]')
-        || [...document.querySelectorAll('.section-metadata div')].some((d) => d.textContent.match(/Experiment|Campaign|Audience/i))
-        ? 10
-        : 100;
-      const weight = new URLSearchParams(window.location.search).get('rum') === 'on' ? 1 : defaultWeight;
+      const weight = (window.SAMPLE_PAGEVIEWS_AT_RATE === 'high' && 10) ||
+        (window.SAMPLE_PAGEVIEWS_AT_RATE === 'low' && 1000) ||
+        (new URLSearchParams(window.location.search).get('rum') === 'on' && 1) ||
+        100;
       const id = Math.random().toString(36).slice(-4);
       const isSelected = (Math.random() * weight < 1);
       // eslint-disable-next-line object-curly-newline, max-len
