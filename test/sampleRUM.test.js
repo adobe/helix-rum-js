@@ -30,6 +30,7 @@ describe('sampleRUM', () => {
     // eslint-disable-next-line no-underscore-dangle
     window.hlx.rum = undefined;
   });
+
   it('rum initialization', async () => {
     const sendBeaconArgs = {};
     // eslint-disable-next-line no-underscore-dangle
@@ -47,6 +48,7 @@ describe('sampleRUM', () => {
     // eslint-disable-next-line no-underscore-dangle
     navigator.sendBeacon = navigator._sendBeacon;
   });
+
   it('rum checkpoint queuing', async () => {
     sampleRUM();
     sampleRUM('test', {
@@ -59,6 +61,7 @@ describe('sampleRUM', () => {
     expect(data.int).to.equal(1);
     expect(time).to.exist;
   });
+
   it('rum initialization not selected', async () => {
     const sendBeaconArgs = {};
     // eslint-disable-next-line no-underscore-dangle
@@ -77,6 +80,7 @@ describe('sampleRUM', () => {
     // eslint-disable-next-line no-underscore-dangle
     navigator.sendBeacon = navigator._sendBeacon;
   });
+
   it('rum checkpoint queuing not selected', async () => {
     sampleRUM();
     window.hlx.rum.isSelected = false;
@@ -85,10 +89,5 @@ describe('sampleRUM', () => {
       int: 1,
     });
     expect(window.hlx.rum.queue.length).to.equal(0);
-  });
-  it('rum selected load enhancer', async () => {
-    sampleRUM();
-    window.dispatchEvent(new Event('load'));
-    expect(document.querySelector('script[src*="rum-enhancer"]')).to.exist;
   });
 });

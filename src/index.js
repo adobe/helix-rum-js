@@ -49,7 +49,7 @@ export function sampleRUM(checkpoint, data) {
         };
 
         if (window.performance && window.performance.getEntriesByType('navigation').every((e) => e.loadEventEnd)) {
-          // load event ended
+          // load event already ended
           loadEnhancer();
         } else {
           window.addEventListener('load', loadEnhancer);
