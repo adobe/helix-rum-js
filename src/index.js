@@ -41,12 +41,10 @@ export function sampleRUM(checkpoint, data) {
         const body = JSON.stringify({ weight, id, referer: window.location.href, checkpoint: 'top', t: timeShift(), target: document.visibilityState });
         const url = new URL(`.rum/${weight}`, sampleRUM.baseURL).href;
         navigator.sendBeacon(url, body);
-        // get enhancer on load
-        window.addEventListener('load', () => {
-          const script = document.createElement('script');
-          script.src = new URL('.rum/@adobe/helix-rum-enhancer@^2/src/index.js', sampleRUM.baseURL).href;
-          document.head.appendChild(script);
-        });
+
+        const script = document.createElement('script');
+        script.src = new URL('.rum/@adobe/helix-rum-enhancer@^2/src/index.js', sampleRUM.baseURL).href;
+        document.head.appendChild(script);
       }
     }
     if (window.hlx.rum && window.hlx.rum.isSelected && checkpoint) {
