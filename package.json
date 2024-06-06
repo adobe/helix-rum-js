@@ -5,8 +5,9 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "test": "npx playwright install --with-deps chromium firefox webkit && web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
-    "test-ci": "npx playwright install --with-deps chromium firefox webkit && web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
+    "setup-playwright": "npx playwright install --with-deps chromium firefox webkit",
+    "test": "npm run setup-playwright && web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
+    "test-ci": "npm run setup-playwright && web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
     "test:watch": "web-test-runner --node-resolve --watch --coverage",
     "build-standalone": "rollup --config",
     "prepack": "npm run build-standalone",
