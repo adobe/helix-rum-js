@@ -101,4 +101,24 @@ describe('sampleRUM', () => {
     });
     expect(window.hlx.rum.queue.length).to.equal(0);
   });
+
+  it('sampleRUM fire custom rum event', (done) => {
+    sampleRUM();
+
+    const cb = (event) => {
+      document.removeEventListener('rum', cb);
+
+      expect(event.detail.checkpoint).to.equal('test');
+      expect(event.detail.data.foo).to.equal('bar');
+      expect(event.detail.data.int).to.equal(1);
+      done();
+    };
+
+    document.addEventListener('rum', cb);
+
+    sampleRUM('test', {
+      foo: 'bar',
+      int: 1,
+    });
+  });
 });
