@@ -36,7 +36,7 @@ describe('sampleRUM', () => {
     }
   });
 
-  it('rum error selected', async () => {
+  it('rum error selected', () => {
     const listeners = window.Mocha.process.listeners('uncaughtException');
     window.Mocha.process.removeAllListeners('uncaughtException');
     window.Mocha.process.on('uncaughtException', () => {
@@ -75,7 +75,7 @@ describe('sampleRUM', () => {
     });
   });
 
-  it('rum capture exception', async () => {
+  it('rum capture exception', () => {
     sampleRUM();
     window.hlx.rum.queue = undefined;
     expect(() => sampleRUM('triggererror')).to.not.throw(Error);

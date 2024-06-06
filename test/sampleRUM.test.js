@@ -36,7 +36,7 @@ describe('sampleRUM', () => {
     }
   });
 
-  it('rum initialization', async () => {
+  it('rum initialization', () => {
     const sendBeaconArgs = {};
     // eslint-disable-next-line no-underscore-dangle
     navigator._sendBeacon = navigator.sendBeacon;
@@ -56,7 +56,7 @@ describe('sampleRUM', () => {
     navigator.sendBeacon = navigator._sendBeacon;
   });
 
-  it('rum checkpoint queuing', async () => {
+  it('rum checkpoint queuing', () => {
     sampleRUM();
     sampleRUM('test', {
       foo: 'bar',
@@ -70,7 +70,7 @@ describe('sampleRUM', () => {
     expect(time).to.exist;
   });
 
-  it('rum initialization not selected', async () => {
+  it('rum initialization not selected', () => {
     const sendBeaconArgs = {};
     // eslint-disable-next-line no-underscore-dangle
     navigator._sendBeacon = navigator.sendBeacon;
@@ -92,7 +92,7 @@ describe('sampleRUM', () => {
     navigator.sendBeacon = navigator._sendBeacon;
   });
 
-  it('rum checkpoint queuing not selected', async () => {
+  it('rum checkpoint queuing not selected', () => {
     sampleRUM();
     window.hlx.rum.isSelected = false;
     sampleRUM('test', {
