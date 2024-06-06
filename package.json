@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
+    "pretest": "npx install playwright",
     "test": "web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
     "test-ci": "web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
     "test:watch": "web-test-runner --node-resolve --watch --coverage",
