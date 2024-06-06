@@ -103,8 +103,6 @@ describe('sampleRUM', () => {
   });
 
   it('sampleRUM fire custom rum event', (done) => {
-    sampleRUM();
-
     const cb = (event) => {
       document.removeEventListener('rum', cb);
 
