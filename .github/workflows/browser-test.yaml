@@ -11,7 +11,7 @@ env:
 
 jobs:
   test:
-    name: Test
+    name: Browsers Test
     strategy:
       matrix:
         os: [macos, windows]
@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: '20.x'
       - run: npm ci
-      - run: npm run test-ci
+      - run: npm run test-ci-mac
         if: ${{ matrix.os != 'windows' }}
       - run: npm run test-ci-win
         if: ${{ matrix.os != 'macos' }}
