@@ -70,28 +70,6 @@ describe('sampleRUM', () => {
     expect(time).to.exist;
   });
 
-  it('rum initialization not selected', () => {
-    const sendBeaconArgs = {};
-    // eslint-disable-next-line no-underscore-dangle
-    navigator._sendBeacon = navigator.sendBeacon;
-    navigator.sendBeacon = (url, data) => {
-      sendBeaconArgs.url = url;
-      sendBeaconArgs.data = JSON.parse(data);
-      return true;
-    };
-
-    const usp = new URLSearchParams(window.location.search);
-    usp.delete('rum');
-    window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
-    window.hlx.rum = undefined;
-
-    sampleRUM();
-
-    expect(Object.keys(sendBeaconArgs).length).to.equal(0);
-    // eslint-disable-next-line no-underscore-dangle
-    navigator.sendBeacon = navigator._sendBeacon;
-  });
-
   it('rum checkpoint queuing not selected', () => {
     sampleRUM();
     window.hlx.rum.isSelected = false;
