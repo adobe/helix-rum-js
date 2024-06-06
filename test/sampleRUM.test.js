@@ -89,6 +89,5 @@ describe('sampleRUM', () => {
       int: 1,
     });
     expect(window.hlx.rum.queue.length).to.equal(0);
-    expect(null).to.be.true;
   });
 });
