@@ -6,9 +6,10 @@
   "type": "module",
   "scripts": {
     "setup-playwright": "npx playwright install",
+    "setup-playwright-win": "npm run setup-playwrite && npx playwright install msedge",
     "test": "npm run setup-playwright && web-test-runner --node-resolve --coverage --playwright",
-    "test-ci": "npm run setup-playwright && web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
-    "test-ci-win": "npm run setup-playwright && web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox msedge",
+    "test-ci": "npm run setup-playwright-win && web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
+    "test-ci-win": "npm run setup-playwright-win && web-test-runner --node-resolve --coverage --playwright --browsers chromium msedge",
     "test:watch": "web-test-runner --node-resolve --watch --coverage",
     "build-standalone": "rollup --config",
     "prepack": "npm run build-standalone",
