@@ -5,10 +5,8 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "test": "web-test-runner --node-resolve --coverage --playwright",
-    "test-ci": "npx playwright install && web-test-runner --node-resolve --coverage --playwright",
-    "test-ci-mac": "npx playwright install chromium firefox webkit && web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
-    "test-ci-win": "npx playwright install msedge && web-test-runner --node-resolve --coverage --playwright --browsers msedge",
+    "test": "web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
+    "test-ci": "web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
     "test:watch": "web-test-runner --node-resolve --watch --coverage",
     "build-standalone": "rollup --config",
     "prepack": "npm run build-standalone",
