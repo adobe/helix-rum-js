@@ -1,3 +1,11 @@
+## [1.8.1](https://github.com/adobe/helix-rum-js/compare/v1.8.0...v1.8.1) (2024-06-07)
+
+
+### Bug Fixes
+
+* change id generation ([94af448](https://github.com/adobe/helix-rum-js/commit/94af448b078963d24395dc65c862003c9c448a79))
+* **release:** pass release branches to semantic-release dry-run ([ca5fd73](https://github.com/adobe/helix-rum-js/commit/ca5fd73cae3baf7c9ec086b78cd182d10dc2b2b0))
+
 # [1.8.0](https://github.com/adobe/helix-rum-js/compare/v1.7.0...v1.8.0) (2023-12-11)
 
 
