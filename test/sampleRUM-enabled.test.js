@@ -29,9 +29,14 @@ describe('sampleRUM', () => {
     window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
     // eslint-disable-next-line no-underscore-dangle
     window.hlx.rum = undefined;
+
+    const enhancer = document.querySelector('script[src*="rum-enhancer"]');
+    if (enhancer) {
+      enhancer.remove();
+    }
   });
 
-  it('rum initialization', async () => {
+  it('rum initialization', () => {
     const sendBeaconArgs = {};
     // eslint-disable-next-line no-underscore-dangle
     navigator._sendBeacon = navigator.sendBeacon;
@@ -40,7 +45,9 @@ describe('sampleRUM', () => {
       sendBeaconArgs.data = JSON.parse(data);
       return true;
     };
+
     sampleRUM();
+
     expect(sendBeaconArgs.url).to.equal('https://rum.hlx.page/.rum/1');
     expect(sendBeaconArgs.data.id).to.exist;
     expect(sendBeaconArgs.data.weight).to.equal(1);
@@ -49,12 +56,13 @@ describe('sampleRUM', () => {
     navigator.sendBeacon = navigator._sendBeacon;
   });
 
-  it('rum checkpoint queuing', async () => {
+  it('rum checkpoint queuing', () => {
     sampleRUM();
     sampleRUM('test', {
       foo: 'bar',
       int: 1,
     });
+
     const [checkpoint, data, time] = window.hlx.rum.queue.pop();
     expect(checkpoint).to.equal('test');
     expect(data.foo).to.equal('bar');
@@ -62,26 +70,7 @@ describe('sampleRUM', () => {
     expect(time).to.exist;
   });
 
-  it('rum initialization not selected', async () => {
-    const sendBeaconArgs = {};
-    // eslint-disable-next-line no-underscore-dangle
-    navigator._sendBeacon = navigator.sendBeacon;
-    navigator.sendBeacon = (url, data) => {
-      sendBeaconArgs.url = url;
-      sendBeaconArgs.data = JSON.parse(data);
-      return true;
-    };
-    const usp = new URLSearchParams(window.location.search);
-    usp.delete('rum');
-    window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
-    window.hlx.rum = undefined;
-    sampleRUM();
-    expect(Object.keys(sendBeaconArgs).length).to.equal(0);
-    // eslint-disable-next-line no-underscore-dangle
-    navigator.sendBeacon = navigator._sendBeacon;
-  });
-
-  it('rum checkpoint queuing not selected', async () => {
+  it('rum checkpoint queuing not selected', () => {
     sampleRUM();
     window.hlx.rum.isSelected = false;
     sampleRUM('test', {
@@ -89,5 +78,23 @@ describe('sampleRUM', () => {
       int: 1,
     });
     expect(window.hlx.rum.queue.length).to.equal(0);
+  });
+
+  it('sampleRUM fire custom rum event', (done) => {
+    const cb = (event) => {
+      document.removeEventListener('rum', cb);
+
+      expect(event.detail.checkpoint).to.equal('test');
+      expect(event.detail.data.foo).to.equal('bar');
+      expect(event.detail.data.int).to.equal(1);
+      done();
+    };
+
+    document.addEventListener('rum', cb);
+
+    sampleRUM('test', {
+      foo: 'bar',
+      int: 1,
+    });
   });
 });

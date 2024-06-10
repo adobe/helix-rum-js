@@ -29,12 +29,18 @@ describe('sampleRUM', () => {
     window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
     // eslint-disable-next-line no-underscore-dangle
     window.hlx.rum = undefined;
+
+    const enhancer = document.querySelector('script[src*="rum-enhancer"]');
+    if (enhancer) {
+      enhancer.remove();
+    }
   });
-  it('rum error selected', async () => {
+
+  it('rum error selected', () => {
     const listeners = window.Mocha.process.listeners('uncaughtException');
     window.Mocha.process.removeAllListeners('uncaughtException');
-    window.Mocha.process.on('uncaughtException', (err) => {
-      console.log('Expected uncaught Exception ', err);
+    window.Mocha.process.on('uncaughtException', () => {
+      // console.log('Expected uncaught Exception ', err);
     });
     // eslint-disable-next-line no-underscore-dangle
     navigator._sendBeacon = navigator.sendBeacon;
@@ -68,7 +74,8 @@ describe('sampleRUM', () => {
       window.Mocha.process.addListener('uncaughtException', lst);
     });
   });
-  it('rum capture exception', async () => {
+
+  it('rum capture exception', () => {
     sampleRUM();
     window.hlx.rum.queue = undefined;
     expect(() => sampleRUM('triggererror')).to.not.throw(Error);
