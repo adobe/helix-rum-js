@@ -12,3 +12,7 @@ Implementation should take as little work as possible. Instead, RUM will underst
 ## Uniformity
 
 To ensure uniformity and universality of the collected data, only one direction of customization should be supported: to gather less data, not more.
+
+## Interactions over Implementations
+
+We care more about how people interact with experiences than how the experiences are implemented. Therefore we stay as close to the user interface as possible.
