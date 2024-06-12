@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/adobe/helix-rum-js/compare/v1.8.1...v1.9.0) (2024-06-12)
+
+
+### Features
+
+* remove pagesviewed ([#170](https://github.com/adobe/helix-rum-js/issues/170)) ([180042a](https://github.com/adobe/helix-rum-js/commit/180042a12d1a7319a463a1faa1978022d4fcfab1))
+
 ## [1.8.1](https://github.com/adobe/helix-rum-js/compare/v1.8.0...v1.8.1) (2024-06-07)
 
 
