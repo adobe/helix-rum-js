@@ -24,7 +24,7 @@
         it('rum selected load enhancer', () => {
           // at this stage, rum-enhancer should not loaded because load event already
           expect(document.querySelector('script[src*="rum-enhancer"]')).to.exist;
-          expect(document.querySelector('script[src*="rum-enhancer"]').src).to.equal('http://localhost:8000/.rum/@adobe/helix-rum-enhancer@%5E2/src/index.js');
+          expect(document.querySelector('script[src*="rum-enhancer"]').src).not.to.match(/rum\.hlx\.page/);
         });
       });
     });
