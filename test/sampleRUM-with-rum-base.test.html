@@ -1,0 +1,34 @@
+<html>
+
+<head>
+  <script>
+    window.RUM_BASE = window.origin;
+    const usp = new URLSearchParams(window.location.search);
+    usp.append('rum', 'on');
+    window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
+  </script>
+  <script type="module">
+    import { sampleRUM } from '../src/index.js';
+    // early call to sampleRUM, i.e. before load event
+    sampleRUM();
+  </script>
+</head>
+
+<body>
+  <script type="module">
+    import { runTests } from '@web/test-runner-mocha';
+    import { expect } from '@esm-bundle/chai';
+    /* eslint-env mocha */
+    runTests(async () => {
+      describe('sampleRUM - load event', () => {
+        it('rum selected load enhancer', () => {
+          // at this stage, rum-enhancer should not loaded because load event already
+          expect(document.querySelector('script[src*="rum-enhancer"]')).to.exist;
+          expect(document.querySelector('script[src*="rum-enhancer"]').src).not.to.match(/rum\.hlx\.page/);
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
