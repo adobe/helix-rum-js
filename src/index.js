@@ -48,7 +48,7 @@ export function sampleRUM(checkpoint, data) {
           script.src = new URL('.rum/@adobe/helix-rum-enhancer@^2/src/index.js', sampleRUM.baseURL).href;
           document.head.appendChild(script);
         };
-        if (!window.hlx.RUM_SUPERVISED) {
+        if (!window.hlx.RUM_MANUAL_ENHANCE) {
           sampleRUM.enhance();
         }
       }
