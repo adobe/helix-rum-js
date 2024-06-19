@@ -15,6 +15,7 @@ export function sampleRUM(checkpoint, data) {
   const timeShift = () => (window.performance ? window.performance.now() : Date.now() - window.hlx.rum.firstReadTime);
   try {
     window.hlx = window.hlx || {};
+    sampleRUM.enhance = () => {};
     if (!window.hlx.rum) {
       const weight = new URLSearchParams(window.location.search).get('rum') === 'on' ? 1 : 100;
       const id = Math.random().toString(36).slice(-4);
@@ -42,17 +43,13 @@ export function sampleRUM(checkpoint, data) {
         const url = new URL(`.rum/${weight}`, sampleRUM.baseURL).href;
         navigator.sendBeacon(url, body);
 
-        const loadEnhancer = () => {
+        sampleRUM.enhance = () => {
           const script = document.createElement('script');
           script.src = new URL('.rum/@adobe/helix-rum-enhancer@^2/src/index.js', sampleRUM.baseURL).href;
           document.head.appendChild(script);
         };
-
-        if (window.performance && window.performance.getEntriesByType('navigation').every((e) => e.loadEventEnd)) {
-          // load event already ended
-          loadEnhancer();
-        } else {
-          window.addEventListener('load', loadEnhancer);
+        if (!window.hlx.RUM_SUPERVISED) {
+          sampleRUM.enhance();
         }
       }
     }
