@@ -37,10 +37,16 @@ export function sampleRUM(checkpoint, data) {
         });
         sampleRUM.baseURL = sampleRUM.baseURL || new URL(window.RUM_BASE || '/', new URL('https://rum.hlx.page'));
         sampleRUM.collectBaseURL = sampleRUM.collectBaseURL || sampleRUM.baseURL;
-        // eslint-disable-next-line object-curly-newline, max-len
-        const body = JSON.stringify({ weight, id, referer: window.location.href, checkpoint: 'top', t: timeShift(), target: document.visibilityState });
-        const url = new URL(`.rum/${weight}`, sampleRUM.baseURL).href;
-        navigator.sendBeacon(url, body);
+        sampleRUM.sendPing = (ck, time, pingData = {}) => {
+          // eslint-disable-next-line max-len, object-curly-newline
+          const rumData = JSON.stringify({ weight, id, referer: window.location.href, checkpoint: ck, t: time, ...pingData });
+          const { href: url, origin } = new URL(`.rum/${weight}`, sampleRUM.collectBaseURL);
+          const body = origin === window.location.origin ? new Blob([rumData], { type: 'application/json' }) : rumData;
+          navigator.sendBeacon(url, body);
+          // eslint-disable-next-line no-console
+          console.debug(`ping:${ck}`, pingData);
+        };
+        sampleRUM.sendPing('top', timeShift());
 
         const loadEnhancer = () => {
           const script = document.createElement('script');
