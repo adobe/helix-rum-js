@@ -1,0 +1,29 @@
+<html>
+  <body>
+    <script type="module">
+      import { runTests } from '@web/test-runner-mocha';
+      import { expect } from '@esm-bundle/chai';
+
+      window.hlx = {
+        RUM_SUPERVISED: true,
+      };
+
+      import { sampleRUM } from '../../src/index.js';
+      
+      /* eslint-env mocha */
+      runTests(async () => {
+        describe('sampleRUM - after load event', () => {
+          it('rum supervised mode - control enhancement', () => {
+            expect(document.querySelector('script[src*="rum-enhancer"]')).to.not.exist;
+            sampleRUM();
+            expect(document.querySelector('script[src*="rum-enhancer"]')).to.not.exist;
+            expect(sampleRUM.enhance).to.be.a('function');
+            sampleRUM.enhance();
+            // at this stage, rum-enhancer should still be loaded because rum has not been enabled
+            expect(document.querySelector('script[src*="rum-enhancer"]')).to.not.exist;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
