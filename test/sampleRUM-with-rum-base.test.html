@@ -11,7 +11,8 @@
     navigator._sendBeacon = navigator.sendBeacon;
     navigator.sendBeacon = (url, data) => {
       window.sendBeaconArgs.url = url;
-      window.sendBeaconArgs.blob = data;
+      // we only care about the `top` checkpoint which should be the first one.
+      window.sendBeaconArgs.blob = window.sendBeaconArgs.blob || data;
       return true;
     };
   </script>
