@@ -44,8 +44,8 @@ export function sampleRUM(checkpoint, data) {
           const { href: url, origin } = new URL(`.rum/${weight}`, sampleRUM.collectBaseURL);
           const body = origin === window.location.origin ? new Blob([rumData], { type: 'application/json' }) : rumData;
           navigator.sendBeacon(url, body);
-          // eslint-disable-next-line no-console, max-statements-per-line
-          if (weight === 1) { console.debug(`ping:${ck}`, pingData); }
+          // eslint-disable-next-line no-console
+          console.debug(`ping:${ck}`, pingData);
         };
         sampleRUM.sendPing('top', timeShift());
 
