@@ -67,9 +67,10 @@ describe('sampleRUM', () => {
     };
 
     sampleRUM();
-    sampleRUM.sendPing('sendPingWorks', 0, { source: 'test', target: 'test' });
+    sampleRUM.sendPing('sendPingWorks', 0, { source: 'sourcetest', target: 'targettest' });
     expect(sendBeaconArgs.data.checkpoint).to.equal('sendPingWorks');
-    expect(sendBeaconArgs.data.source).to.equal('test');
+    expect(sendBeaconArgs.data.source).to.equal('sourcetest');
+    expect(sendBeaconArgs.data.target).to.equal('targettest');
     // eslint-disable-next-line no-underscore-dangle
     navigator.sendBeacon = navigator._sendBeacon;
   });
