@@ -56,6 +56,24 @@ describe('sampleRUM', () => {
     navigator.sendBeacon = navigator._sendBeacon;
   });
 
+  it('rum sendPing available', () => {
+    const sendBeaconArgs = {};
+    // eslint-disable-next-line no-underscore-dangle
+    navigator._sendBeacon = navigator.sendBeacon;
+    navigator.sendBeacon = (url, data) => {
+      sendBeaconArgs.url = url;
+      sendBeaconArgs.data = JSON.parse(data);
+      return true;
+    };
+
+    sampleRUM();
+    sampleRUM.sendPing('sendPingWorks', 0, { source: 'test', target: 'test' });
+    expect(sendBeaconArgs.data.checkpoint).to.equal('sendPingWorks');
+    expect(sendBeaconArgs.data.source).to.equal('test');
+    // eslint-disable-next-line no-underscore-dangle
+    navigator.sendBeacon = navigator._sendBeacon;
+  });
+
   it('rum checkpoint queuing', () => {
     sampleRUM();
     sampleRUM('test', {
