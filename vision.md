@@ -19,4 +19,4 @@ We care more about how people interact with experiences than how the experiences
 
 ## Owned & Opinionated
 
-The AEM Oversight data stock is owned by Adobe and maintained to maximize insights for our customers. We actively grow, foster and prune the data.
+The AEM Oversight data stock is owned by Adobe and maintained to provide insights for site operators. We actively grow, foster and prune the data.
