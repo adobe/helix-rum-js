@@ -15,6 +15,7 @@ export function sampleRUM(checkpoint, data) {
   const timeShift = () => (window.performance ? window.performance.now() : Date.now() - window.hlx.rum.firstReadTime);
   try {
     window.hlx = window.hlx || {};
+    sampleRUM.enhance = () => {};
     if (!window.hlx.rum) {
       const weight = new URLSearchParams(window.location.search).get('rum') === 'on' ? 1 : 100;
       const id = Math.random().toString(36).slice(-4);
@@ -37,22 +38,24 @@ export function sampleRUM(checkpoint, data) {
         });
         sampleRUM.baseURL = sampleRUM.baseURL || new URL(window.RUM_BASE || '/', new URL('https://rum.hlx.page'));
         sampleRUM.collectBaseURL = sampleRUM.collectBaseURL || sampleRUM.baseURL;
-        // eslint-disable-next-line object-curly-newline, max-len
-        const body = JSON.stringify({ weight, id, referer: window.location.href, checkpoint: 'top', t: timeShift(), target: document.visibilityState });
-        const url = new URL(`.rum/${weight}`, sampleRUM.baseURL).href;
-        navigator.sendBeacon(url, body);
+        sampleRUM.sendPing = (ck, time, pingData = {}) => {
+          // eslint-disable-next-line max-len, object-curly-newline
+          const rumData = JSON.stringify({ weight, id, referer: window.location.href, checkpoint: ck, t: time, ...pingData });
+          const { href: url, origin } = new URL(`.rum/${weight}`, sampleRUM.collectBaseURL);
+          const body = origin === window.location.origin ? new Blob([rumData], { type: 'application/json' }) : rumData;
+          navigator.sendBeacon(url, body);
+          // eslint-disable-next-line no-console
+          console.debug(`ping:${ck}`, pingData);
+        };
+        sampleRUM.sendPing('top', timeShift());
 
-        const loadEnhancer = () => {
+        sampleRUM.enhance = () => {
           const script = document.createElement('script');
           script.src = new URL('.rum/@adobe/helix-rum-enhancer@^2/src/index.js', sampleRUM.baseURL).href;
           document.head.appendChild(script);
         };
-
-        if (window.performance && window.performance.getEntriesByType('navigation').every((e) => e.loadEventEnd)) {
-          // load event already ended
-          loadEnhancer();
-        } else {
-          window.addEventListener('load', loadEnhancer);
+        if (!window.hlx.RUM_MANUAL_ENHANCE) {
+          sampleRUM.enhance();
         }
       }
     }

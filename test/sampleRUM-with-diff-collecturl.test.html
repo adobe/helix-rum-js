@@ -2,7 +2,6 @@
 
 <head>
   <script>
-    window.RUM_BASE = window.origin;
     const usp = new URLSearchParams(window.location.search);
     usp.append('rum', 'on');
     window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
@@ -19,7 +18,9 @@
   <script type="module">
     import { sampleRUM } from '../src/index.js';
     // early call to sampleRUM, i.e. before load event
+    sampleRUM.collectBaseURL = new URL(window.location.origin);
     sampleRUM();
+
   </script>
 </head>
 
@@ -33,7 +34,7 @@
         it('rum selected load enhancer', () => {
           // at this stage, rum-enhancer should not loaded because load event already
           expect(document.querySelector('script[src*="rum-enhancer"]')).to.exist;
-          expect(document.querySelector('script[src*="rum-enhancer"]').src).not.to.match(/rum\.hlx\.page/);
+          expect(document.querySelector('script[src*="rum-enhancer"]').src).to.match(/rum\.hlx\.page/);
         });
         it('rum selected blob beacon', async () => {
           expect(window.sendBeaconArgs.url).to.equal(`${window.location.origin}/.rum/1`);
