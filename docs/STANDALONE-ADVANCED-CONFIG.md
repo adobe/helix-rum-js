@@ -19,4 +19,3 @@ Please note, that the origin you set, must route `/.rum/*` requests to `https://
 E.g.
 ```javascript
 window.RUM_BASE = window.origin;
-```
