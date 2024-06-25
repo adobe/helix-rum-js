@@ -97,4 +97,43 @@ describe('sampleRUM', () => {
       int: 1,
     });
   });
+  describe('sampling rate', () => {
+    let sendBeaconArgs;
+    beforeEach(() => {
+      sendBeaconArgs = {};
+      // eslint-disable-next-line no-underscore-dangle
+      navigator._sendBeacon = navigator.sendBeacon;
+      navigator.sendBeacon = (url, data) => {
+        sendBeaconArgs.url = url;
+        sendBeaconArgs.data = JSON.parse(data);
+        return true;
+      };
+    });
+    afterEach(() => {
+      // eslint-disable-next-line no-underscore-dangle
+      navigator.sendBeacon = navigator._sendBeacon;
+    });
+    it('allows high sampling rate', async () => {
+      window.SAMPLE_PAGEVIEWS_AT_RATE = 'high';
+      sampleRUM();
+      expect(window.hlx.rum.weight).to.equal(10);
+    });
+    it('allows low sampling rate', async () => {
+      window.SAMPLE_PAGEVIEWS_AT_RATE = 'low';
+      sampleRUM();
+      expect(window.hlx.rum.weight).to.equal(1000);
+    });
+    it('defaults to 100 sampling rate', async () => {
+      const usp = new URLSearchParams(window.location.search);
+      usp.delete('rum');
+      window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
+      delete window.SAMPLE_PAGEVIEWS_AT_RATE;
+      sampleRUM();
+      expect(window.hlx.rum.weight).to.equal(100);
+    });
+    it('allows forced sampling', async () => {
+      sampleRUM();
+      expect(window.hlx.rum.weight).to.equal(1);
+    });
+  });
 });
