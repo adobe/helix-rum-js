@@ -92,21 +92,6 @@ describe('sampleRUM', () => {
     expect(document.querySelector('script[src*="rum-enhancer"]')).to.exist;
   });
   describe('sampling rate', () => {
-    let sendBeaconArgs;
-    beforeEach(() => {
-      sendBeaconArgs = {};
-      // eslint-disable-next-line no-underscore-dangle
-      navigator._sendBeacon = navigator.sendBeacon;
-      navigator.sendBeacon = (url, data) => {
-        sendBeaconArgs.url = url;
-        sendBeaconArgs.data = JSON.parse(data);
-        return true;
-      };
-    });
-    afterEach(() => {
-      // eslint-disable-next-line no-underscore-dangle
-      navigator.sendBeacon = navigator._sendBeacon;
-    });
     it('allows high sampling rate', async () => {
       window.SAMPLE_PAGEVIEWS_AT_RATE = 'high';
       sampleRUM();
