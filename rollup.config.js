@@ -31,6 +31,10 @@ const bundles = [
     source: 'src/standalone.js',
     outputFile: 'dist/rum-standalone',
   },
+  {
+    source: 'src/404.js',
+    outputFile: 'dist/rum-standalone-404',
+  },
 ];
 
 export default [...bundles.map(({ outputFile, source }) => ({
