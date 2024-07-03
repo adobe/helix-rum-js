@@ -11,4 +11,4 @@
  */
 import { sampleRUM } from './index.js';
 
-sampleRUM('404');
+sampleRUM('404', { source: document.referrer });
