@@ -1,0 +1,33 @@
+<html>
+  <body>
+    <script>
+      const usp = new URLSearchParams(window.location.search);
+      usp.append('rum', 'on');
+      window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
+    </script>
+
+    <script type="module">
+      import { runTests } from '@web/test-runner-mocha';
+      import { expect } from '@esm-bundle/chai';
+
+      window.hlx = {
+        RUM_MANUAL_ENHANCE: true,
+      };
+
+      import { sampleRUM } from '../../src/index.js';
+
+      /* eslint-env mocha */
+      runTests(async () => {
+        describe('sampleRUM - after load event', () => {
+          it('rum manual enhance mode - control enhancement', () => {
+            expect(document.querySelector('script[src*="rum-enhancer"]')).to.not.exist;
+            sampleRUM();
+            expect(document.querySelector('script[src*="rum-enhancer"]')).to.not.exist;
+            sampleRUM.enhance();
+            expect(document.querySelector('script[src*="rum-enhancer"]')).to.exist;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
