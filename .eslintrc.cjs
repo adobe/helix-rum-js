@@ -16,4 +16,8 @@ module.exports = {
   env: {
     browser: true,
   },
+  rules: {
+    // allow
+    'no-nested-ternary': ['off'],
+  },
 };
