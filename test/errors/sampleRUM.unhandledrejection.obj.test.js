@@ -29,7 +29,7 @@ describe('sampleRUM simple error capture', () => {
     after(config);
   });
 
-  it('rum capture unhandled promise rejection', async () => {
+  it('rum capture unhandled promise rejection where reason is an error object', async () => {
     await test(async () => {
       await new Promise((resolve, reject) => {
         reject(new Error('This is an unhandled promise rejection with error object'));

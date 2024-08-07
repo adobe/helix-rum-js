@@ -30,7 +30,7 @@ describe('sampleRUM simple error capture', () => {
     after(config);
   });
 
-  it('rum capture simple error', async () => {
+  it('rum capture implementation error in a module', async () => {
     await test(() => {
       fireError();
     }, (source) => {

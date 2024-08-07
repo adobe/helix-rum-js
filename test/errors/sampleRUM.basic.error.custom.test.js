@@ -35,7 +35,7 @@ describe('sampleRUM custom error obj capture', () => {
     after(config);
   });
 
-  it('rum capture simple error', async () => {
+  it('rum capture a custom error', async () => {
     await test(() => {
       throw new MyCustomError('This is an unexpected custom error');
     }, (source) => {
