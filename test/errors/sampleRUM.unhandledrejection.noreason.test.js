@@ -29,7 +29,7 @@ describe('sampleRUM simple error capture', () => {
     after(config);
   });
 
-  it('rum capture unhandled promise rejection without reason', async () => {
+  it.only('rum capture unhandled promise rejection without reason', async () => {
     await test(async () => {
       await new Promise((resolve, reject) => {
         // eslint-disable-next-line prefer-promise-reject-errors
