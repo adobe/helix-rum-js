@@ -28,7 +28,7 @@ export async function test(errorFct, sourceTest, targetTest, queue) {
   const wait = async () => new Promise((resolve) => {
     window.setTimeout(() => {
       resolve();
-    }, 1000);
+    }, 1500);
   });
 
   await wait();
