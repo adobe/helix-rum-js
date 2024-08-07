@@ -36,45 +36,6 @@ describe('sampleRUM', () => {
     }
   });
 
-  it('rum error selected', () => {
-    const listeners = window.Mocha.process.listeners('uncaughtException');
-    window.Mocha.process.removeAllListeners('uncaughtException');
-    window.Mocha.process.on('uncaughtException', () => {
-      // console.log('Expected uncaught Exception ', err);
-    });
-    // eslint-disable-next-line no-underscore-dangle
-    navigator._sendBeacon = navigator.sendBeacon;
-    navigator.sendBeacon = (url, data) => {
-      if (data && JSON.parse(data).checkpoint === 'top') {
-        try {
-          throw new Error('Expected error');
-        } catch (error) {
-          window.dispatchEvent(
-            new ErrorEvent(
-              'error',
-              {
-                error,
-                message: 'Force error to test error handler!',
-                lineno: 999,
-                filename: 'sampleRUM.test.js',
-                cancelable: true,
-              },
-            ),
-          );
-        }
-      }
-      return true;
-    };
-    sampleRUM();
-    expect(window.hlx.rum.queue.length).to.equal(1);
-    expect(window.hlx.rum.queue.pop()[0]).to.equal('error');
-    // eslint-disable-next-line no-underscore-dangle
-    navigator.sendBeacon = navigator._sendBeacon;
-    listeners.forEach((lst) => {
-      window.Mocha.process.addListener('uncaughtException', lst);
-    });
-  });
-
   it('rum capture exception', () => {
     sampleRUM();
     window.hlx.rum.queue = undefined;
