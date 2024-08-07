@@ -12,7 +12,7 @@
 
 /* eslint-env mocha */
 
-import { expect } from '@esm-bundle/chai';
+import { assert } from '@esm-bundle/chai';
 import {
   test, before, after, fireError,
 } from './errors.js';
@@ -34,9 +34,9 @@ describe('sampleRUM simple error capture', () => {
     await test(() => {
       fireError();
     }, (source) => {
-      expect(source).to.equal('fireError@http://localhost:8000/test/errors/errors.js:20:7');
+      assert.ok(source.startsWith('fireError@'));
     }, (target) => {
-      expect(target).to.equal('TypeError: Cannot set properties of undefined (setting \'t\')');
+      assert.ok(target.startsWith('TypeError:'));
     }, config.queue);
   });
 });

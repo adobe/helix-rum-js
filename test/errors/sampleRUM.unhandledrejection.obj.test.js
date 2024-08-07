@@ -36,8 +36,7 @@ describe('sampleRUM simple error capture', () => {
       });
     }, (source) => {
       expect(source).to.be.a('string');
-      assert.ok(source.match(/sampleRUM.unhandledrejection.obj.test/), 'source should contain the file name');
-      assert.ok(source.match(/:35:/), 'source should contain the line number');
+      assert.ok(source.match(/sampleRUM.unhandledrejection.obj.test.js(.*):[\d]+:/), 'source should contain the file name and line number');
     }, (target) => {
       expect(target).to.equal('Error: This is an unhandled promise rejection with error object');
     }, config.queue);

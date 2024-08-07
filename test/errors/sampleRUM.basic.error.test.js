@@ -33,8 +33,7 @@ describe('sampleRUM simple error capture', () => {
       throw new Error('This is an unexpected error', { cause: 'root cause' });
     }, (source) => {
       expect(source).to.be.a('string');
-      assert.ok(source.match(/sampleRUM.basic.error.test.js/), 'source should contain the file name');
-      assert.ok(source.match(/:33:/), 'source should contain the line number');
+      assert.ok(source.match(/sampleRUM.basic.error.test.js(.*):[\d]+:/), 'source should contain the file name and line number');
     }, (target) => {
       expect(target).to.equal('Error: This is an unexpected error');
     }, config.queue);

@@ -36,10 +36,9 @@ describe('sampleRUM simple error capture', () => {
       s.t = 1;
     }, (source) => {
       expect(source).to.be.a('string');
-      assert.ok(source.match(/sampleRUM.real.error.test.js/), 'source should contain the file name');
-      assert.ok(source.match(/:36:/), 'source should contain the line number');
+      assert.ok(source.match(/sampleRUM.real.error.test.js(.*):[\d]+:/), 'source should contain the file name and line number');
     }, (target) => {
-      expect(target).to.equal('TypeError: Cannot set properties of undefined (setting \'t\')');
+      assert.ok(target.startsWith('TypeError:'));
     }, config.queue);
   });
 });

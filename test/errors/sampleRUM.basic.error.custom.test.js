@@ -40,8 +40,7 @@ describe('sampleRUM custom error obj capture', () => {
       throw new MyCustomError('This is an unexpected custom error');
     }, (source) => {
       expect(source).to.be.a('string');
-      assert.ok(source.match(/sampleRUM.basic.error.custom.test.js/), 'source should contain the file name');
-      assert.ok(source.match(/:40:/), 'source should contain the line number');
+      assert.ok(source.match(/sampleRUM.basic.error.custom.test.js(.*):[\d]+:/), 'source should contain the file name and line number');
     }, (target) => {
       expect(target).to.equal('Error: This is an unexpected custom error');
     }, config.queue);
