@@ -23,7 +23,7 @@ export function fireError() {
 export async function test(errorFct, sourceTest, targetTest, queue) {
   sampleRUM();
 
-  window.setTimeout(errorFct, 1);
+  window.setTimeout(errorFct);
 
   const wait = async () => new Promise((resolve) => {
     window.setTimeout(() => {
