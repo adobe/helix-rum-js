@@ -1,3 +1,19 @@
+# [2.2.0](https://github.com/adobe/helix-rum-js/compare/v2.1.4...v2.2.0) (2024-08-13)
+
+
+### Bug Fixes
+
+* **404:** send referrer ([84a6556](https://github.com/adobe/helix-rum-js/commit/84a655650b273382d1e1e606ab413dc67f4f77e4))
+* release process ([#191](https://github.com/adobe/helix-rum-js/issues/191)) ([f40a949](https://github.com/adobe/helix-rum-js/commit/f40a9498373b5f963d8f6821d24b9b720b6cbca9))
+
+
+### Features
+
+* **bundle:** release a standalone 404.js that can be used to track error pages ([33d70b5](https://github.com/adobe/helix-rum-js/commit/33d70b530c278ed63e700ac1d73b03b1dab60c84))
+* improve errors capture ([#189](https://github.com/adobe/helix-rum-js/issues/189)) ([d7448eb](https://github.com/adobe/helix-rum-js/commit/d7448eb9c58be26407ef4b7a86a81ac6722c6920))
+* improving enhancer loading timing ([#175](https://github.com/adobe/helix-rum-js/issues/175)) ([d9c690e](https://github.com/adobe/helix-rum-js/commit/d9c690ef717432fe93e753105d6bdd3318065b02))
+* trigger release ([7d8f4e0](https://github.com/adobe/helix-rum-js/commit/7d8f4e03fba48481148612a2dd69bcdf322a8fdf))
+
 ## [2.1.4](https://github.com/adobe/helix-rum-js/compare/v2.1.3...v2.1.4) (2024-06-05)
 
 
