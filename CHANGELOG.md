@@ -1,3 +1,11 @@
+# [2.3.0](https://github.com/adobe/helix-rum-js/compare/v2.2.0...v2.3.0) (2024-08-19)
+
+
+### Features
+
+* allow increasing the sampling rate up to 1/10 for specific use cases ([f96e713](https://github.com/adobe/helix-rum-js/commit/f96e713c7b9c5ab03c933683499a527b5e98f57e))
+* **minirum:** allow increasing the sampling rate up to 1/10 for specific use cases ([05f6da7](https://github.com/adobe/helix-rum-js/commit/05f6da700072cd5462e50368054ac420581e64f6)), closes [#156](https://github.com/adobe/helix-rum-js/issues/156)
+
 # [2.2.0](https://github.com/adobe/helix-rum-js/compare/v2.1.4...v2.2.0) (2024-08-13)
 
 
