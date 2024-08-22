@@ -1,3 +1,10 @@
+## [2.3.1](https://github.com/adobe/helix-rum-js/compare/v2.3.0...v2.3.1) (2024-08-22)
+
+
+### Bug Fixes
+
+* add missing license to packaged code ([#195](https://github.com/adobe/helix-rum-js/issues/195)) ([7e8bfb1](https://github.com/adobe/helix-rum-js/commit/7e8bfb1c5535d0a92feefe224ad542ced9086b0d))
+
 # [2.3.0](https://github.com/adobe/helix-rum-js/compare/v2.2.0...v2.3.0) (2024-08-19)
 
 
