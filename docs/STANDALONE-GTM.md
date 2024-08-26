@@ -14,7 +14,7 @@ Standalone mode for RUM using Google Tag Manager
 
 5. Use 'Custom HTML' as the tag type
 
-![gtm-custom-html](https://github.com/user-attachments/assets/72dbb18c-0614-4a24-9749-d1d193be7dd3)
+![gtm-custom-html](https://github.com/user-attachments/assets/75ca518d-3e5c-46c9-9953-d9cc35049eb8)
 
 6. Use the 'RUM Standalone script' and insert below  tag in 'Custom HTML'
 
