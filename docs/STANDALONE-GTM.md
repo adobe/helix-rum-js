@@ -18,7 +18,7 @@ Standalone mode for RUM using Google Tag Manager
 
 6. Use the 'RUM Standalone script' and insert below  tag in 'Custom HTML'
 
-```
+```html
 <script defer type="text/javascript" src="https://rum.hlx.page/.rum/@adobe/helix-rum-js@^2/dist/rum-standalone.js"/>
 ```
 
@@ -29,12 +29,12 @@ Standalone mode for RUM using Google Tag Manager
 
 ## Check if RUM was enabled on your site
 
-1. Navigate to your non Edge Delivery site 
+1. Navigate to your non AEM site
 2. Add  query parameter `?rum=on` to your site. Example: https://site.com?rum=on
-3. Open browser console and check that ping messages are being written
+3. Open browser console and check that `ping` messages are being written
 
 ![ping-messages-in-console](https://github.com/adobe/helix-rum-js/assets/43381734/0a2f4b25-0198-41b2-b386-740489b1f7b3)
 
-4. Open the network tab of your browser and validate that ping requests using POST method to domain rum.hlx.page are being sent and that the response status is 201
+4. Open the network tab of your browser and validate that ping requests using `POST` method to domain `rum.hlx.page` are being sent and that the response status is `201`
 
  ![rum-requests-in-network-tab](https://github.com/adobe/helix-rum-js/assets/43381734/766f1c45-223b-40e3-ba57-1237f44c9c15)
