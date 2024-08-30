@@ -23,6 +23,8 @@ If you understand the details of a high performance page, it might be advisable 
 
 Check the following link for [advanced configuration options](docs/STANDALONE-ADVANCED-CONFIG.md).
 
+Also, you can instrument your website with [RUM using Google Tag Manager](docs/STANDALONE-GTM.md)
+
 ### Content Security Policy
 If your website implements a [Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) it is important to ensure
 that the origin `https://rum.hlx.page` is allowed both as a script source and as a destination for `navigator.sendBeacon` API.
