@@ -12,6 +12,9 @@
 
 import cleanup from 'rollup-plugin-cleanup';
 import eslint from 'rollup-plugin-eslint-bundle';
+import pkg from 'rollup-plugin-checksum';
+
+const checksum = pkg.default;
 
 const banner = `/*
  * Copyright 2024 Adobe. All rights reserved.
@@ -58,6 +61,10 @@ export default [...bundles.map(({ outputFile, source }) => ({
       eslintOptions: {
         fix: true,
       },
+    }),
+    checksum({
+      filename: `${outputFile.split('/').pop()}.md5`,
+      includeAssets: false,
     }),
   ],
 }))];
