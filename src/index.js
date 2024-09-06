@@ -55,7 +55,8 @@ export function sampleRUM(checkpoint, data) {
           sampleRUM('error', errData);
         });
 
-        sampleRUM.baseURL = sampleRUM.baseURL || new URL(window.RUM_BASE || '/', new URL('https://rum.hlx.page'));
+        const scriptSrc = document.currentScript.src ? new URL(document.currentScript.src, window.location.origin) : '/';
+        sampleRUM.baseURL = sampleRUM.baseURL || new URL(window.RUM_BASE || scriptSrc, new URL('https://rum.hlx.page'));
         sampleRUM.collectBaseURL = sampleRUM.collectBaseURL || sampleRUM.baseURL;
         sampleRUM.sendPing = (ck, time, pingData = {}) => {
           // eslint-disable-next-line max-len, object-curly-newline
