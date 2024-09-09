@@ -20,7 +20,7 @@ In this case, simply load the standalone script from the same domain and all RUM
 
 Please note, that the origin you set, must route `/.rum/*` requests to `https://rum.hlx.page/.rum/*`
 
-For more complex setups, a different option is to the global variable `window.RUM_BASE` before loading the script. All RUM requests will then use that domain.
+For more complex setups, a different option is to set the global variable `window.RUM_BASE` before loading the script. All RUM requests will then use that domain.
 
 E.g.
 ```javascript
