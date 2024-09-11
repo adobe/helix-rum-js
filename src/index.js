@@ -60,7 +60,9 @@ export function sampleRUM(checkpoint, data) {
         sampleRUM.sendPing = (ck, time, pingData = {}) => {
           // eslint-disable-next-line max-len, object-curly-newline
           const rumData = JSON.stringify({ weight, id, referer: window.location.href, checkpoint: ck, t: time, ...pingData });
-          const { href: url, origin } = new URL(`.rum/${weight}`, sampleRUM.collectBaseURL);
+          const u = new URL(`.rum/${weight}`, sampleRUM.collectBaseURL);
+          u.searchParams = window.RUM_PARAMS || new URLSearchParams();
+          const { href: url, origin } = u;
           const body = origin === window.location.origin ? new Blob([rumData], { type: 'application/json' }) : rumData;
           navigator.sendBeacon(url, body);
           // eslint-disable-next-line no-console
