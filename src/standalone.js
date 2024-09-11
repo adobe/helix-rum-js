@@ -15,3 +15,4 @@ const scriptSrc = (document.currentScript && document.currentScript.src)
   ? new URL(document.currentScript.src, window.location.origin).origin : null;
 window.RUM_BASE = window.RUM_BASE || scriptSrc;
 sampleRUM();
+window.hlx.sampleRUM = sampleRUM;
