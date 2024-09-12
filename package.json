@@ -1,6 +1,6 @@
 {
   "name": "@adobe/helix-rum-js",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "Helix RUM JS",
   "main": "src/index.js",
   "type": "module",
@@ -35,7 +35,7 @@
     "reporter-options": "configFile=.mocha-multi.json"
   },
   "devDependencies": {
-    "@adobe/eslint-config-helix": "2.0.6",
+    "@adobe/eslint-config-helix": "2.0.7",
     "@esm-bundle/chai": "4.3.4-fix.0",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
@@ -52,7 +52,7 @@
     "husky": "9.1.5",
     "jsdoc-to-markdown": "8.0.3",
     "junit-report-builder": "5.0.0",
-    "lint-staged": "15.2.9",
+    "lint-staged": "15.2.10",
     "mocha": "10.7.3",
     "mocha-multi-reporters": "1.5.1",
     "rollup": "4.21.2",
