@@ -1,7 +1,8 @@
 <a name="sampleRUM"></a>
 
 ## sampleRUM(checkpoint, data)
-log RUM if part of the sample.
+log RUM if part of the sample. This is an internal API and should not be called directly by projects. The collection service validates and rejects
+samples with unknown `checkpoint` values and implausible `source` and `target` value.
 
 **Kind**: global function  
 
