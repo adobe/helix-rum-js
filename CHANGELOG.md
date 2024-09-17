@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/adobe/helix-rum-js/compare/v2.4.0...v2.5.0) (2024-09-17)
+
+
+### Features
+
+* **build:** create hashsums for generated files ([3b690ed](https://github.com/adobe/helix-rum-js/commit/3b690edb8643b0cebaee7ecf8f8ea1319d30478b))
+
 # [2.4.0](https://github.com/adobe/helix-rum-js/compare/v2.3.1...v2.4.0) (2024-09-09)
 
 
