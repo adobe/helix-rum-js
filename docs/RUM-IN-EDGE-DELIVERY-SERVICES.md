@@ -56,4 +56,4 @@ Simplified sample code to listen to this event:
 
 ## Extending sampleRUM usage
 
-For usage of the `sampleRUM` function, follow the [API documentation](docs/API.md).
+For usage of the `sampleRUM` function, follow the [API documentation](docs/API.md), but note that you should not and do not have to call the function directly anymore.

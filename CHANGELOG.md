@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/adobe/helix-rum-js/compare/v2.3.1...v2.4.0) (2024-09-09)
+
+
+### Features
+
+* Simplify script inclusion when using same domain ([98073a4](https://github.com/adobe/helix-rum-js/commit/98073a48084c2f6bf916fe7a3a9f02ef4940dd60)), closes [#201](https://github.com/adobe/helix-rum-js/issues/201)
+
 ## [2.3.1](https://github.com/adobe/helix-rum-js/compare/v2.3.0...v2.3.1) (2024-08-22)
 
 
