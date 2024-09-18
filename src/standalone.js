@@ -13,8 +13,8 @@ import { sampleRUM } from './index.js';
 
 const scriptSrc = (document.currentScript && document.currentScript.src)
   ? new URL(document.currentScript.src, window.location.origin).origin : null;
-const scriptParams = (document.currentScript && document.currentScript.src)
-  ? new URL(document.currentScript.src, window.location.origin).searchParams : null;
+const scriptParams = (document.currentScript && document.currentScript.dataset)
+  ? document.currentScript.dataset : null;
 window.RUM_BASE = window.RUM_BASE || scriptSrc;
 window.RUM_PARAMS = window.RUM_PARAMS || scriptParams;
 sampleRUM();
