@@ -1,3 +1,10 @@
+## [2.5.1](https://github.com/adobe/helix-rum-js/compare/v2.5.0...v2.5.1) (2024-09-18)
+
+
+### Bug Fixes
+
+* **index:** better comment ([152b477](https://github.com/adobe/helix-rum-js/commit/152b4779c19f0c939319cc51a260a31e69ff8180))
+
 # [2.5.0](https://github.com/adobe/helix-rum-js/compare/v2.4.0...v2.5.0) (2024-09-17)
 
 
