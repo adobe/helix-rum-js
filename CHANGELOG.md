@@ -1,3 +1,10 @@
+## [2.5.2](https://github.com/adobe/helix-rum-js/compare/v2.5.1...v2.5.2) (2024-09-18)
+
+
+### Bug Fixes
+
+* **release:** include explicit list of assets ([4452c2d](https://github.com/adobe/helix-rum-js/commit/4452c2d80de57a70ad30afa43e9a5ac5e06bcd86))
+
 ## [2.5.1](https://github.com/adobe/helix-rum-js/compare/v2.5.0...v2.5.1) (2024-09-18)
 
 
