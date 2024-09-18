@@ -10,8 +10,6 @@ module.exports = {
       "assets": [
         "package.json",
         "CHANGELOG.md",
-        'dist/rum-standalone.md5',
-        'dist/rum-standalone-404.md5'
       ],
       "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
     }],
