@@ -1,3 +1,10 @@
+## [2.5.3](https://github.com/adobe/helix-rum-js/compare/v2.5.2...v2.5.3) (2024-09-18)
+
+
+### Bug Fixes
+
+* **release:** use github relase attachments instead of git repo checkins ([6fcee18](https://github.com/adobe/helix-rum-js/commit/6fcee18902852ae05209f1f451e16f996656f48c))
+
 ## [2.5.2](https://github.com/adobe/helix-rum-js/compare/v2.5.1...v2.5.2) (2024-09-18)
 
 
