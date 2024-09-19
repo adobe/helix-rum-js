@@ -1,3 +1,17 @@
+# [2.6.0](https://github.com/adobe/helix-rum-js/compare/v2.5.3...v2.6.0) (2024-09-19)
+
+
+### Bug Fixes
+
+* **index:** better way of setting search parameters ([584de2c](https://github.com/adobe/helix-rum-js/commit/584de2c170988713eddf46d19f74bf35cb1de105))
+* **index:** do not show question mark if no URL parameters are set ([e650367](https://github.com/adobe/helix-rum-js/commit/e650367facd8aad274ed004ba83b1de0d65a2f56))
+
+
+### Features
+
+* **index:** support `window.RUM_PARAMS` to attach custom URL parameters to collection URL ([4e0d22d](https://github.com/adobe/helix-rum-js/commit/4e0d22dffc7792aa80d664c442aa7a5302128ada))
+* **rum-params:** in standalone replace extra params by data attributes ([ec4e6ea](https://github.com/adobe/helix-rum-js/commit/ec4e6ea52d236962cef174f5c02de6c6bdb9b3f4))
+
 ## [2.5.3](https://github.com/adobe/helix-rum-js/compare/v2.5.2...v2.5.3) (2024-09-18)
 
 
