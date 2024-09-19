@@ -11,7 +11,14 @@
  */
 import { sampleRUM } from './index.js';
 
-const scriptSrc = (document.currentScript && document.currentScript.src)
-  ? new URL(document.currentScript.src, window.location.origin).origin : null;
-window.RUM_BASE = window.RUM_BASE || scriptSrc;
-sampleRUM('404', { source: document.referrer });
+try {
+  const scriptSrc = (document.currentScript && document.currentScript.src)
+    ? new URL(document.currentScript.src, window.location.origin).origin : null;
+  const scriptParams = (document.currentScript && document.currentScript.dataset)
+    ? document.currentScript.dataset : null;
+  window.RUM_BASE = window.RUM_BASE || scriptSrc;
+  window.RUM_PARAMS = window.RUM_PARAMS || scriptParams;
+  sampleRUM('404', { source: document.referrer });
+} catch (error) {
+  // something went wrong
+}
