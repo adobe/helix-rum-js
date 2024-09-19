@@ -32,7 +32,13 @@ module.exports = {
           "label": "RUM Standalone 404 Hash"
         }
       ]
-    }]
+    }],
+    ["semantic-release-slack-bot", {
+      notifyOnSuccess: true,
+      notifyOnFail: true,
+      markdownReleaseNotes: true,
+      slackChannel: "rum-explorers",
+    }],
   ],
   branches: ['main', '1.x'],
 };
