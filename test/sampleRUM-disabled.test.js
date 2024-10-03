@@ -17,6 +17,25 @@ import { expect } from '@esm-bundle/chai';
 import { sampleRUM } from '../src/index.js';
 
 describe('sampleRUM - RUM disabled', () => {
+  beforeEach(() => {
+    const usp = new URLSearchParams(window.location.search);
+    usp.append('rum', 'off');
+    window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
+  });
+
+  afterEach(() => {
+    const usp = new URLSearchParams(window.location.search);
+    usp.delete('rum');
+    window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
+    // eslint-disable-next-line no-underscore-dangle
+    window.hlx.rum = undefined;
+
+    const enhancer = document.querySelector('script[src*="rum-enhancer"]');
+    if (enhancer) {
+      enhancer.remove();
+    }
+  });
+
   it('no beacon sent', () => {
     const sendBeaconArgs = {};
     // eslint-disable-next-line no-underscore-dangle
@@ -38,7 +57,6 @@ describe('sampleRUM - RUM disabled', () => {
     const cb = (event) => {
       document.removeEventListener('rum', cb);
 
-      // in 1/100 of cases, the test will fail because rum will be enabled automatically
       expect(event.detail.checkpoint).to.equal('test');
       expect(event.detail.data.foo).to.equal('bar');
       expect(event.detail.data.int).to.equal(1);
