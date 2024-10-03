@@ -38,6 +38,7 @@ describe('sampleRUM - RUM disabled', () => {
     const cb = (event) => {
       document.removeEventListener('rum', cb);
 
+      // in 1/100 of cases, the test will fail because rum will be enabled automatically
       expect(event.detail.checkpoint).to.equal('test');
       expect(event.detail.data.foo).to.equal('bar');
       expect(event.detail.data.int).to.equal(1);

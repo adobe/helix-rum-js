@@ -19,7 +19,7 @@
             expect(document.querySelector('script[src*="rum-enhancer"]')).to.not.exist;
             expect(sampleRUM.enhance).to.be.a('function');
             sampleRUM.enhance();
-            // at this stage, rum-enhancer should not be loaded because rum has not been enabled
+            // at this stage, rum-enhancer should not be loaded because rum has not been enabled (well, in 1/100 it is, test may fail)
             expect(document.querySelector('script[src*="rum-enhancer"]')).to.not.exist;
           });
         });

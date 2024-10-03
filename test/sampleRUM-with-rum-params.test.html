@@ -6,12 +6,18 @@
     const usp = new URLSearchParams(window.location.search);
     usp.append('rum', 'on');
     window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
-    window.sendBeaconArgs = {};
+    window.sendBeaconArgs = {
+      url: '',
+      data: {},
+    };
     // eslint-disable-next-line no-underscore-dangle
     navigator._sendBeacon = navigator.sendBeacon;
     navigator.sendBeacon = (url, data) => {
-      sendBeaconArgs.url = url;
-      sendBeaconArgs.data = JSON.parse(data);
+      const json = JSON.parse(data);
+      if (json.checkpoint === 'top') {
+        sendBeaconArgs.url = url;
+        sendBeaconArgs.data = json;
+      }
       return true;
     };
   </script>
