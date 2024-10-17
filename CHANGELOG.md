@@ -1,3 +1,11 @@
+# [2.7.0](https://github.com/adobe/helix-rum-js/compare/v2.6.0...v2.7.0) (2024-10-17)
+
+
+### Features
+
+* allow rum=off to stabilize tests ([#218](https://github.com/adobe/helix-rum-js/issues/218)) ([eb1b8a1](https://github.com/adobe/helix-rum-js/commit/eb1b8a160a02bd05c97a2f9a28b40d5be483b140))
+* allow to enhance only once ([#220](https://github.com/adobe/helix-rum-js/issues/220)) ([af1a21c](https://github.com/adobe/helix-rum-js/commit/af1a21c601312a9676cb306f12133a0a13cd02af))
+
 # [2.6.0](https://github.com/adobe/helix-rum-js/compare/v2.5.3...v2.6.0) (2024-09-19)
 
 
