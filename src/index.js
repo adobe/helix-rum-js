@@ -71,6 +71,9 @@ export function sampleRUM(checkpoint, data) {
         sampleRUM.sendPing('top', timeShift());
 
         sampleRUM.enhance = () => {
+          // only enhance once
+          if (document.querySelector('script[src*="rum-enhancer"]')) return;
+
           const script = document.createElement('script');
           script.src = new URL('.rum/@adobe/helix-rum-enhancer@^2/src/index.js', sampleRUM.baseURL).href;
           document.head.appendChild(script);
