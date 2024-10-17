@@ -25,6 +25,10 @@
             expect(document.querySelector('script[src*="rum-enhancer"]')).to.not.exist;
             sampleRUM.enhance();
             expect(document.querySelector('script[src*="rum-enhancer"]')).to.exist;
+            // test enhance once
+            sampleRUM.enhance();
+            const scripts = document.querySelectorAll('script[src*="rum-enhancer"]');
+            expect(scripts.length).to.equal(1);
           });
         });
       });
