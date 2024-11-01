@@ -1,3 +1,11 @@
+# [2.8.0](https://github.com/adobe/helix-rum-js/compare/v2.7.0...v2.8.0) (2024-11-01)
+
+
+### Features
+
+* allow specific version for enhancer in 404 script ([8511ed2](https://github.com/adobe/helix-rum-js/commit/8511ed229b757178cabc1ffa8cc787644adb8e10))
+* **enhancer-version:** allow selecting a specific enhancer version in standalone ([4cf9762](https://github.com/adobe/helix-rum-js/commit/4cf9762deee38b98af58e37fd11eeba019b07e55))
+
 # [2.7.0](https://github.com/adobe/helix-rum-js/compare/v2.6.0...v2.7.0) (2024-10-17)
 
 
