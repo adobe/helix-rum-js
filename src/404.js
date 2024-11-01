@@ -14,8 +14,10 @@ import { sampleRUM } from './index.js';
 try {
   const scriptSrc = (document.currentScript && document.currentScript.src)
     ? new URL(document.currentScript.src, window.location.origin).origin : null;
-  const scriptParams = (document.currentScript && document.currentScript.dataset)
-    ? document.currentScript.dataset : null;
+  // eslint-disable-next-line max-len
+  const dataAttrs = (document.currentScript && document.currentScript.dataset) ? document.currentScript.dataset : {};
+  const { enhancerVersion, enhancerHash, ...scriptParams } = dataAttrs;
+  sampleRUM.enhancerContext = { enhancerVersion, enhancerHash };
   window.RUM_BASE = window.RUM_BASE || scriptSrc;
   window.RUM_PARAMS = window.RUM_PARAMS || scriptParams;
   sampleRUM('404', { source: document.referrer });

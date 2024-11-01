@@ -1,0 +1,52 @@
+<html>
+
+<head>
+  <script>
+    window.RUM_PARAMS = { program: 'pXXXXXX', environment: 'eYYYYYY'};
+    const usp = new URLSearchParams(window.location.search);
+    usp.append('rum', 'on');
+    window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
+    window.sendBeaconArgs = {};
+    // eslint-disable-next-line no-underscore-dangle
+    navigator._sendBeacon = navigator.sendBeacon;
+    navigator.sendBeacon = (url, data) => {
+      sendBeaconArgs.url = url;
+      sendBeaconArgs.data = JSON.parse(data);
+      return true;
+    };
+  </script>
+  <script type="module">
+    import { sampleRUM } from '../src/index.js';
+    sampleRUM.enhancerContext = { enhancerVersion: 'X.Y.Z', enhancerHash: '123456789ABC' };
+    // early call to sampleRUM, i.e. before load event
+    sampleRUM();
+  </script>
+</head>
+
+<body>
+  <script type="module">
+    import { runTests } from '@web/test-runner-mocha';
+    import { expect } from '@esm-bundle/chai';
+    /* eslint-env mocha */
+    runTests(async () => {
+      describe('sampleRUM - enhancer context', () => {
+        it('rum enhancerVersion', async () => {
+          const enhancerScript = document.querySelector('script[src*="rum-enhancer"]');
+          expect(enhancerScript).to.exist;
+          const enhancerUrlPath = new URL(enhancerScript.src).pathname;
+          expect(enhancerUrlPath).to.equal('/.rum/@adobe/helix-rum-enhancer@X.Y.Z/src/index.js');
+          expect(enhancerScript.getAttribute('crossorigin')).to.equal('anonymous');
+          expect(enhancerScript.integrity).to.equal('123456789ABC');
+        });
+        it('rum enhancer integrity', async () => {
+          const enhancerScript = document.querySelector('script[src*="rum-enhancer"]');
+          expect(enhancerScript).to.exist;
+          expect(enhancerScript.getAttribute('crossorigin')).to.equal('anonymous');
+          expect(enhancerScript.integrity).to.equal('123456789ABC');
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
