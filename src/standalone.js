@@ -21,27 +21,14 @@ try {
   window.RUM_BASE = window.RUM_BASE || scriptSrc;
   window.RUM_PARAMS = window.RUM_PARAMS || scriptParams;
 
-  let status;
-  if (window.performance && window.performance.getEntriesByType) {
-    for (const { name, responseStatus, serverTiming } of window.performance.getEntriesByType("navigation")) {
-      if (name === window.location.href) {
-        status = responseStatus;
-      }
-      if (!status && serverTiming) {
-        for (const {name, duration} of serverTiming) {
-          if (name === "status") {
-            status = duration;
-          }
-        }
-      }
-    }
-  }
+const [navigation] = (window.performance && window.performance.getEntriesByType("navigation")) || [];
+const is404 = navigation && navigation.name === window.location.href && navigation.responseStatus === 404;
 
-  if (status && status === 404) {
+if (is404) {
     sampleRUM('404', { source: document.referrer });
-  } else {
+} else {
     sampleRUM();
-  }
+}
 } catch (error) {
   // something went wrong
 }
