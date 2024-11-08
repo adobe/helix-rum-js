@@ -21,7 +21,15 @@ try {
   window.RUM_BASE = window.RUM_BASE || scriptSrc;
   window.RUM_PARAMS = window.RUM_PARAMS || scriptParams;
 
-  sampleRUM();
+  const [navigation] = (window.performance && window.performance.getEntriesByType('navigation')) || [];
+  const is404 = navigation && navigation.name === window.location.href
+    && navigation.responseStatus === 404;
+
+  if (is404) {
+    sampleRUM('404', { source: document.referrer });
+  } else {
+    sampleRUM();
+  }
 } catch (error) {
   // something went wrong
 }
