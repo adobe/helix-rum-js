@@ -1,3 +1,10 @@
+# [2.9.0](https://github.com/adobe/helix-rum-js/compare/v2.8.0...v2.9.0) (2024-11-08)
+
+
+### Features
+
+* use Performance API to get response status and sample accordingly ([#224](https://github.com/adobe/helix-rum-js/issues/224)) ([7702404](https://github.com/adobe/helix-rum-js/commit/770240446d500d383de78c0dc7dd854c46301aa6))
+
 # [2.8.0](https://github.com/adobe/helix-rum-js/compare/v2.7.0...v2.8.0) (2024-11-01)
 
 
