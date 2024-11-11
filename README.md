@@ -20,9 +20,9 @@ To do it, simply add the following script to your pages.
 <script defer type="text/javascript" src="https://rum.hlx.page/.rum/@adobe/helix-rum-js@^2/dist/rum-standalone.js"></script>
 ```
 
-If you want to instruct a 404 response, include this script instead in standalone mode.
+If you want to instruct a 404 response, include the same script but set the status data attribute to 404.
 ```html
-<script defer type="text/javascript" src="https://rum.hlx.page/.rum/@adobe/helix-rum-js@^2/dist/rum-standalone-404.js"></script>
+<script defer type="text/javascript" src="https://rum.hlx.page/.rum/@adobe/helix-rum-js@^2/dist/rum-standalone.js" data-status="404"></script>
 ```
 
 If you understand the details of a high performance page, it might be advisable to load the script after the [LCP](https://web.dev/articles/lcp) event
