@@ -16,14 +16,16 @@ try {
     ? new URL(document.currentScript.src, window.location.origin).origin : null;
   // eslint-disable-next-line max-len
   const dataAttrs = (document.currentScript && document.currentScript.dataset) ? document.currentScript.dataset : {};
-  const { enhancerVersion, enhancerHash, ...scriptParams } = dataAttrs;
+  const {
+    status, enhancerVersion, enhancerHash, ...scriptParams
+  } = dataAttrs;
   sampleRUM.enhancerContext = { enhancerVersion, enhancerHash };
   window.RUM_BASE = window.RUM_BASE || scriptSrc;
   window.RUM_PARAMS = window.RUM_PARAMS || scriptParams;
 
   const [navigation] = (window.performance && window.performance.getEntriesByType('navigation')) || [];
-  const is404 = navigation && navigation.name === window.location.href
-    && navigation.responseStatus === 404;
+  const is404 = status === '404' || (navigation && navigation.name === window.location.href
+    && navigation.responseStatus === 404);
 
   if (is404) {
     sampleRUM('404', { source: document.referrer });
