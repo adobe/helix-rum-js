@@ -1,3 +1,10 @@
+# [2.10.0](https://github.com/adobe/helix-rum-js/compare/v2.9.0...v2.10.0) (2024-11-12)
+
+
+### Features
+
+* **standalone:** Use data attribute for 404 tracking (avoid separate script) ([a793f13](https://github.com/adobe/helix-rum-js/commit/a793f13851080ce85bcfaf80e03f9a1da323c6b5))
+
 # [2.9.0](https://github.com/adobe/helix-rum-js/compare/v2.8.0...v2.9.0) (2024-11-08)
 
 
