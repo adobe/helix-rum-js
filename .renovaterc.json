@@ -1,10 +1,8 @@
 {
   "extends": ["github>adobe/helix-shared"],
-  "packageRules": [
-    {
+  "packageRules": [{
       "matchDepTypes": ["devDependencies"],
-      "label": "ignore-psi-check", 
+      "labels": ["ignore-psi-check"], 
       "automerge": true
-    }
-  ]
+  }]
 }
