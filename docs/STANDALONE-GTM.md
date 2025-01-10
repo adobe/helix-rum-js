@@ -1,5 +1,12 @@
 # AEM RUM JS - Standalone Configuration using Google Tag Manager
-Standalone mode for RUM using Google Tag Manager
+
+Standalone mode for RUM using Google Tag Manager. Google Tag Manager is an easy way to embed RUM on sites where access to the page templates is not possible, but it is not the prefered way to integrate if data consistency is a priority:
+1. Google Tag Manager is likely to be blocked by content blockers, such as Ad Blockers. With Ad Blocker market share close to 50%, this means a large portion of traffic would remain unmonitored.
+2. the loading of the RUM script may be erroneously guarded by consent opt-in. Opt-in rates are abysmally low, so the RUM script is unlikely to be loaded in that case
+3. the loading order of the RUM script may be too late to capture a significant part of user interactions
+4. the RUM script tracks clicks, media impressions, block impressions, and JavaScript errors. These things are wont to get missed when the RUM script is loaded too late.
+
+With that being said, if using Google Tag Manager is still your best option, here is how to do it:
 
 ## Embed RUM standalone using Google Tag Manager
 1. Navigate to [Google Tag Manager console](https://tagmanager.google.com/)
