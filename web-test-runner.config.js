@@ -10,6 +10,7 @@
  * governing permissions and limitations under the License.
  */
 export default {
+  browserStartTimeout: 60000,
   coverageConfig: {
     report: true,
     reportDir: 'coverage',
