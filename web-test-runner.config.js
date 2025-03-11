@@ -10,7 +10,14 @@
  * governing permissions and limitations under the License.
  */
 export default {
-  browserStartTimeout: 60000,
+  browserStartTimeout: 60000, // Default timeout for Chrome and WebKit
+  browsers: [
+    {
+      name: 'firefox',
+      // Increase timeout specifically for Firefox as it's taking longer in CI
+      browserStartTimeout: 120000,
+    },
+  ],
   coverageConfig: {
     report: true,
     reportDir: 'coverage',
