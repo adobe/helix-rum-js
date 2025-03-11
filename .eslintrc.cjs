@@ -16,4 +16,9 @@ module.exports = {
   env: {
     browser: true,
   },
+  rules: {
+    'import/no-extraneous-dependencies': ['error', {
+      devDependencies: ['**/*.test.js', '**/*.test.html', 'rollup.config.js', 'web-test-runner.config.js'],
+    }],
+  },
 };
