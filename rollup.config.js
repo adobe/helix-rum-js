@@ -65,6 +65,10 @@ export default [...bundles.map(({ outputFile, source }) => ({
     checksum({
       filename: `${outputFile.split('/').pop()}.md5`,
       includeAssets: false,
+    }),
+    checksum({
+      filename: `${outputFile.split('/').pop()}`,
+      includeAssets: false,
       sri: 'sha384',
     }),
   ],
