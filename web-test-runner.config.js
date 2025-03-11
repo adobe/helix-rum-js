@@ -10,7 +10,8 @@
  * governing permissions and limitations under the License.
  */
 export default {
-  browserStartTimeout: 60000,
+  // Increase browserStartTimeout to fix Firefox timeout issues in CI
+  browserStartTimeout: 120000,
   coverageConfig: {
     report: true,
     reportDir: 'coverage',
