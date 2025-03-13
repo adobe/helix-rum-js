@@ -1,3 +1,11 @@
+## [2.10.1](https://github.com/adobe/helix-rum-js/compare/v2.10.0...v2.10.1) (2025-03-13)
+
+
+### Bug Fixes
+
+* increase browserStartTimeout for Firefox to 120s in CI tests ([9c4f746](https://github.com/adobe/helix-rum-js/commit/9c4f746822ec7f911f5e12702896535661d018d9))
+* use global browserStartTimeout increase instead of browser-specific config ([e9fff0e](https://github.com/adobe/helix-rum-js/commit/e9fff0e0a4d0b22c6ec637a17124259a1609adc6))
+
 # [2.10.0](https://github.com/adobe/helix-rum-js/compare/v2.9.0...v2.10.0) (2024-11-12)
 
 
