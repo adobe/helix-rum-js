@@ -119,6 +119,7 @@ describe('sampleRUM', () => {
 
   describe('rum enhancer', () => {
     beforeEach(() => {
+      window.hlx = window.hlx || {};
       window.hlx.RUM_MANUAL_ENHANCE = true;
     });
 
