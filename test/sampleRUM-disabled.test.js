@@ -70,4 +70,22 @@ describe('sampleRUM - RUM disabled', () => {
       int: 1,
     });
   });
+
+  describe('rum enhancer', () => {
+    beforeEach(() => {
+      window.hlx = window.hlx || {};
+      window.hlx.RUM_MANUAL_ENHANCE = true;
+    });
+
+    afterEach(() => {
+      window.hlx.RUM_MANUAL_ENHANCE = undefined;
+    });
+
+    it('does not load rum enhancer', () => {
+      sampleRUM();
+      sampleRUM.enhance();
+      const enhancer = document.querySelector('script[src*="rum-enhancer"]');
+      expect(enhancer).to.not.exist;
+    });
+  });
 });
