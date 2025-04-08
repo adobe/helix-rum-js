@@ -1,3 +1,10 @@
+## [2.10.2](https://github.com/adobe/helix-rum-js/compare/v2.10.1...v2.10.2) (2025-04-08)
+
+
+### Bug Fixes
+
+* don't allow enhance function to be redefined as noop ([#253](https://github.com/adobe/helix-rum-js/issues/253)) ([9e56efa](https://github.com/adobe/helix-rum-js/commit/9e56efadf75159db23d02466021e644ab988bf7d))
+
 ## [2.10.1](https://github.com/adobe/helix-rum-js/compare/v2.10.0...v2.10.1) (2025-03-13)
 
 
