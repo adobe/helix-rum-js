@@ -116,6 +116,33 @@ describe('sampleRUM', () => {
       int: 1,
     });
   });
+
+  describe('rum enhancer', () => {
+    beforeEach(() => {
+      window.hlx = window.hlx || {};
+      window.hlx.RUM_MANUAL_ENHANCE = true;
+    });
+
+    afterEach(() => {
+      window.hlx.RUM_MANUAL_ENHANCE = undefined;
+    });
+
+    it('loads rum enhancer', () => {
+      sampleRUM();
+      sampleRUM.enhance();
+      const enhancer = document.querySelector('script[src*="rum-enhancer"]');
+      expect(enhancer).to.exist;
+    });
+
+    it('loads rum enhancer when sampleRum is called twice', () => {
+      sampleRUM();
+      sampleRUM();
+      sampleRUM.enhance();
+      const enhancer = document.querySelector('script[src*="rum-enhancer"]');
+      expect(enhancer).to.exist;
+    });
+  });
+
   describe('sampling rate', () => {
     it('allows high sampling rate', async () => {
       window.SAMPLE_PAGEVIEWS_AT_RATE = 'high';
