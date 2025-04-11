@@ -73,24 +73,21 @@ fi
 # Store the current branch name
 CURRENT_BRANCH=$(git branch --show-current)
 
-# Validate that we have files to add
-if [ ${#PATHS[@]} -eq 0 ]; then
-  echo "Error: No files specified to add."
-  exit 1
+# Create a temporary directory only if we have files to copy
+if [ ${#PATHS[@]} -gt 0 ]; then
+  # Create a temporary directory to store copies of the files
+  TEMP_DIR=$(mktemp -d)
+  echo "Creating temporary copies of files at $TEMP_DIR"
+
+  # Copy all specified files to the temporary directory
+  for path in "${PATHS[@]}"; do
+    # Create directory structure in temp dir
+    mkdir -p "$TEMP_DIR/$(dirname "$path")"
+    # Copy the file
+    cp "$path" "$TEMP_DIR/$path"
+    echo "Copied $path to $TEMP_DIR/$path"
+  done
 fi
-
-# Create a temporary directory to store copies of the files
-TEMP_DIR=$(mktemp -d)
-echo "Creating temporary copies of files at $TEMP_DIR"
-
-# Copy all specified files to the temporary directory
-for path in "${PATHS[@]}"; do
-  # Create directory structure in temp dir
-  mkdir -p "$TEMP_DIR/$(dirname "$path")"
-  # Copy the file
-  cp "$path" "$TEMP_DIR/$path"
-  echo "Copied $path to $TEMP_DIR/$path"
-done
 
 # Create commit message
 COMMIT_MSG="Update for version $VERSION"
@@ -115,23 +112,28 @@ create_or_update_branch() {
     git checkout -b $branch_name
   fi
   
-  # Copy files from temp directory back to working directory
-  for path in "${PATHS[@]}"; do
-    # Create directory structure if needed
-    mkdir -p "$(dirname "$path")"
-    # Copy the file back from temp
-    cp "$TEMP_DIR/$path" "$path"
-    echo "Restored $path from $TEMP_DIR/$path"
-  done
-  
-  # Add files to git, even if they're in .gitignore
-  echo "Adding files to git staging area in branch $branch_name..."
-  for path in "${PATHS[@]}"; do
-    git add --force "$path"
-  done
-  
-  # Commit changes
-  git commit -m "$COMMIT_MSG"
+  # Copy files from temp directory back to working directory if we have any
+  if [ ${#PATHS[@]} -gt 0 ]; then
+    for path in "${PATHS[@]}"; do
+      # Create directory structure if needed
+      mkdir -p "$(dirname "$path")"
+      # Copy the file back from temp
+      cp "$TEMP_DIR/$path" "$path"
+      echo "Restored $path from $TEMP_DIR/$path"
+    done
+    
+    # Add files to git, even if they're in .gitignore
+    echo "Adding files to git staging area in branch $branch_name..."
+    for path in "${PATHS[@]}"; do
+      git add --force "$path"
+    done
+    
+    # Commit changes
+    git commit -m "$COMMIT_MSG"
+  else
+    # Create an empty commit when no files are specified
+    git commit --allow-empty -m "$COMMIT_MSG"
+  fi
   
   # Push if requested
   if [ "$PUSH" = true ]; then
@@ -154,9 +156,11 @@ if [[ -n $PATCH_BRANCH_NAME ]]; then
   create_or_update_branch $MAJOR_BRANCH_NAME
 fi
 
-# Clean up temporary directory
-echo "Cleaning up temporary files..."
-rm -rf "$TEMP_DIR"
+# Clean up temporary directory if it was created
+if [ ${#PATHS[@]} -gt 0 ]; then
+  echo "Cleaning up temporary files..."
+  rm -rf "$TEMP_DIR"
+fi
 
 # Return to the original branch
 echo "Returning to original branch: $CURRENT_BRANCH"
