@@ -1,3 +1,10 @@
+## [2.10.4](https://github.com/adobe/helix-rum-js/compare/v2.10.3...v2.10.4) (2025-04-11)
+
+
+### Bug Fixes
+
+* trigger release ([a82e930](https://github.com/adobe/helix-rum-js/commit/a82e93039347d9f050acc9563f754df8f11a5a60))
+
 ## [2.10.3](https://github.com/adobe/helix-rum-js/compare/v2.10.2...v2.10.3) (2025-04-11)
 
 
