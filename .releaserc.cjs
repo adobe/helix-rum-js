@@ -6,6 +6,9 @@ module.exports = {
       "changelogFile": "CHANGELOG.md",
     }],
     "@semantic-release/npm",
+    ["@semantic-release/exec", {
+      "publishCmd": "./tagger.sh ${nextRelease.version} --push"
+    }],
     ["@semantic-release/git", {
       "assets": [
         "package.json",

@@ -38,7 +38,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          persist-credentials: true
+          token: ${{ secrets.ADOBE_BOT_GITHUB_TOKEN }}
       - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
