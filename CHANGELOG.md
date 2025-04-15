@@ -1,3 +1,10 @@
+## [2.10.5](https://github.com/adobe/helix-rum-js/compare/v2.10.4...v2.10.5) (2025-04-15)
+
+
+### Bug Fixes
+
+* prefer rum sample rate 1 if param set ([#260](https://github.com/adobe/helix-rum-js/issues/260)) ([35ee163](https://github.com/adobe/helix-rum-js/commit/35ee163b6965d7b191b5b57b446179d95d011697))
+
 ## [2.10.4](https://github.com/adobe/helix-rum-js/compare/v2.10.3...v2.10.4) (2025-04-11)
 
 
