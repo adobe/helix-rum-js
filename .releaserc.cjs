@@ -6,6 +6,9 @@ module.exports = {
       "changelogFile": "CHANGELOG.md",
     }],
     "@semantic-release/npm",
+    ["@semantic-release/exec", {
+      "publishCmd": "./tagger.sh ${nextRelease.version} --push"
+    }],
     ["@semantic-release/git", {
       "assets": [
         "package.json",
@@ -37,7 +40,7 @@ module.exports = {
       notifyOnSuccess: true,
       notifyOnFail: true,
       markdownReleaseNotes: true,
-      slackChannel: "rum-explorers",
+      slackChannel: "optel-explorers",
     }],
   ],
   branches: ['main', '1.x'],
