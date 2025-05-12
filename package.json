@@ -54,7 +54,7 @@
     "husky": "9.1.7",
     "jsdoc-to-markdown": "9.1.1",
     "junit-report-builder": "5.1.1",
-    "lint-staged": "15.5.2",
+    "lint-staged": "16.0.0",
     "mocha": "11.2.2",
     "mocha-multi-reporters": "1.5.1",
     "rollup": "4.40.2",
