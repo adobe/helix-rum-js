@@ -149,4 +149,16 @@ describe('sampleRUM', () => {
       expect(window.hlx.rum.weight).to.equal(1);
     });
   });
+
+  describe('initialization', () => {
+    it('window.hlx.rum.id constraints', async () => {
+      sampleRUM();
+
+      const { id } = window.hlx.rum;
+
+      expect(id).to.exist;
+      expect(id.length).to.equal(4);
+      expect(id).to.match(/^[0-9a-z]+$/);
+    });
+  });
 });
