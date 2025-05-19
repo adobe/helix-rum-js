@@ -23,7 +23,7 @@
   var p = new URLSearchParams(location.search).get('rum'),r = (window.hlx = window.hlx || {}).rum || (window.hlx.rum = { id: crypto.randomUUID().slice(-4) });
   if (r.isSelected || (p !== 'off' && Math.random() * ({ on: 1, high: 10, low: 1e3 }[p || window.SAMPLE_PAGEVIEWS_AT_RATE] || 100) < 1)) {
     var c = document.currentScript,n = document.createElement('script');
-    for (const a of c.attributes) n.setAttribute(a.name, a.value);
+    for (var a of c.attributes) n.setAttribute(a.name, a.value);
     n.src = c.dataset.script;document.head.append(n);
   }
   </script>
