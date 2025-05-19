@@ -1,0 +1,49 @@
+<html>
+
+<head>
+  <script>
+    // this is set-up for the test
+    window.RUM_PARAMS = { program: 'pXXXXXX', environment: 'eYYYYYY' };
+    window.sendBeaconArgs = {
+      url: '',
+      data: {},
+    };
+    // eslint-disable-next-line no-underscore-dangle
+    navigator._sendBeacon = navigator.sendBeacon;
+    navigator.sendBeacon = (url, data) => {
+      const json = JSON.parse(data);
+      if (json.checkpoint === 'top') {
+        sendBeaconArgs.url = url;
+        sendBeaconArgs.data = json;
+      }
+      return true;
+    };
+  </script>
+  <script type="module">
+    window.hlx = window.hlx || {
+      id: Math.random().toString(36).slice(-4),
+      isSelected: true, // hard-coded for the test
+    };
+    if (window.hlx.rum.isSelected) {
+      console.log('Current script element:', document.currentScript);
+    }
+  </script>
+</head>
+
+<body>
+  <script type="module">
+    import { runTests } from '@web/test-runner-mocha';
+    import { expect } from '@esm-bundle/chai';
+    /* eslint-env mocha */
+    runTests(async () => {
+      describe('sampleRUM - load event', () => {
+        it('rum selected url params sent', async () => {
+          expect(window.sendBeaconArgs.url).to.equal(`https://rum.hlx.page/.rum/1?program=pXXXXXX&environment=eYYYYYY`);
+          expect(window.sendBeaconArgs.data.checkpoint).to.equal('top');
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
