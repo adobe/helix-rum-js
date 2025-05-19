@@ -5,7 +5,7 @@
     // this is set-up for the test
     window.RUM_PARAMS = { program: 'pXXXXXX', environment: 'eYYYYYY' };
     window.sendBeaconArgs = {
-      url: '',
+      url: 'never has been set',
       data: {},
     };
     // eslint-disable-next-line no-underscore-dangle
@@ -22,7 +22,7 @@
   <script defer data-script="standalone.js">
   if (((window.hlx = window.hlx || {}).rum || (window.hlx.rum = {
     id: crypto.randomUUID().slice(-4),
-    isSelected: !0
+    isSelected: false // we test the negative here
   })).isSelected) {
     var s = document.createElement('script'), c = document.currentScript;
     for (var a of c.attributes)
@@ -40,9 +40,8 @@
     /* eslint-env mocha */
     runTests(async () => {
       describe('Operational Telemetry - Micro-Loader', () => {
-        it('When selected, always sends data', async () => {
-          expect(window.sendBeaconArgs.url).to.equal(`https://rum.hlx.page/.rum/1?program=pXXXXXX&environment=eYYYYYY`);
-          expect(window.sendBeaconArgs.data.checkpoint).to.equal('top');
+        it('when not-selected, no data is sent', async () => {
+          expect(window.sendBeaconArgs.url).to.equal('never has been set');
         });
       });
     });
