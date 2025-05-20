@@ -23,7 +23,7 @@ export function sampleRUM(checkpoint, data) {
         || (window.SAMPLE_PAGEVIEWS_AT_RATE === 'low' && 1000)
         || 100;
       const id = (window.hlx.rum && window.hlx.rum.id)
-        || crypto.randomUUID().slice(-5);
+        || crypto.randomUUID().slice(-9);
       const isSelected = (window.hlx.rum && window.hlx.rum.isSelected) || ((param !== 'off') && (Math.random() * weight < 1));
       // eslint-disable-next-line object-curly-newline, max-len
       window.hlx.rum = { weight, id, isSelected, firstReadTime: window.performance ? window.performance.timeOrigin : Date.now(), sampleRUM, queue: [], collector: (...args) => window.hlx.rum.queue.push(args) };
