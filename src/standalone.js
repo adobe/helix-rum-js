@@ -17,10 +17,11 @@ try {
   // eslint-disable-next-line max-len
   const dataAttrs = (document.currentScript && document.currentScript.dataset) ? document.currentScript.dataset : {};
   const {
-    status, enhancerVersion, enhancerHash, ...scriptParams
+    postPath, status, enhancerVersion, enhancerHash, ...scriptParams
   } = dataAttrs;
+  const base = scriptSrc && postPath ? new URL(postPath, scriptSrc) : scriptSrc;
   sampleRUM.enhancerContext = { enhancerVersion, enhancerHash };
-  window.RUM_BASE = window.RUM_BASE || scriptSrc;
+  window.RUM_BASE = window.RUM_BASE || base;
   window.RUM_PARAMS = window.RUM_PARAMS || scriptParams;
 
   const [navigation] = (window.performance && window.performance.getEntriesByType('navigation')) || [];
