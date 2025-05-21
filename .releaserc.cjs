@@ -7,7 +7,7 @@ module.exports = {
     }],
     "@semantic-release/npm",
     ["@semantic-release/exec", {
-      "publishCmd": "./tagger.sh ${nextRelease.version} dist --push"
+      "publishCmd": "./tagger.sh ${nextRelease.version} --push"
     }],
     ["@semantic-release/git", {
       "assets": [
