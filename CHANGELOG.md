@@ -1,3 +1,10 @@
+## [2.11.4](https://github.com/adobe/helix-rum-js/compare/v2.11.3...v2.11.4) (2025-05-21)
+
+
+### Bug Fixes
+
+* **release:** update publish command to include additional files in dist directory ([acb5e0c](https://github.com/adobe/helix-rum-js/commit/acb5e0c42e7b5a1e7f08bb14e7a569a6b87853e8))
+
 ## [2.11.3](https://github.com/adobe/helix-rum-js/compare/v2.11.2...v2.11.3) (2025-05-21)
 
 
