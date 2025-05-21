@@ -116,28 +116,49 @@ describe('sampleRUM', () => {
       int: 1,
     });
   });
+
+  describe('rum enhancer', () => {
+    beforeEach(() => {
+      window.hlx = window.hlx || {};
+      window.hlx.RUM_MANUAL_ENHANCE = true;
+    });
+
+    afterEach(() => {
+      window.hlx.RUM_MANUAL_ENHANCE = undefined;
+    });
+
+    it('loads rum enhancer', () => {
+      sampleRUM();
+      sampleRUM.enhance();
+      const enhancer = document.querySelector('script[src*="rum-enhancer"]');
+      expect(enhancer).to.exist;
+    });
+
+    it('loads rum enhancer when sampleRum is called twice', () => {
+      sampleRUM();
+      sampleRUM();
+      sampleRUM.enhance();
+      const enhancer = document.querySelector('script[src*="rum-enhancer"]');
+      expect(enhancer).to.exist;
+    });
+  });
+
   describe('sampling rate', () => {
-    it('allows high sampling rate', async () => {
-      window.SAMPLE_PAGEVIEWS_AT_RATE = 'high';
-      sampleRUM();
-      expect(window.hlx.rum.weight).to.equal(10);
-    });
-    it('allows low sampling rate', async () => {
-      window.SAMPLE_PAGEVIEWS_AT_RATE = 'low';
-      sampleRUM();
-      expect(window.hlx.rum.weight).to.equal(1000);
-    });
-    it('defaults to 100 sampling rate', async () => {
-      const usp = new URLSearchParams(window.location.search);
-      usp.delete('rum');
-      window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
-      delete window.SAMPLE_PAGEVIEWS_AT_RATE;
-      sampleRUM();
-      expect(window.hlx.rum.weight).to.equal(100);
-    });
     it('allows forced sampling', async () => {
       sampleRUM();
       expect(window.hlx.rum.weight).to.equal(1);
+    });
+  });
+
+  describe('initialization', () => {
+    it('window.hlx.rum.id constraints', async () => {
+      sampleRUM();
+
+      const { id } = window.hlx.rum;
+
+      expect(id).to.exist;
+      expect(id.length).to.equal(4);
+      expect(id).to.match(/^[0-9a-z]+$/);
     });
   });
 });

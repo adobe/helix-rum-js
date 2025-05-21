@@ -15,14 +15,14 @@ export function sampleRUM(checkpoint, data) {
   const timeShift = () => (window.performance ? window.performance.now() : Date.now() - window.hlx.rum.firstReadTime);
   try {
     window.hlx = window.hlx || {};
-    sampleRUM.enhance = () => {};
     if (!window.hlx.rum) {
+      sampleRUM.enhance = () => {};
       const param = new URLSearchParams(window.location.search).get('rum');
-      const weight = (window.SAMPLE_PAGEVIEWS_AT_RATE === 'high' && 10)
+      const weight = (param === 'on' && 1)
+        || (window.SAMPLE_PAGEVIEWS_AT_RATE === 'high' && 10)
         || (window.SAMPLE_PAGEVIEWS_AT_RATE === 'low' && 1000)
-        || (param === 'on' && 1)
         || 100;
-      const id = Math.random().toString(36).slice(-4);
+      const id = crypto.getRandomValues(new Uint32Array(1))[0].toString(36).slice(-4);
       const isSelected = (param !== 'off') && (Math.random() * weight < 1);
       // eslint-disable-next-line object-curly-newline, max-len
       window.hlx.rum = { weight, id, isSelected, firstReadTime: window.performance ? window.performance.timeOrigin : Date.now(), sampleRUM, queue: [], collector: (...args) => window.hlx.rum.queue.push(args) };
@@ -61,8 +61,8 @@ export function sampleRUM(checkpoint, data) {
         sampleRUM.sendPing = (ck, time, pingData = {}) => {
           // eslint-disable-next-line max-len, object-curly-newline
           const rumData = JSON.stringify({ weight, id, referer: window.location.href, checkpoint: ck, t: time, ...pingData });
-          const urlParams = window.RUM_PARAMS ? `?${new URLSearchParams(window.RUM_PARAMS).toString()}` : '';
-          const { href: url, origin } = new URL(`.rum/${weight}${urlParams}`, sampleRUM.collectBaseURL);
+          const urlParams = window.RUM_PARAMS ? (new URLSearchParams(window.RUM_PARAMS).toString() || '') : '';
+          const { href: url, origin } = new URL(`.rum/${weight}${urlParams ? `?${urlParams}` : ''}`, sampleRUM.collectBaseURL);
           const body = origin === window.location.origin ? new Blob([rumData], { type: 'application/json' }) : rumData;
           navigator.sendBeacon(url, body);
           // eslint-disable-next-line no-console
