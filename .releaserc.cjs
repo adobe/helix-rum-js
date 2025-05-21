@@ -6,9 +6,6 @@ module.exports = {
       "changelogFile": "CHANGELOG.md",
     }],
     "@semantic-release/npm",
-    ["@semantic-release/exec", {
-      "publishCmd": "./tagger.sh ${nextRelease.version} --push"
-    }],
     ["@semantic-release/git", {
       "assets": [
         "package.json",
@@ -43,6 +40,9 @@ module.exports = {
           "label": "RUM Standalone 404 SRI Hash (sha384)"
         }
       ]
+    }],
+    ["@semantic-release/exec", {
+      "publishCmd": "./tagger.sh ${nextRelease.version} dist/rum-standalone.js dist/rum-standalone-404.js --push"
     }],
     ["semantic-release-slack-bot", {
       notifyOnSuccess: true,
