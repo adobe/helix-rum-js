@@ -1,3 +1,10 @@
+## [2.11.2](https://github.com/adobe/helix-rum-js/compare/v2.11.1...v2.11.2) (2025-05-21)
+
+
+### Bug Fixes
+
+* **release:** update publish command to include 'dist' directory ([9166e7d](https://github.com/adobe/helix-rum-js/commit/9166e7d9add9b2aa1d1545b259002694539b6d11))
+
 ## [2.11.1](https://github.com/adobe/helix-rum-js/compare/v2.11.0...v2.11.1) (2025-05-21)
 
 
