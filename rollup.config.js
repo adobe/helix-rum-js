@@ -12,7 +12,7 @@
 
 import cleanup from 'rollup-plugin-cleanup';
 import eslint from 'rollup-plugin-eslint-bundle';
-import pkg from '@trieloff/rollup-plugin-checksum';
+import pkg from '@adobe/rollup-plugin-checksum';
 
 const checksum = pkg.default;
 
