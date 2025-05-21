@@ -1,3 +1,10 @@
+## [2.11.1](https://github.com/adobe/helix-rum-js/compare/v2.11.0...v2.11.1) (2025-05-21)
+
+
+### Bug Fixes
+
+* **release:** include sri resource in release artifacts ([3fa3b8b](https://github.com/adobe/helix-rum-js/commit/3fa3b8b51390f3eefabf9692ef19415c0f9c5531))
+
 # [2.11.0](https://github.com/adobe/helix-rum-js/compare/v2.10.5...v2.11.0) (2025-05-21)
 
 
