@@ -1,3 +1,44 @@
+## [2.11.4](https://github.com/adobe/helix-rum-js/compare/v2.11.3...v2.11.4) (2025-05-21)
+
+
+### Bug Fixes
+
+* **release:** update publish command to include additional files in dist directory ([acb5e0c](https://github.com/adobe/helix-rum-js/commit/acb5e0c42e7b5a1e7f08bb14e7a569a6b87853e8))
+
+## [2.11.3](https://github.com/adobe/helix-rum-js/compare/v2.11.2...v2.11.3) (2025-05-21)
+
+
+### Reverts
+
+* Revert "fix(release): update publish command to include 'dist' directory" ([583631c](https://github.com/adobe/helix-rum-js/commit/583631ca51e65ad8e22278c57214eb47902df53f))
+
+## [2.11.2](https://github.com/adobe/helix-rum-js/compare/v2.11.1...v2.11.2) (2025-05-21)
+
+
+### Bug Fixes
+
+* **release:** update publish command to include 'dist' directory ([9166e7d](https://github.com/adobe/helix-rum-js/commit/9166e7d9add9b2aa1d1545b259002694539b6d11))
+
+## [2.11.1](https://github.com/adobe/helix-rum-js/compare/v2.11.0...v2.11.1) (2025-05-21)
+
+
+### Bug Fixes
+
+* **release:** include sri resource in release artifacts ([3fa3b8b](https://github.com/adobe/helix-rum-js/commit/3fa3b8b51390f3eefabf9692ef19415c0f9c5531))
+
+# [2.11.0](https://github.com/adobe/helix-rum-js/compare/v2.10.5...v2.11.0) (2025-05-21)
+
+
+### Bug Fixes
+
+* improve URL parameter handling in sampleRUM function to avoid trailing question mark ([a903b5e](https://github.com/adobe/helix-rum-js/commit/a903b5e2384d817feaa1943c3f67490e0ec5c026))
+
+
+### Features
+
+* Allow path for posts to be set via data attribute ([7b06126](https://github.com/adobe/helix-rum-js/commit/7b061260379045d79fe7027ce2e85df11a634d72))
+* update to @trieloff/rollup-plugin-checksum v1.1.0 with SHA-384 SRI hash support ([4c0cbfe](https://github.com/adobe/helix-rum-js/commit/4c0cbfeb77a66bb03cefbe3eb5516203cc2abbb5))
+
 ## [2.10.5](https://github.com/adobe/helix-rum-js/compare/v2.10.4...v2.10.5) (2025-04-15)
 
 

@@ -12,7 +12,7 @@
 
 import cleanup from 'rollup-plugin-cleanup';
 import eslint from 'rollup-plugin-eslint-bundle';
-import pkg from 'rollup-plugin-checksum';
+import pkg from '@adobe/rollup-plugin-checksum';
 
 const checksum = pkg.default;
 
@@ -65,6 +65,11 @@ export default [...bundles.map(({ outputFile, source }) => ({
     checksum({
       filename: `${outputFile.split('/').pop()}.md5`,
       includeAssets: false,
+    }),
+    checksum({
+      filename: `${outputFile.split('/').pop()}`,
+      includeAssets: false,
+      sri: 'sha384',
     }),
   ],
 }))];
