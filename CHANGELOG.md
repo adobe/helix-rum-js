@@ -1,3 +1,16 @@
+# [2.11.0](https://github.com/adobe/helix-rum-js/compare/v2.10.5...v2.11.0) (2025-05-21)
+
+
+### Bug Fixes
+
+* improve URL parameter handling in sampleRUM function to avoid trailing question mark ([a903b5e](https://github.com/adobe/helix-rum-js/commit/a903b5e2384d817feaa1943c3f67490e0ec5c026))
+
+
+### Features
+
+* Allow path for posts to be set via data attribute ([7b06126](https://github.com/adobe/helix-rum-js/commit/7b061260379045d79fe7027ce2e85df11a634d72))
+* update to @trieloff/rollup-plugin-checksum v1.1.0 with SHA-384 SRI hash support ([4c0cbfe](https://github.com/adobe/helix-rum-js/commit/4c0cbfeb77a66bb03cefbe3eb5516203cc2abbb5))
+
 ## [2.10.5](https://github.com/adobe/helix-rum-js/compare/v2.10.4...v2.10.5) (2025-04-15)
 
 
