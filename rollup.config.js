@@ -41,35 +41,68 @@ const bundles = [
   },
 ];
 
-export default [...bundles.map(({ outputFile, source }) => ({
-  input: source,
-  output: [
-    {
-      file: `${outputFile}.js`,
-      format: 'iife',
-      sourcemap: false,
-      exports: 'auto',
-      banner,
-    },
-  ].filter((m) => m),
-  plugins: [
-    cleanup({
-      comments: ['eslint', 'jsdoc', /^\//, /^\*(?!\sc8\s)(?!\n \* Copyright)/],
-      maxEmptyLines: -1,
-    }),
-    eslint({
-      eslintOptions: {
-        fix: true,
+const verbatim = [
+  {
+    source: 'src/micro.js',
+    outputFile: 'dist/micro',
+  },
+];
+
+export default [
+  ...verbatim.map(({ outputFile, source }) => ({
+    input: source,
+    output: [
+      {
+        file: `${outputFile}.js`,
+        sourcemap: false,
+        exports: 'auto',
       },
-    }),
-    checksum({
-      filename: `${outputFile.split('/').pop()}.md5`,
-      includeAssets: false,
-    }),
-    checksum({
-      filename: `${outputFile.split('/').pop()}`,
-      includeAssets: false,
-      sri: 'sha384',
-    }),
-  ],
-}))];
+    ].filter((m) => m),
+    plugins: [
+      cleanup({
+        comments: ['none'],
+        maxEmptyLines: 0,
+      }),
+      checksum({
+        filename: `${outputFile.split('/').pop()}.md5`,
+        includeAssets: false,
+      }),
+      checksum({
+        filename: `${outputFile.split('/').pop()}`,
+        includeAssets: false,
+        sri: 'sha384',
+      }),
+    ],
+  })),
+  ...bundles.map(({ outputFile, source }) => ({
+    input: source,
+    output: [
+      {
+        file: `${outputFile}.js`,
+        format: 'iife',
+        sourcemap: false,
+        exports: 'auto',
+        banner,
+      },
+    ].filter((m) => m),
+    plugins: [
+      cleanup({
+        comments: ['eslint', 'jsdoc', /^\//, /^\*(?!\sc8\s)(?!\n \* Copyright)/],
+        maxEmptyLines: -1,
+      }),
+      eslint({
+        eslintOptions: {
+          fix: true,
+        },
+      }),
+      checksum({
+        filename: `${outputFile.split('/').pop()}.md5`,
+        includeAssets: false,
+      }),
+      checksum({
+        filename: `${outputFile.split('/').pop()}`,
+        includeAssets: false,
+        sri: 'sha384',
+      }),
+    ],
+  }))];

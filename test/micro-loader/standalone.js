@@ -13,6 +13,8 @@
 (function () {
   console.log('standalone.js loaded', document.currentScript.outerHTML);
   navigator.sendBeacon('https://rum.hlx.page/.rum/1?program=pXXXXXX&environment=eYYYYYY', '{"checkpoint":"top", "id":"superfake"}');
+
+  window.WAS_SELECTED = window.hlx.rum.isSelected;
 }());
 // this file is a poor imitation of our dist/standalone.js
 // but it is useful to verify that the script is indeed loaded
