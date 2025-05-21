@@ -18,7 +18,7 @@ const r = (window.hlx = window.hlx || {}).rum || (window.hlx.rum = { id: crypto.
 if (r.isSelected || (w && Math.random() * w < 1)) {
   const n = document.createElement('script');
   for (const a of c.attributes) n.setAttribute(a.name, a.value);
-  n.src = c.src.replace(/micro.js$/, 'standalone.js');
+  n.src = c.src.replace(/[^/]+$/, 'rum-standalone.js');
   n.defer = 'defer';
   document.head.append(n);
 }
