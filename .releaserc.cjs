@@ -27,12 +27,20 @@ module.exports = {
           "label": "RUM Standalone Hash"
         },
         {
+          "path": "dist/rum-standalone.sri",
+          "label": "RUM Standalone SRI Hash (sha384)"
+        },
+        {
           "path": "dist/rum-standalone-404.js",
           "label": "RUM Standalone 404 JS"
         },
         {
           "path": "dist/rum-standalone-404.md5",
           "label": "RUM Standalone 404 Hash"
+        },
+        {
+          "path": "dist/rum-standalone-404.sri",
+          "label": "RUM Standalone 404 SRI Hash (sha384)"
         }
       ]
     }],
