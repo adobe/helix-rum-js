@@ -1,3 +1,10 @@
+## [2.11.3](https://github.com/adobe/helix-rum-js/compare/v2.11.2...v2.11.3) (2025-05-21)
+
+
+### Reverts
+
+* Revert "fix(release): update publish command to include 'dist' directory" ([583631c](https://github.com/adobe/helix-rum-js/commit/583631ca51e65ad8e22278c57214eb47902df53f))
+
 ## [2.11.2](https://github.com/adobe/helix-rum-js/compare/v2.11.1...v2.11.2) (2025-05-21)
 
 
