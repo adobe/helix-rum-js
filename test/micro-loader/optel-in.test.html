@@ -31,6 +31,7 @@
     runTests(async () => {
       describe('Operational Telemetry - Micro-Loader', () => {
         it('When selected, always sends data', async () => {
+          await new Promise(resolve => setTimeout(resolve, 500));
           expect(window.sendBeaconArgs.url).to.equal(`https://rum.hlx.page/.rum/1?program=pXXXXXX&environment=eYYYYYY`);
           expect(window.sendBeaconArgs.data.checkpoint).to.equal('top');
           expect(window.WAS_SELECTED).to.equal(true);
