@@ -22,6 +22,11 @@ if (r.isSelected || ((w && Math.random() * w < 1) && (r.isSelected = true))) {
   // set the source of the new script element to the script URL from the dataset
   /* c8 ignore next */
   n.src = d.script || c.src.replace(/\/micro\.js$/, '/rum-standalone.js');
+  if (c.integrity) {
+    const sri = '__SRI__';
+    n.setAttribute('integrity', sri);
+    n.setAttribute('crossorigin', 'anonymous');
+  }
   // append the new script element to the head of the document
   document.head.append(n);
 }

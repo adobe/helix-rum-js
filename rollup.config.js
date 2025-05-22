@@ -13,6 +13,8 @@
 import cleanup from 'rollup-plugin-cleanup';
 import eslint from 'rollup-plugin-eslint-bundle';
 import pkg from '@adobe/rollup-plugin-checksum';
+import replace from '@rollup/plugin-replace';
+import fs from 'fs';
 
 const checksum = pkg.default;
 
@@ -48,32 +50,9 @@ const verbatim = [
   },
 ];
 
+const getStandaloneSRI = () => fs.readFileSync('dist/rum-standalone.sri', 'utf8');
+
 export default [
-  ...verbatim.map(({ outputFile, source }) => ({
-    input: source,
-    output: [
-      {
-        file: `${outputFile}.js`,
-        sourcemap: false,
-        exports: 'auto',
-      },
-    ].filter((m) => m),
-    plugins: [
-      cleanup({
-        comments: ['none'],
-        maxEmptyLines: 0,
-      }),
-      checksum({
-        filename: `${outputFile.split('/').pop()}.md5`,
-        includeAssets: false,
-      }),
-      checksum({
-        filename: `${outputFile.split('/').pop()}`,
-        includeAssets: false,
-        sri: 'sha384',
-      }),
-    ],
-  })),
   ...bundles.map(({ outputFile, source }) => ({
     input: source,
     output: [
@@ -94,6 +73,36 @@ export default [
         eslintOptions: {
           fix: true,
         },
+      }),
+      checksum({
+        filename: `${outputFile.split('/').pop()}.md5`,
+        includeAssets: false,
+      }),
+      checksum({
+        filename: `${outputFile.split('/').pop()}`,
+        includeAssets: false,
+        sri: 'sha384',
+      }),
+    ],
+  })),
+  ...verbatim.map(({ outputFile, source }) => ({
+    input: source,
+    output: [
+      {
+        file: `${outputFile}.js`,
+        sourcemap: false,
+        exports: 'auto',
+      },
+    ].filter((m) => m),
+    plugins: [
+      cleanup({
+        comments: ['none'],
+        maxEmptyLines: 0,
+      }),
+      replace({
+        __SRI__: () => getStandaloneSRI(),
+        preventAssignment: true,
+        delimiters: ['', ''],
       }),
       checksum({
         filename: `${outputFile.split('/').pop()}.md5`,
