@@ -38,6 +38,14 @@ module.exports = {
         {
           "path": "dist/rum-standalone-404.sri",
           "label": "RUM Standalone 404 SRI Hash (sha384)"
+        },
+        {
+          "path": "dist/micro.js",
+          "label": "Operational Telemetry Micro JS"
+        },
+        {
+          "path": "dist/micro.sri",
+          "label": "Operational Telemetry Micro SRI Hash (sha384)"
         }
       ]
     }],
