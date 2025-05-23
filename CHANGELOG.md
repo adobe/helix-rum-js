@@ -1,3 +1,10 @@
+## [2.12.1](https://github.com/adobe/helix-rum-js/compare/v2.12.0...v2.12.1) (2025-05-23)
+
+
+### Bug Fixes
+
+* **release:** update publish command to include micro.js in release process ([b37d716](https://github.com/adobe/helix-rum-js/commit/b37d716a832665cd03a0bafec12d315bb1ebc975))
+
 # [2.12.0](https://github.com/adobe/helix-rum-js/compare/v2.11.4...v2.12.0) (2025-05-23)
 
 
