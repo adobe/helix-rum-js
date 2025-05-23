@@ -42,7 +42,7 @@ module.exports = {
       ]
     }],
     ["@semantic-release/exec", {
-      "publishCmd": "./tagger.sh ${nextRelease.version} dist/rum-standalone.js dist/rum-standalone-404.js --push"
+      "publishCmd": "./tagger.sh ${nextRelease.version} dist/rum-standalone.js dist/rum-standalone-404.js dist/micro.js --push"
     }],
     ["semantic-release-slack-bot", {
       notifyOnSuccess: true,
