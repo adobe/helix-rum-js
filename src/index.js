@@ -15,7 +15,7 @@ export function sampleRUM(checkpoint, data) {
   const timeShift = () => (window.performance ? window.performance.now() : Date.now() - window.hlx.rum.firstReadTime);
   try {
     window.hlx = window.hlx || {};
-    if (!window.hlx.rum || (window.hlx.rum && typeof window.hlx.rum.collector === 'undefined')) {
+    if (!window.hlx.rum || !window.hlx.rum.collector) {
       sampleRUM.enhance = () => {};
       const param = new URLSearchParams(window.location.search).get('rum');
       const weight = (param === 'on' && 1)
