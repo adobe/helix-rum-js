@@ -23,8 +23,7 @@ if (r.isSelected || ((w && Math.random() * w < 1) && (r.isSelected = true))) {
   /* c8 ignore next */
   n.src = d.script || c.src.replace(/\/micro\.js$/, '/rum-standalone.js');
   if (c.integrity) {
-    const sri = '__SRI__';
-    n.setAttribute('integrity', sri);
+    n.setAttribute('integrity', '__SRI__');
     n.setAttribute('crossorigin', 'anonymous');
   }
   // append the new script element to the head of the document
