@@ -1,3 +1,22 @@
+# [2.12.0](https://github.com/adobe/helix-rum-js/compare/v2.11.4...v2.12.0) (2025-05-23)
+
+
+### Bug Fixes
+
+* **micro:** add ignore comment for script source assignment in micro.js ([ee51131](https://github.com/adobe/helix-rum-js/commit/ee51131073f6a05f3f02962f3a0bb26c3908e721))
+* **micro:** change loop variable declaration in optel-oneline test ([0078697](https://github.com/adobe/helix-rum-js/commit/00786971b7da06213d14f88f4f4f09417a193966))
+* **micro:** standardize UUID length in test files ([9fd967f](https://github.com/adobe/helix-rum-js/commit/9fd967fb246fcf32a0ea49dd80b5f1bb0cb5eaaa))
+* **micro:** standardize UUID slice length in implementation ([e50fa9e](https://github.com/adobe/helix-rum-js/commit/e50fa9e68b6fe0a3c962a307c8b6351afe14b82d))
+* **micro:** update comment syntax for script source assignment in micro.js ([5c289ff](https://github.com/adobe/helix-rum-js/commit/5c289ff744bbb2fb1d551a24ce0acf28ab0a9c11))
+* **micro:** update script source fallback in micro.js and adjust test HTML ([1b0be75](https://github.com/adobe/helix-rum-js/commit/1b0be75a013781a007dd7265fbf08912252ff3e7))
+* **micro:** update UUID length for ID generation ([60ddeda](https://github.com/adobe/helix-rum-js/commit/60ddeda279fa6c5d06b5b5efcdd3a9c96a4bd9b9))
+
+
+### Features
+
+* implement micro-loader for operational telemetry ([ce805ca](https://github.com/adobe/helix-rum-js/commit/ce805ca3e1465893168f0507822389e52290743c))
+* **micro:** implement micro.js for dynamic script loading and update test files ([5de1947](https://github.com/adobe/helix-rum-js/commit/5de194789c59e435c057b21bb0c21e6b91761287))
+
 ## [2.11.4](https://github.com/adobe/helix-rum-js/compare/v2.11.3...v2.11.4) (2025-05-21)
 
 
