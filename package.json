@@ -36,8 +36,10 @@
   },
   "devDependencies": {
     "@adobe/eslint-config-helix": "2.0.9",
+    "@adobe/rollup-plugin-checksum": "1.2.0",
     "@esm-bundle/chai": "4.3.4-fix.0",
     "@playwright/test": "1.52.0",
+    "@rollup/plugin-replace": "6.0.2",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/exec": "7.1.0",
     "@semantic-release/git": "10.0.1",
@@ -58,7 +60,6 @@
     "mocha": "11.4.0",
     "mocha-multi-reporters": "1.5.1",
     "rollup": "4.41.0",
-    "@adobe/rollup-plugin-checksum": "1.2.0",
     "rollup-plugin-cleanup": "3.2.1",
     "rollup-plugin-eslint-bundle": "9.0.0",
     "semantic-release": "24.2.4",

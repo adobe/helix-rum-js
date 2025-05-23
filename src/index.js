@@ -15,15 +15,16 @@ export function sampleRUM(checkpoint, data) {
   const timeShift = () => (window.performance ? window.performance.now() : Date.now() - window.hlx.rum.firstReadTime);
   try {
     window.hlx = window.hlx || {};
-    if (!window.hlx.rum) {
+    if (!window.hlx.rum || !window.hlx.rum.collector) {
       sampleRUM.enhance = () => {};
       const param = new URLSearchParams(window.location.search).get('rum');
       const weight = (param === 'on' && 1)
         || (window.SAMPLE_PAGEVIEWS_AT_RATE === 'high' && 10)
         || (window.SAMPLE_PAGEVIEWS_AT_RATE === 'low' && 1000)
         || 100;
-      const id = crypto.getRandomValues(new Uint32Array(1))[0].toString(36).slice(-4);
-      const isSelected = (param !== 'off') && (Math.random() * weight < 1);
+      const id = (window.hlx.rum && window.hlx.rum.id)
+        || crypto.randomUUID().slice(-9);
+      const isSelected = (window.hlx.rum && window.hlx.rum.isSelected) || ((param !== 'off') && (Math.random() * weight < 1));
       // eslint-disable-next-line object-curly-newline, max-len
       window.hlx.rum = { weight, id, isSelected, firstReadTime: window.performance ? window.performance.timeOrigin : Date.now(), sampleRUM, queue: [], collector: (...args) => window.hlx.rum.queue.push(args) };
       if (isSelected) {

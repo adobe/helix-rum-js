@@ -1,0 +1,42 @@
+<html>
+
+<head>
+  <script>
+    // this is set-up for the test
+    window.RUM_PARAMS = { program: 'pXXXXXX', environment: 'eYYYYYY' };
+    window.sendBeaconArgs = {
+      url: 'never has been set',
+      data: {},
+    };
+    // eslint-disable-next-line no-underscore-dangle
+    navigator._sendBeacon = navigator.sendBeacon;
+    navigator.sendBeacon = (url, data) => {
+      const json = JSON.parse(data);
+      if (json.checkpoint === 'top') {
+        sendBeaconArgs.url = url;
+        sendBeaconArgs.data = json;
+      }
+      return true;
+    };
+  </script>
+  <script defer data-script="standalone.js" data-rate="off" src="../../src/micro.js">
+  </script>
+</head>
+
+<body>
+  <script type="module">
+    import { runTests } from '@web/test-runner-mocha';
+    import { expect } from '@esm-bundle/chai';
+    /* eslint-env mocha */
+    runTests(async () => {
+      describe('Operational Telemetry - Micro-Loader', () => {
+        it('when not-selected, no data is sent', async () => {
+          expect(window.sendBeaconArgs.url).to.equal('never has been set');
+          expect(window.WAS_SELECTED).to.equal(undefined);
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

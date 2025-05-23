@@ -157,8 +157,8 @@ describe('sampleRUM', () => {
       const { id } = window.hlx.rum;
 
       expect(id).to.exist;
-      expect(id.length).to.equal(4);
-      expect(id).to.match(/^[0-9a-z]+$/);
+      expect(id.length).to.equal(9);
+      expect(id).to.match(/^[0-9a-f]+$/);
     });
   });
 });
