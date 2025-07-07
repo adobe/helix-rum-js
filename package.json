@@ -37,6 +37,7 @@
   "devDependencies": {
     "@adobe/eslint-config-helix": "3.0.6",
     "@adobe/rollup-plugin-checksum": "1.2.0",
+    "@eslint/config-helpers": "0.3.0",
     "@esm-bundle/chai": "4.3.4-fix.0",
     "@playwright/test": "1.53.2",
     "@rollup/plugin-replace": "6.0.2",
@@ -52,7 +53,8 @@
     "codecov": "3.8.3",
     "commitizen": "4.3.1",
     "cz-conventional-changelog": "3.3.0",
-    "eslint": "8.57.1",
+    "eslint": "9.30.1",
+    "globals": "16.3.0",
     "husky": "9.1.7",
     "jsdoc-to-markdown": "9.1.1",
     "junit-report-builder": "5.1.1",
