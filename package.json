@@ -35,7 +35,7 @@
     "reporter-options": "configFile=.mocha-multi.json"
   },
   "devDependencies": {
-    "@adobe/eslint-config-helix": "3.0.7",
+    "@adobe/eslint-config-helix": "3.0.8",
     "@adobe/rollup-plugin-checksum": "1.2.0",
     "@eslint/config-helpers": "0.3.0",
     "@esm-bundle/chai": "4.3.4-fix.0",
