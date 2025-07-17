@@ -1,3 +1,4 @@
+(function() {
 // c is the current script element
 var c = document.currentScript,
   // d is the dataset of the current script element
@@ -30,3 +31,4 @@ if (r.isSelected || ((w && Math.random() * w < 1) && (r.isSelected = true))) {
   document.head.append(n);
 }
 // these comments will not make it into the output
+})();
