@@ -1,3 +1,10 @@
+## [2.12.2](https://github.com/adobe/helix-rum-js/compare/v2.12.1...v2.12.2) (2025-07-17)
+
+
+### Bug Fixes
+
+* wrap micro.js in IIFE to prevent global variable conflicts ([ee1766f](https://github.com/adobe/helix-rum-js/commit/ee1766f3e92006a452c81e16d9b5b8c897f863f7))
+
 ## [2.12.1](https://github.com/adobe/helix-rum-js/compare/v2.12.0...v2.12.1) (2025-05-23)
 
 
