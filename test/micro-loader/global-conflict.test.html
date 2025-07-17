@@ -1,0 +1,73 @@
+<html>
+
+<head>
+  <script>
+    // this is set-up for the test
+    window.RUM_PARAMS = { program: 'pXXXXXX', environment: 'eYYYYYY' };
+    window.sendBeaconArgs = {
+      url: '',
+      data: {},
+    };
+    // eslint-disable-next-line no-underscore-dangle
+    navigator._sendBeacon = navigator.sendBeacon;
+    navigator.sendBeacon = (url, data) => {
+      const json = JSON.parse(data);
+      if (json.checkpoint === 'top') {
+        sendBeaconArgs.url = url;
+        sendBeaconArgs.data = json;
+      }
+      return true;
+    };
+
+    // Pre-declare conflicting global variables that micro.js uses
+    var c = 'ORIGINAL_C';
+    var d = 'ORIGINAL_D';
+    var q = 'ORIGINAL_Q';
+    var v = 'ORIGINAL_V';
+    var w = 'ORIGINAL_W';
+    var r = 'ORIGINAL_R';
+    var n = 'ORIGINAL_N';
+    var a = 'ORIGINAL_A';
+    
+    // Store original values to test if they get overwritten
+    window.ORIGINAL_VALUES = { c, d, q, v, w, r, n, a };
+  </script>
+  <script defer data-script="standalone.js" data-rate="on" src="../../src/micro.js">
+  </script>
+</head>
+
+<body>
+  <script type="module">
+    import { runTests } from '@web/test-runner-mocha';
+    import { expect } from '@esm-bundle/chai';
+    /* eslint-env mocha */
+    runTests(async () => {
+      describe('Micro-Loader - Global Variable Conflicts', () => {
+        it('Should not overwrite pre-existing global variables', async () => {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          // Test that original values are preserved (this should fail with current implementation)
+          expect(window.c).to.equal('ORIGINAL_C');
+          expect(window.d).to.equal('ORIGINAL_D');
+          expect(window.q).to.equal('ORIGINAL_Q');
+          expect(window.v).to.equal('ORIGINAL_V');
+          expect(window.w).to.equal('ORIGINAL_W');
+          expect(window.r).to.equal('ORIGINAL_R');
+          expect(window.n).to.equal('ORIGINAL_N');
+          expect(window.a).to.equal('ORIGINAL_A');
+        });
+        
+        it('Should still function correctly despite conflicts', async () => {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          // Verify that RUM still works
+          expect(window.sendBeaconArgs.url).to.equal(`https://rum.hlx.page/.rum/1?program=pXXXXXX&environment=eYYYYYY`);
+          expect(window.sendBeaconArgs.data.checkpoint).to.equal('top');
+          expect(window.WAS_SELECTED).to.equal(true);
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
