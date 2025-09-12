@@ -12,7 +12,7 @@
 
 /* eslint-env mocha */
 
-import { assert, expect } from '@esm-bundle/chai';
+import { assert } from '@esm-bundle/chai';
 import { test, before, after } from './errors.js';
 
 class MyCustomError extends Error {
@@ -39,10 +39,10 @@ describe('sampleRUM custom error obj capture', () => {
     await test(() => {
       throw new MyCustomError('This is an unexpected custom error');
     }, (source) => {
-      expect(source).to.be.a('string');
+      assert.strictEqual(typeof source, 'string');
       assert.ok(source.match(/sampleRUM.basic.error.custom.test.js(.*):[\d]+:/), 'source should contain the file name and line number');
     }, (target) => {
-      expect(target).to.equal('Error: This is an unexpected custom error');
+      assert.strictEqual(target, 'Error: This is an unexpected custom error');
     }, config.queue);
   });
 });

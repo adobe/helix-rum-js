@@ -8,7 +8,7 @@
 
     <script type="module">
       import { runTests } from '@web/test-runner-mocha';
-      import { expect } from '@esm-bundle/chai';
+      import { assert } from '@esm-bundle/chai';
 
       import { sampleRUM } from '../../src/index.js';
       
@@ -16,9 +16,9 @@
       runTests(async () => {
         describe('enhance', () => {
           it('rum - load enhancer', () => {
-            expect(document.querySelector('script[src*="rum-enhancer"]')).to.not.exist;
+            assert.ok(!document.querySelector('script[src*="rum-enhancer"]'));
             sampleRUM();
-            expect(document.querySelector('script[src*="rum-enhancer"]')).to.exist;
+            assert.ok(document.querySelector('script[src*="rum-enhancer"]'));
           });
         });
       });

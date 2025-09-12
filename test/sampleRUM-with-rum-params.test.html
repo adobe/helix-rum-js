@@ -31,13 +31,13 @@
 <body>
   <script type="module">
     import { runTests } from '@web/test-runner-mocha';
-    import { expect } from '@esm-bundle/chai';
+    import { assert } from '@esm-bundle/chai';
     /* eslint-env mocha */
     runTests(async () => {
       describe('sampleRUM - load event', () => {
         it('rum selected url params sent', async () => {
-          expect(window.sendBeaconArgs.url).to.equal(`https://rum.hlx.page/.rum/1?program=pXXXXXX&environment=eYYYYYY`);
-          expect(window.sendBeaconArgs.data.checkpoint).to.equal('top');
+          assert.strictEqual(window.sendBeaconArgs.url, `https://rum.hlx.page/.rum/1?program=pXXXXXX&environment=eYYYYYY`);
+          assert.strictEqual(window.sendBeaconArgs.data.checkpoint, 'top');
         });
       });
     });

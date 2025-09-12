@@ -26,18 +26,18 @@
 <body>
   <script type="module">
     import { runTests } from '@web/test-runner-mocha';
-    import { expect } from '@esm-bundle/chai';
+    import { assert } from '@esm-bundle/chai';
     /* eslint-env mocha */
     runTests(async () => {
       describe('Operational Telemetry - Micro-Loader', () => {
         it('When selected, always sends data', async () => {
           await new Promise(resolve => setTimeout(resolve, 500));
-          expect(window.sendBeaconArgs.url).to.equal(`https://rum.hlx.page/.rum/1?program=pXXXXXX&environment=eYYYYYY`);
-          expect(window.sendBeaconArgs.data.checkpoint).to.equal('top');
-          expect(window.WAS_SELECTED).to.equal(true);
+          assert.strictEqual(window.sendBeaconArgs.url, `https://rum.hlx.page/.rum/1?program=pXXXXXX&environment=eYYYYYY`);
+          assert.strictEqual(window.sendBeaconArgs.data.checkpoint, 'top');
+          assert.strictEqual(window.WAS_SELECTED, true);
           const script = document.querySelector('script[src="standalone.js"]');
-          expect(script).to.not.be.null;
-          expect(script.getAttribute('integrity')).to.equal('__SRI__');
+          assert.ok(script !== null);
+          assert.strictEqual(script.getAttribute('integrity'), '__SRI__');
         });
       });
     });

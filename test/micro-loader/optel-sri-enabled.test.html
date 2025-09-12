@@ -26,13 +26,13 @@
 <body>
   <script type="module">
     import { runTests } from '@web/test-runner-mocha';
-    import { expect } from '@esm-bundle/chai';
+    import { assert } from '@esm-bundle/chai';
     /* eslint-env mocha */
     runTests(async () => {
       describe('Operational Telemetry - Micro-Loader', () => {
         it('When selected, always sends data', async () => {
-          expect(window.sendBeaconArgs.url).to.equal('never has been set');
-          expect(window.WAS_SELECTED).to.equal(undefined);
+          assert.strictEqual(window.sendBeaconArgs.url, 'never has been set');
+          assert.strictEqual(window.WAS_SELECTED, undefined);
         });
       });
     });

@@ -2,7 +2,7 @@
   <body>
     <script type="module">
       import { runTests } from '@web/test-runner-mocha';
-      import { expect } from '@esm-bundle/chai';
+      import { assert } from '@esm-bundle/chai';
 
       window.hlx = {
         RUM_MANUAL_ENHANCE: true,
@@ -33,13 +33,13 @@
         
         describe('sampleRUM - after load event', () => {
           it('rum manual enhance mode - control enhancement', () => {
-            expect(document.querySelector('script[src*="rum-enhancer"]')).to.not.exist;
+            assert.ok(!document.querySelector('script[src*="rum-enhancer"]'));
             sampleRUM();
-            expect(document.querySelector('script[src*="rum-enhancer"]')).to.not.exist;
-            expect(sampleRUM.enhance).to.be.a('function');
+            assert.ok(!document.querySelector('script[src*="rum-enhancer"]'));
+            assert.strictEqual(typeof sampleRUM.enhance, 'function');
             sampleRUM.enhance();
             // at this stage, rum-enhancer should not be loaded because rum has not been enabled
-            expect(document.querySelector('script[src*="rum-enhancer"]')).to.not.exist;
+            assert.ok(!document.querySelector('script[src*="rum-enhancer"]'));
           });
         });
       });

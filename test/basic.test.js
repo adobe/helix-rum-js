@@ -12,11 +12,11 @@
 
 /* eslint-env mocha */
 
-import { expect } from '@esm-bundle/chai';
+import { assert } from '@esm-bundle/chai';
 import { sampleRUM } from '../src/index.js';
 
 describe('basic tests', () => {
   it('sampleRUM function is present', () => {
-    expect(typeof sampleRUM).to.be.equal('function');
+    assert.strictEqual(typeof sampleRUM, 'function');
   });
 });

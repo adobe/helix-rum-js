@@ -13,7 +13,7 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-import { expect } from '@esm-bundle/chai';
+import { assert } from '@esm-bundle/chai';
 import { test, before, after } from './errors.js';
 
 describe('sampleRUM simple error capture', () => {
@@ -36,9 +36,9 @@ describe('sampleRUM simple error capture', () => {
         reject('This is an unhandled promise rejection');
       });
     }, (source) => {
-      expect(source).to.equal('Unhandled Rejection');
+      assert.strictEqual(source, 'Unhandled Rejection');
     }, (target) => {
-      expect(target).to.equal('This is an unhandled promise rejection');
+      assert.strictEqual(target, 'This is an unhandled promise rejection');
     }, config.queue);
   });
 });

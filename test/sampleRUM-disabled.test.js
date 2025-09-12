@@ -13,7 +13,7 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-import { expect } from '@esm-bundle/chai';
+import { assert } from '@esm-bundle/chai';
 import { sampleRUM } from '../src/index.js';
 
 describe('sampleRUM - RUM disabled', () => {
@@ -48,7 +48,7 @@ describe('sampleRUM - RUM disabled', () => {
 
     sampleRUM();
 
-    expect(Object.keys(sendBeaconArgs).length).to.equal(0);
+    assert.strictEqual(Object.keys(sendBeaconArgs).length, 0);
     // eslint-disable-next-line no-underscore-dangle
     navigator.sendBeacon = navigator._sendBeacon;
   });
@@ -57,9 +57,9 @@ describe('sampleRUM - RUM disabled', () => {
     const cb = (event) => {
       document.removeEventListener('rum', cb);
 
-      expect(event.detail.checkpoint).to.equal('test');
-      expect(event.detail.data.foo).to.equal('bar');
-      expect(event.detail.data.int).to.equal(1);
+      assert.strictEqual(event.detail.checkpoint, 'test');
+      assert.strictEqual(event.detail.data.foo, 'bar');
+      assert.strictEqual(event.detail.data.int, 1);
       done();
     };
 
@@ -85,7 +85,7 @@ describe('sampleRUM - RUM disabled', () => {
       sampleRUM();
       sampleRUM.enhance();
       const enhancer = document.querySelector('script[src*="rum-enhancer"]');
-      expect(enhancer).to.not.exist;
+      assert.ok(!enhancer);
     });
   });
 
@@ -93,12 +93,12 @@ describe('sampleRUM - RUM disabled', () => {
     it('allows high sampling rate', async () => {
       window.SAMPLE_PAGEVIEWS_AT_RATE = 'high';
       sampleRUM();
-      expect(window.hlx.rum.weight).to.equal(10);
+      assert.strictEqual(window.hlx.rum.weight, 10);
     });
     it('allows low sampling rate', async () => {
       window.SAMPLE_PAGEVIEWS_AT_RATE = 'low';
       sampleRUM();
-      expect(window.hlx.rum.weight).to.equal(1000);
+      assert.strictEqual(window.hlx.rum.weight, 1000);
     });
     it('defaults to 100 sampling rate', async () => {
       const usp = new URLSearchParams(window.location.search);
@@ -106,7 +106,7 @@ describe('sampleRUM - RUM disabled', () => {
       window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
       delete window.SAMPLE_PAGEVIEWS_AT_RATE;
       sampleRUM();
-      expect(window.hlx.rum.weight).to.equal(100);
+      assert.strictEqual(window.hlx.rum.weight, 100);
     });
   });
 });

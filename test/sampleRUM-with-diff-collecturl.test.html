@@ -27,21 +27,21 @@
 <body>
   <script type="module">
     import { runTests } from '@web/test-runner-mocha';
-    import { expect } from '@esm-bundle/chai';
+    import { assert } from '@esm-bundle/chai';
     /* eslint-env mocha */
     runTests(async () => {
       describe('sampleRUM - load event', () => {
         it('rum selected load enhancer', () => {
           // at this stage, rum-enhancer should not loaded because load event already
-          expect(document.querySelector('script[src*="rum-enhancer"]')).to.exist;
-          expect(document.querySelector('script[src*="rum-enhancer"]').src).to.match(/rum\.hlx\.page/);
+          assert.ok(document.querySelector('script[src*="rum-enhancer"]'));
+          assert.match(document.querySelector('script[src*="rum-enhancer"]').src, /rum\.hlx\.page/);
         });
         it('rum selected blob beacon', async () => {
-          expect(window.sendBeaconArgs.url).to.equal(`${window.location.origin}/.rum/1`);
-          expect(window.sendBeaconArgs.blob).to.be.a('Blob');
-          expect(window.sendBeaconArgs.blob.type).to.equal('application/json');
+          assert.strictEqual(window.sendBeaconArgs.url, `${window.location.origin}/.rum/1`);
+          assert.strictEqual(window.sendBeaconArgs.blob.constructor.name, 'Blob');
+          assert.strictEqual(window.sendBeaconArgs.blob.type, 'application/json');
           window.sendBeaconArgs.data = JSON.parse(await window.sendBeaconArgs.blob.text());
-          expect(window.sendBeaconArgs.data.checkpoint).to.equal('top');
+          assert.strictEqual(window.sendBeaconArgs.data.checkpoint, 'top');
         });
       });
     });

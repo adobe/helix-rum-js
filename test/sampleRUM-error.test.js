@@ -13,7 +13,7 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-import { expect } from '@esm-bundle/chai';
+import { assert } from '@esm-bundle/chai';
 import { sampleRUM } from '../src/index.js';
 
 describe('sampleRUM', () => {
@@ -39,6 +39,6 @@ describe('sampleRUM', () => {
   it('rum capture exception', () => {
     sampleRUM();
     window.hlx.rum.queue = undefined;
-    expect(() => sampleRUM('triggererror')).to.not.throw(Error);
+    assert.doesNotThrow(() => sampleRUM('triggererror'), Error);
   });
 });

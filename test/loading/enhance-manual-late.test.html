@@ -8,7 +8,7 @@
 
     <script type="module">
       import { runTests } from '@web/test-runner-mocha';
-      import { expect } from '@esm-bundle/chai';
+      import { assert } from '@esm-bundle/chai';
 
       window.hlx = {
         RUM_MANUAL_ENHANCE: true,
@@ -20,15 +20,15 @@
       runTests(async () => {
         describe('sampleRUM - after load event', () => {
           it('rum manual enhance mode - control enhancement', () => {
-            expect(document.querySelector('script[src*="rum-enhancer"]')).to.not.exist;
+            assert.ok(!document.querySelector('script[src*="rum-enhancer"]'));
             sampleRUM();
-            expect(document.querySelector('script[src*="rum-enhancer"]')).to.not.exist;
+            assert.ok(!document.querySelector('script[src*="rum-enhancer"]'));
             sampleRUM.enhance();
-            expect(document.querySelector('script[src*="rum-enhancer"]')).to.exist;
+            assert.ok(document.querySelector('script[src*="rum-enhancer"]'));
             // test enhance once
             sampleRUM.enhance();
             const scripts = document.querySelectorAll('script[src*="rum-enhancer"]');
-            expect(scripts.length).to.equal(1);
+            assert.strictEqual(scripts.length, 1);
           });
         });
       });
