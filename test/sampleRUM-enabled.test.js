@@ -13,7 +13,7 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 
-import { expect } from '@esm-bundle/chai';
+import { assert } from '@esm-bundle/chai';
 import { sampleRUM } from '../src/index.js';
 
 describe('sampleRUM', () => {
@@ -48,10 +48,10 @@ describe('sampleRUM', () => {
 
     sampleRUM();
 
-    expect(sendBeaconArgs.url).to.equal('https://rum.hlx.page/.rum/1');
-    expect(sendBeaconArgs.data.id).to.exist;
-    expect(sendBeaconArgs.data.weight).to.equal(1);
-    expect(sendBeaconArgs.data.checkpoint).to.equal('top');
+    assert.strictEqual(sendBeaconArgs.url, 'https://rum.hlx.page/.rum/1');
+    assert.ok(sendBeaconArgs.data.id);
+    assert.strictEqual(sendBeaconArgs.data.weight, 1);
+    assert.strictEqual(sendBeaconArgs.data.checkpoint, 'top');
     // eslint-disable-next-line no-underscore-dangle
     navigator.sendBeacon = navigator._sendBeacon;
   });
@@ -68,9 +68,9 @@ describe('sampleRUM', () => {
 
     sampleRUM();
     sampleRUM.sendPing('sendPingWorks', 0, { source: 'sourcetest', target: 'targettest' });
-    expect(sendBeaconArgs.data.checkpoint).to.equal('sendPingWorks');
-    expect(sendBeaconArgs.data.source).to.equal('sourcetest');
-    expect(sendBeaconArgs.data.target).to.equal('targettest');
+    assert.strictEqual(sendBeaconArgs.data.checkpoint, 'sendPingWorks');
+    assert.strictEqual(sendBeaconArgs.data.source, 'sourcetest');
+    assert.strictEqual(sendBeaconArgs.data.target, 'targettest');
     // eslint-disable-next-line no-underscore-dangle
     navigator.sendBeacon = navigator._sendBeacon;
   });
@@ -83,10 +83,10 @@ describe('sampleRUM', () => {
     });
 
     const [checkpoint, data, time] = window.hlx.rum.queue.pop();
-    expect(checkpoint).to.equal('test');
-    expect(data.foo).to.equal('bar');
-    expect(data.int).to.equal(1);
-    expect(time).to.exist;
+    assert.strictEqual(checkpoint, 'test');
+    assert.strictEqual(data.foo, 'bar');
+    assert.strictEqual(data.int, 1);
+    assert.ok(time);
   });
 
   it('rum checkpoint queuing not selected', () => {
@@ -96,16 +96,16 @@ describe('sampleRUM', () => {
       foo: 'bar',
       int: 1,
     });
-    expect(window.hlx.rum.queue.length).to.equal(0);
+    assert.strictEqual(window.hlx.rum.queue.length, 0);
   });
 
   it('sampleRUM fire custom rum event', (done) => {
     const cb = (event) => {
       document.removeEventListener('rum', cb);
 
-      expect(event.detail.checkpoint).to.equal('test');
-      expect(event.detail.data.foo).to.equal('bar');
-      expect(event.detail.data.int).to.equal(1);
+      assert.strictEqual(event.detail.checkpoint, 'test');
+      assert.strictEqual(event.detail.data.foo, 'bar');
+      assert.strictEqual(event.detail.data.int, 1);
       done();
     };
 
@@ -131,7 +131,7 @@ describe('sampleRUM', () => {
       sampleRUM();
       sampleRUM.enhance();
       const enhancer = document.querySelector('script[src*="rum-enhancer"]');
-      expect(enhancer).to.exist;
+      assert.ok(enhancer);
     });
 
     it('loads rum enhancer when sampleRum is called twice', () => {
@@ -139,14 +139,14 @@ describe('sampleRUM', () => {
       sampleRUM();
       sampleRUM.enhance();
       const enhancer = document.querySelector('script[src*="rum-enhancer"]');
-      expect(enhancer).to.exist;
+      assert.ok(enhancer);
     });
   });
 
   describe('sampling rate', () => {
     it('allows forced sampling', async () => {
       sampleRUM();
-      expect(window.hlx.rum.weight).to.equal(1);
+      assert.strictEqual(window.hlx.rum.weight, 1);
     });
   });
 
@@ -156,9 +156,9 @@ describe('sampleRUM', () => {
 
       const { id } = window.hlx.rum;
 
-      expect(id).to.exist;
-      expect(id.length).to.equal(9);
-      expect(id).to.match(/^[0-9a-f]+$/);
+      assert.ok(id);
+      assert.strictEqual(id.length, 9);
+      assert.match(id, /^[0-9a-f]+$/);
     });
   });
 });

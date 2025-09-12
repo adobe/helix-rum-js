@@ -12,7 +12,7 @@
 
 /* eslint-env mocha */
 
-import { assert, expect } from '@esm-bundle/chai';
+import { assert } from '@esm-bundle/chai';
 import {
   test, before, after,
 } from './errors.js';
@@ -35,7 +35,7 @@ describe('sampleRUM simple error capture', () => {
       let s;
       s.t = 1;
     }, (source) => {
-      expect(source).to.be.a('string');
+      assert.strictEqual(typeof source, 'string');
       assert.ok(source.match(/sampleRUM.real.error.test.js(.*):[\d]+:/), 'source should contain the file name and line number');
     }, (target) => {
       assert.ok(target.startsWith('TypeError:'));

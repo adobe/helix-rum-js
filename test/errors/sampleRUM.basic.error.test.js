@@ -12,7 +12,7 @@
 
 /* eslint-env mocha */
 
-import { assert, expect } from '@esm-bundle/chai';
+import { assert } from '@esm-bundle/chai';
 import { test, before, after } from './errors.js';
 
 describe('sampleRUM simple error capture', () => {
@@ -32,10 +32,10 @@ describe('sampleRUM simple error capture', () => {
     await test(() => {
       throw new Error('This is an unexpected error', { cause: 'root cause' });
     }, (source) => {
-      expect(source).to.be.a('string');
+      assert.strictEqual(typeof source, 'string');
       assert.ok(source.match(/sampleRUM.basic.error.test.js(.*):[\d]+:/), 'source should contain the file name and line number');
     }, (target) => {
-      expect(target).to.equal('Error: This is an unexpected error');
+      assert.strictEqual(target, 'Error: This is an unexpected error');
     }, config.queue);
   });
 });

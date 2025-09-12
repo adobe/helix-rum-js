@@ -11,7 +11,7 @@
  */
 
 /* eslint-env mocha */
-import { expect } from '@esm-bundle/chai';
+import { assert } from '@esm-bundle/chai';
 import { sampleRUM } from '../../src/index.js';
 
 // fires an error on purpose
@@ -33,7 +33,7 @@ export async function test(errorFct, sourceTest, targetTest, queue) {
 
   await wait();
 
-  expect(queue.length).to.equal(1);
+  assert.strictEqual(queue.length, 1);
   const { source, target } = queue[0].data;
   sourceTest.call(this, source);
   targetTest.call(this, target);
