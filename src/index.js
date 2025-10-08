@@ -58,7 +58,7 @@ export function sampleRUM(checkpoint, data) {
         });
 
         window.addEventListener('securitypolicyviolation', (e) => {
-          if (e.blockedURI.includes('helix-rum-enhancer')) {
+          if (e.blockedURI.includes('helix-rum-enhancer') && e.disposition === 'enforce') {
             const errData = {
               source: 'csp',
               target: e.blockedURI,
