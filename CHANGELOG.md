@@ -1,3 +1,10 @@
+# [2.13.0](https://github.com/adobe/helix-rum-js/compare/v2.12.2...v2.13.0) (2025-10-08)
+
+
+### Features
+
+* add collection for CSP error on helix-rum-enhancer ([e655db9](https://github.com/adobe/helix-rum-js/commit/e655db941c53c4b5e77f1c3327745095f4aba5c6))
+
 ## [2.12.2](https://github.com/adobe/helix-rum-js/compare/v2.12.1...v2.12.2) (2025-07-17)
 
 
