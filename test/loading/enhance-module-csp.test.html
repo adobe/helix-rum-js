@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <!-- CSP policy that blocks rum.hlx.page specifically -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' 'unsafe-inline' 'unsafe-eval'; base-uri 'self'; object-src 'none';"
+      move-to-http-header="true"
+    />
+    <script>
+      const usp = new URLSearchParams(window.location.search);
+      usp.append('rum', 'on');
+      window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
+    </script>
+    <script type="module">
+      import { sampleRUM } from '../../src/index.js';
+      sampleRUM();
+    </script>
+  </head>
+  <body>
+    <script type="module">
+      import { runTests } from '@web/test-runner-mocha';
+      import { assert } from '@esm-bundle/chai';
+
+      /* eslint-env mocha */
+      runTests(async () => {
+        describe('enhance', () => {
+          it('rum - CSP blocks enhancer loading', () => {
+            // at this stage, rum-enhancer plugins should NOT be loaded due to CSP violation
+            const enhancerPluginScript = document.querySelector('script[src*="cwv.js"]');
+            assert.strictEqual(enhancerPluginScript, null, 'helix-rum-enhancer cwv plugin script should be blocked by CSP');
+          });
+        });
+      });
+    </script>
+    Test page for CSP violation.  Only top and error checkpoints should be sent.
+  </body>
+</html>
