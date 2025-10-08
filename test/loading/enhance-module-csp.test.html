@@ -1,5 +1,10 @@
 <html>
   <head>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="script-src 'self' 'unsafe-inline'; base-uri 'self'; object-src 'none';"
+      move-to-http-header="true"
+    />
     <script>
       const usp = new URLSearchParams(window.location.search);
       usp.append('rum', 'on');
@@ -18,14 +23,14 @@
       /* eslint-env mocha */
       runTests(async () => {
         describe('enhance', () => {
-          it('rum - load enhancer', () => {
-            // at this stage, rum-enhancer should be loaded
-            assert.ok(document.querySelector('script[src*="rum-enhancer"]'));          
-            assert.match(document.querySelector('script[src*="rum-enhancer"]').src, /rum\.hlx\.page/);
+          it('rum - CSP blocks enhancer loading', () => {
+            // at this stage, rum-enhancer should NOT be loaded due to CSP violation
+            const enhancerScript = document.querySelector('script[src*="rum-enhancer"]');
+            assert.strictEqual(enhancerScript, null, 'helix-rum-enhancer script should be blocked by CSP');
           });
         });
       });
     </script>
-    Test page for rum enhancer loading.  Many checkpoints should be sent, including language, cwv, a11y, etc.
+    Test page for CSP violation.  Only top and error checkpoints should be sent.
   </body>
 </html>
