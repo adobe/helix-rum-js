@@ -1,3 +1,10 @@
+## [2.13.1](https://github.com/adobe/helix-rum-js/compare/v2.13.0...v2.13.1) (2025-10-08)
+
+
+### Bug Fixes
+
+* CSP report-only should not create error checkpoint ([9454927](https://github.com/adobe/helix-rum-js/commit/9454927a3622a969e2353146116a5dbb01c5e6ef))
+
 # [2.13.0](https://github.com/adobe/helix-rum-js/compare/v2.12.2...v2.13.0) (2025-10-08)
 
 
