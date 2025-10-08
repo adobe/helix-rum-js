@@ -67,6 +67,7 @@ describe('sampleRUM CSP violation capture', () => {
     event.sourceFile = 'https://example.com/page.html';
     event.lineNumber = 10;
     event.columnNumber = 5;
+    event.disposition = 'enforce';
 
     // Dispatch the event
     window.dispatchEvent(event);
@@ -117,6 +118,7 @@ describe('sampleRUM CSP violation capture', () => {
     event.sourceFile = 'https://example.com/page.html';
     event.lineNumber = 10;
     event.columnNumber = 5;
+    event.disposition = 'enforce';
 
     // Dispatch the event
     window.dispatchEvent(event);
@@ -129,6 +131,28 @@ describe('sampleRUM CSP violation capture', () => {
       assert.strictEqual(cspCall.data.checkpoint, 'error');
       assert.strictEqual(cspCall.data.source, 'csp');
       assert.strictEqual(cspCall.data.target, 'https://cdn.example.com/path/to/helix-rum-enhancer/v2/script.js');
+      done();
+    }, 100);
+  });
+
+  it('should allow CSP violation for URI containing helix-rum-enhancer anywhere in the path when report-only', (done) => {
+    // Create a securitypolicyviolation event with helix-rum-enhancer in the middle of the URI
+    const event = new Event('securitypolicyviolation');
+    event.blockedURI = 'https://cdn.example.com/path/to/helix-rum-enhancer/v2/script.js';
+    event.violatedDirective = 'script-src';
+    event.originalPolicy = 'script-src \'self\'';
+    event.sourceFile = 'https://example.com/page.html';
+    event.lineNumber = 10;
+    event.columnNumber = 5;
+    event.disposition = 'report';
+
+    // Dispatch the event
+    window.dispatchEvent(event);
+
+    // Wait a bit for the event to be processed
+    setTimeout(() => {
+      const cspCall = capturedCalls.find((call) => call.data.checkpoint === 'error' && call.data.source === 'csp');
+      assert.strictEqual(cspCall, undefined, 'sendBeacon should not have been called for helix-rum-enhancer URI when report-only');
       done();
     }, 100);
   });

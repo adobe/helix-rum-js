@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <!-- CSP policy that blocks rum.hlx.page specifically -->
+    <meta
+      http-equiv="Content-Security-Policy-Report-Only"
+      content="script-src 'self' 'unsafe-inline' 'unsafe-eval'; base-uri 'self'; object-src 'none';"
+      move-to-http-header="true"
+    />
+    <script>
+      const usp = new URLSearchParams(window.location.search);
+      usp.append('rum', 'on');
+      window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
+    </script>
+    <script type="module">
+      import { sampleRUM } from '../../src/index.js';
+      sampleRUM();
+    </script>
+  </head>
+  <body>
+    <script type="module">
+      import { runTests } from '@web/test-runner-mocha';
+      import { assert } from '@esm-bundle/chai';
+
+      /* eslint-env mocha */
+      runTests(async () => {
+        describe('enhance', () => {
+          it('rum - CSP does not block enhancer loading', () => {
+            // at this stage, rum-enhancer should be loaded because the CSP violation is report only
+            const enhancerScript = document.querySelector('script[src*="helix-rum-enhancer"]');
+            assert.notStrictEqual(enhancerScript, null, 'helix-rum-enhancer script should be allowed.');
+          });
+        });
+      });
+    </script>
+    Test page for report only CSP violation.  All checkpoints should be sent.
+  </body>
+</html>
