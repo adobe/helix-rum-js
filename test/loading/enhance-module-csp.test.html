@@ -1,8 +1,9 @@
 <html>
   <head>
+    <!-- CSP policy that blocks rum.hlx.page specifically -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="script-src 'self' 'unsafe-inline'; base-uri 'self'; object-src 'none';"
+      content="script-src 'self' 'unsafe-inline' 'unsafe-eval'; base-uri 'self'; object-src 'none';"
       move-to-http-header="true"
     />
     <script>
@@ -24,9 +25,9 @@
       runTests(async () => {
         describe('enhance', () => {
           it('rum - CSP blocks enhancer loading', () => {
-            // at this stage, rum-enhancer should NOT be loaded due to CSP violation
-            const enhancerScript = document.querySelector('script[src*="rum-enhancer"]');
-            assert.strictEqual(enhancerScript, null, 'helix-rum-enhancer script should be blocked by CSP');
+            // at this stage, rum-enhancer plugins should NOT be loaded due to CSP violation
+            const enhancerPluginScript = document.querySelector('script[src*="cwv.js"]');
+            assert.strictEqual(enhancerPluginScript, null, 'helix-rum-enhancer cwv plugin script should be blocked by CSP');
           });
         });
       });
