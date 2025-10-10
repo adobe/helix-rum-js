@@ -1,3 +1,11 @@
+## [2.13.2](https://github.com/adobe/helix-rum-js/compare/v2.13.1...v2.13.2) (2025-10-10)
+
+
+### Bug Fixes
+
+* **release:** use NPM trusted publishers ([5a75566](https://github.com/adobe/helix-rum-js/commit/5a75566842ebc1cf86624b6700b0a605ba242145))
+* update package-lock.json to sync with package.json ([72c4224](https://github.com/adobe/helix-rum-js/commit/72c422492ce97f7a3218f226a44c870a70f5f129)), closes [#298](https://github.com/adobe/helix-rum-js/issues/298)
+
 ## [2.13.1](https://github.com/adobe/helix-rum-js/compare/v2.13.0...v2.13.1) (2025-10-08)
 
 
