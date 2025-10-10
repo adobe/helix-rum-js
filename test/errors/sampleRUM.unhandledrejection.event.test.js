@@ -14,6 +14,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { assert } from '@esm-bundle/chai';
+import { before, after } from './errors.js';
 import { sampleRUM } from '../../src/index.js';
 
 describe('sampleRUM PromiseRejectionEvent capture', () => {
@@ -23,63 +24,14 @@ describe('sampleRUM PromiseRejectionEvent capture', () => {
   };
 
   beforeEach(() => {
-    // eslint-disable-next-line no-param-reassign
-    config.queue = [];
-
-    const usp = new URLSearchParams(window.location.search);
-    usp.append('rum', 'on');
-    window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
-
-    // eslint-disable-next-line no-param-reassign
-    config.listeners = window.Mocha.process.listeners('uncaughtException');
-    window.Mocha.process.removeAllListeners('uncaughtException');
-    window.Mocha.process.on('uncaughtException', () => {});
-
-    // Mock sendBeacon to capture error data
-    // eslint-disable-next-line no-underscore-dangle
-    navigator._sendBeacon = navigator.sendBeacon;
-    navigator.sendBeacon = (url, d) => {
-      const data = JSON.parse(d);
-      if (data.checkpoint === 'error') {
-        config.queue.push({ url, data });
-      }
-      return true;
-    };
+    before(config);
   });
 
   afterEach(() => {
-    const usp = new URLSearchParams(window.location.search);
-    usp.delete('rum');
-    window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
-
-    // Clear rum instance and remove event listeners
-    // eslint-disable-next-line no-underscore-dangle
-    if (window.hlx && window.hlx.rum) {
-      // eslint-disable-next-line no-underscore-dangle
-      window.hlx.rum = undefined;
-    }
-
-    const enhancer = document.querySelector('script[src*="rum-enhancer"]');
-    if (enhancer) {
-      enhancer.remove();
-    }
-
-    window.Mocha.process.removeAllListeners('uncaughtException');
-    window.Mocha.process.removeAllListeners('error');
-    window.Mocha.process.removeAllListeners('unhandledRejection');
-
-    config.listeners.forEach((lst) => {
-      window.Mocha.process.addListener('uncaughtException', lst);
-    });
-    // eslint-disable-next-line no-param-reassign
-    config.listeners = undefined;
-    // eslint-disable-next-line no-underscore-dangle
-    navigator.sendBeacon = navigator._sendBeacon;
-    // eslint-disable-next-line no-param-reassign
-    config.queue = [];
+    after(config);
   });
 
-  it('rum capture unhandled promise rejection where reason is a PromiseRejectionEvent with target', (done) => {
+  it('rum capture unhandled promise rejection where reason is a PromiseRejectionEvent with target', async () => {
     sampleRUM();
 
     // Create a mock target element
@@ -94,47 +46,40 @@ describe('sampleRUM PromiseRejectionEvent capture', () => {
       enumerable: true,
     });
 
-    // Set up a one-time listener to verify the error was captured
-    const originalSendBeacon = navigator.sendBeacon;
-    let errorCaptured = false;
-    navigator.sendBeacon = (url, d) => {
-      if (errorCaptured) return true; // Ignore subsequent calls
-      const data = JSON.parse(d);
-      if (data.checkpoint === 'error') {
-        errorCaptured = true;
-        config.queue.push({ url, data });
+    // Clear queue before dispatching to avoid race conditions
+    config.queue.length = 0;
 
-        try {
-          assert.strictEqual(config.queue.length, 1, 'Should capture exactly one error event');
-          const { source, target } = config.queue[0].data;
-          assert.strictEqual(source, 'Unhandled Rejection');
-          assert.ok(
-            target.includes('div') || target.includes('test-element') || target.includes('rejection-target'),
-            `target should contain element information from outerHTML, got: ${target}`,
-          );
-          done();
-        } catch (err) {
-          done(err);
-        } finally {
-          navigator.sendBeacon = originalSendBeacon;
-        }
-      }
-      return true;
-    };
+    // Dispatch the event asynchronously using setTimeout pattern
+    window.setTimeout(() => {
+      window.dispatchEvent(new PromiseRejectionEvent('unhandledrejection', {
+        promise: Promise.resolve(),
+        reason: rejectionEventLike,
+      }));
+    });
 
-    // Manually trigger the unhandledrejection event
-    window.dispatchEvent(new PromiseRejectionEvent('unhandledrejection', {
-      promise: Promise.resolve(),
-      reason: rejectionEventLike,
-    }));
+    // Wait for event processing (same pattern as test() helper)
+    await new Promise((resolve) => {
+      window.setTimeout(() => {
+        resolve();
+      }, 1500);
+    });
+
+    // Verify results
+    assert.strictEqual(config.queue.length, 1, `Expected 1 event but got ${config.queue.length}`);
+    const { source, target } = config.queue[0].data;
+    assert.strictEqual(source, 'Unhandled Rejection');
+    assert.ok(
+      target.includes('div') && (target.includes('test-element') || target.includes('rejection-target')),
+      `target should contain element information from outerHTML, got: ${target}`,
+    );
   });
 
-  it('rum capture unhandled promise rejection where reason is a PromiseRejectionEvent without target', (done) => {
+  it('rum capture unhandled promise rejection where reason is a PromiseRejectionEvent without target', async () => {
     sampleRUM();
 
     // Create a PromiseRejectionEvent-like object without target
     const rejectionEventLike = Object.create(PromiseRejectionEvent.prototype);
-    // Explicitly set target to null/undefined to ensure the fallback path is tested
+    // Explicitly set target to null to ensure the fallback path is tested
     Object.defineProperty(rejectionEventLike, 'target', {
       value: null,
       writable: false,
@@ -149,39 +94,40 @@ describe('sampleRUM PromiseRejectionEvent capture', () => {
       enumerable: true,
     });
 
-    // Set up a one-time listener to verify the error was captured
-    const originalSendBeacon = navigator.sendBeacon;
-    let errorCaptured = false;
-    navigator.sendBeacon = (url, d) => {
-      if (errorCaptured) return true; // Ignore subsequent calls
-      const data = JSON.parse(d);
-      if (data.checkpoint === 'error') {
-        errorCaptured = true;
-        config.queue.push({ url, data });
+    // Clear queue before test
+    config.queue.length = 0;
 
-        try {
-          assert.strictEqual(config.queue.length, 1, 'Should capture exactly one error event');
-          const { source, target } = config.queue[0].data;
-          assert.strictEqual(source, 'Unhandled Rejection');
-          // When there's no target, it should fall back to listing property names
-          assert.ok(
-            target.includes('customProperty') || target.includes('anotherProperty'),
-            `target should contain property names, got: ${target}`,
-          );
-          done();
-        } catch (err) {
-          done(err);
-        } finally {
-          navigator.sendBeacon = originalSendBeacon;
-        }
-      }
-      return true;
-    };
+    // Create a promise that will be rejected but not handled
+    // This avoids the double-event issue from manually dispatching
+    window.setTimeout(() => {
+      // Create a rejected promise with our custom event as the reason
+      Promise.reject(rejectionEventLike);
+    });
 
-    // Manually trigger the unhandledrejection event
-    window.dispatchEvent(new PromiseRejectionEvent('unhandledrejection', {
-      promise: Promise.resolve(),
-      reason: rejectionEventLike,
-    }));
+    // Wait for event processing (same pattern as test() helper)
+    await new Promise((resolve) => {
+      window.setTimeout(() => {
+        resolve();
+      }, 1500);
+    });
+
+    // Verify results - find the event matching our test case
+    const promiseRejectionEvents = config.queue.filter((item) => {
+      const { source, target } = item.data;
+      return source === 'Unhandled Rejection'
+        && target
+        && target.includes('customProperty')
+        && target.includes('anotherProperty');
+    });
+
+    assert.ok(promiseRejectionEvents.length >= 1, `Expected at least 1 matching PromiseRejectionEvent but got ${promiseRejectionEvents.length}`);
+    const { source, target } = promiseRejectionEvents[0].data;
+    assert.strictEqual(source, 'Unhandled Rejection');
+    // When there's no target, it should fall back to listing property names
+    // Both properties should be present in the joined string
+    assert.ok(
+      target.includes('customProperty') && target.includes('anotherProperty'),
+      `target should contain both property names (joined with comma), got: ${target}`,
+    );
   });
 });
