@@ -1,0 +1,51 @@
+name: Update PR Description
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  update-pr-description:
+    name: Update PR Description
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+
+    steps:
+      - name: Update Pull Request Description
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number
+            });
+
+            // Get the branch name from the PR head ref
+            const branchName = context.payload.pull_request.head.ref;
+            const testUrl = `https://${branchName}--helix-rum-js--adobe.aem.live/test/static.html`;
+            const testSection = `
+
+            ## Test URL
+            ${testUrl}
+            `;
+
+            // Check if the test section already exists
+            if (pr.body && pr.body.includes('## Test URL')) {
+              console.log('Test URL section already exists, skipping update');
+              return;
+            }
+
+            // Update the PR description
+            const updatedBody = (pr.body || '') + testSection;
+
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+              body: updatedBody
+            });
+
+            console.log('PR description updated with test URL');
+        env:
+          GITHUB_TOKEN: ${{ secrets.ADOBE_BOT_GITHUB_TOKEN }}
