@@ -41,6 +41,12 @@ export function sampleRUM(checkpoint, data) {
           return errData;
         };
 
+        const dataFromRejectionEvent = (reason) => ({
+          source: 'Unhandled Rejection',
+          target: (reason.target && (reason.target.outerHTML || reason.target.toString()))
+            || Object.getOwnPropertyNames(reason).join(','),
+        });
+
         window.addEventListener('error', ({ error }) => {
           const errData = dataFromErrorObj(error);
           sampleRUM('error', errData);
@@ -53,6 +59,8 @@ export function sampleRUM(checkpoint, data) {
           };
           if (reason instanceof Error) {
             errData = dataFromErrorObj(reason);
+          } else if (reason instanceof PromiseRejectionEvent) {
+            errData = dataFromRejectionEvent(reason);
           }
           sampleRUM('error', errData);
         });
