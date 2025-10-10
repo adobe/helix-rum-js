@@ -20,9 +20,8 @@ jobs:
               repo: context.repo.repo,
               pull_number: context.issue.number
             });
-
             // Get the branch name from the PR head ref
-            const branchName = context.payload.pull_request.head.ref;
+            const branchName = context.payload.pull_request.head.ref.replace(/[^a-zA-Z0-9-]/g, '-');
             const testUrl = `https://${branchName}--helix-rum-js--adobe.aem.live/test/static.html`;
             const testSection = `
 
