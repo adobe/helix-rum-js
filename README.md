@@ -81,4 +81,7 @@ $ npm test
 $ npm run lint
 ```
 
+### Releases
 
+Releases are performed through Semantic Release in GitHub Actions. The package uses [NPM's trusted publishers](https://docs.npmjs.com/trusted-publishers) support, so that NPM will not
+accept any other package publishers.
