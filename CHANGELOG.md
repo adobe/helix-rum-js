@@ -1,3 +1,10 @@
+## [2.13.3](https://github.com/adobe/helix-rum-js/compare/v2.13.2...v2.13.3) (2025-10-10)
+
+
+### Bug Fixes
+
+* **deps:** sync package-lock.json with package.json ([#295](https://github.com/adobe/helix-rum-js/issues/295)) ([5d02b58](https://github.com/adobe/helix-rum-js/commit/5d02b585ffe85d003c2a97e3e32cd064fc8a5137))
+
 ## [2.13.2](https://github.com/adobe/helix-rum-js/compare/v2.13.1...v2.13.2) (2025-10-10)
 
 
