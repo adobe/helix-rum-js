@@ -1,3 +1,13 @@
+## [2.13.4](https://github.com/adobe/helix-rum-js/compare/v2.13.3...v2.13.4) (2025-10-17)
+
+
+### Bug Fixes
+
+* specify Node.js 24.10.0 for Release job to meet semantic-release v25 requirements ([#310](https://github.com/adobe/helix-rum-js/issues/310)) ([1aa611b](https://github.com/adobe/helix-rum-js/commit/1aa611b630d0ac3b23b777fe1daa04c7440b51ec))
+* specify Node.js versions to meet semantic-release v25 requirements ([5b58d09](https://github.com/adobe/helix-rum-js/commit/5b58d0917726b1ed8dff7923ab73845a1865d79d))
+* update @adobe/eslint-config-helix to 3.0.12 with compatible lockfile ([#309](https://github.com/adobe/helix-rum-js/issues/309)) ([732e4d2](https://github.com/adobe/helix-rum-js/commit/732e4d243433d168fed43d3591d562cbd2e240b5))
+* update semantic-release to v25 and node to 24.x for OIDC ([14dcc0f](https://github.com/adobe/helix-rum-js/commit/14dcc0fe796ec1efc40d80b56ed9ee1706154852))
+
 ## [2.13.3](https://github.com/adobe/helix-rum-js/compare/v2.13.2...v2.13.3) (2025-10-10)
 
 
