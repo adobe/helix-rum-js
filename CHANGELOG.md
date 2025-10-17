@@ -1,3 +1,10 @@
+## [2.13.5](https://github.com/adobe/helix-rum-js/compare/v2.13.4...v2.13.5) (2025-10-17)
+
+
+### Bug Fixes
+
+* enable npm provenance for publishing with automation tokens ([#311](https://github.com/adobe/helix-rum-js/issues/311)) ([de13bc6](https://github.com/adobe/helix-rum-js/commit/de13bc612a5d393264b3c34c7c3dad7da46e81ad))
+
 ## [2.13.4](https://github.com/adobe/helix-rum-js/compare/v2.13.3...v2.13.4) (2025-10-17)
 
 
