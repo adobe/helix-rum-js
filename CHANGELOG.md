@@ -1,3 +1,10 @@
+## [2.13.6](https://github.com/adobe/helix-rum-js/compare/v2.13.5...v2.13.6) (2025-10-17)
+
+
+### Bug Fixes
+
+* upgrade @semantic-release/npm to 13.0.0 for provenance support ([#312](https://github.com/adobe/helix-rum-js/issues/312)) ([46229ad](https://github.com/adobe/helix-rum-js/commit/46229ad428b50e0b182f2e1de05dfc1b2060ec18))
+
 ## [2.13.5](https://github.com/adobe/helix-rum-js/compare/v2.13.4...v2.13.5) (2025-10-17)
 
 
