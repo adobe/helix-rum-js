@@ -32,11 +32,13 @@ export function sampleRUM(checkpoint, data) {
           const errData = { source: 'undefined error' };
           try {
             errData.target = error.toString();
-            errData.source = error.stack.split('\n')
-              .filter((line) => line.match(/https?:\/\//)).shift()
-              .replace(/at ([^ ]+) \((.+)\)/, '$1@$2')
-              .replace(/ at /, '@')
-              .trim();
+            if (error.stack) {
+              errData.source = error.stack.split('\n')
+                  .filter((line) => line.match(/https?:\/\//)).shift()
+                  .replace(/at ([^ ]+) \((.+)\)/, '$1@$2')
+                  .replace(/ at /, '@')
+                  .trim();
+            }
           } catch (err) { /* error structure was not as expected */ }
           return errData;
         };
