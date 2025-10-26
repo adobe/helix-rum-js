@@ -32,11 +32,13 @@ export function sampleRUM(checkpoint, data) {
           const errData = { source: 'undefined error' };
           try {
             errData.target = error.toString();
-            errData.source = error.stack.split('\n')
-              .filter((line) => line.match(/https?:\/\//)).shift()
-              .replace(/at ([^ ]+) \((.+)\)/, '$1@$2')
-              .replace(/ at /, '@')
-              .trim();
+            if (error.stack) {
+              errData.source = error.stack.split('\n')
+                  .filter((line) => line.match(/https?:\/\//)).shift()
+                  .replace(/at ([^ ]+) \((.+)\)/, '$1@$2')
+                  .replace(/ at /, '@')
+                  .trim();
+            }
           } catch (err) { /* error structure was not as expected */ }
           return errData;
         };
@@ -106,3 +108,27 @@ export function sampleRUM(checkpoint, data) {
     // something went awry
   }
 }
+
+
+There are two challenges that affect the usability of Coding Agent
+
+Mapping Source Code to Delivered Code
+
+In the current scenario to generate the Code Fixes the Coding Agent works on the artefacts (JavaScript/CSS) that the website user sees and provides a patch on those artefacts. This specific patch works where the source code is delivered as is to the end user. But in the case of Cloud Service, the code is built via a pipeline and sent to the browser. In that scenario JavaScript/CSS gets minified and the coding agent is not able to generate a valid code fix that can be applied to the codebase for these specific reasons
+
+The JavaScript is minified by concatenating various source files and a build tool (like rollup, parcel or webpack)
+The CSS file is generated using less/scss and the coding agent will be working on CSS
+The HTML is also generated from HTL files and the agent needs to be aware of that for fixing any issues with respect to the HTML
+Approaches
+
+Use the source map files to map the minified files with the source code. This would require to change the customer's build files as done here
+Assume that the code is generated from a specific folder (ui.frontend) and use all of the files in that code for auto fix agent. 
+
+
+This will ensure the correct context is being passed here
+
+I am in favour of 2 if that works but fallback to 1 in certain cases.
+
+Validating the Fixes
+
+Once the coding agent updates some files, it uses playwright and updates the rendered page with the updated files. This approach though works for Edge Delivery but will not work for 
