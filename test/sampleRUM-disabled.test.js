@@ -90,6 +90,11 @@ describe('sampleRUM - RUM disabled', () => {
   });
 
   describe('sampling rate', () => {
+    beforeEach(() => {
+      const usp = new URLSearchParams(window.location.search);
+      usp.delete('rum');
+      window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
+    });
     it('allows high sampling rate', async () => {
       window.SAMPLE_PAGEVIEWS_AT_RATE = 'high';
       sampleRUM();
@@ -101,9 +106,6 @@ describe('sampleRUM - RUM disabled', () => {
       assert.strictEqual(window.hlx.rum.weight, 1000);
     });
     it('defaults to 100 sampling rate', async () => {
-      const usp = new URLSearchParams(window.location.search);
-      usp.delete('rum');
-      window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
       delete window.SAMPLE_PAGEVIEWS_AT_RATE;
       sampleRUM();
       assert.strictEqual(window.hlx.rum.weight, 100);

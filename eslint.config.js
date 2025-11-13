@@ -8,6 +8,7 @@ export default defineConfig([
     'coverage/*',
     '*/micro.js',
     'dist/*',
+    'test/micro-loader/rum-standalone.js',
   ]), {
     languageOptions: {
       globals: {

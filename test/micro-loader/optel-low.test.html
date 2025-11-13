@@ -1,0 +1,48 @@
+<html>
+
+<head>
+  <script>
+    // this is set-up for the test
+    window.RUM_PARAMS = { program: 'pXXXXXX', environment: 'eYYYYYY' };
+    window.sendBeaconArgs = {
+      url: '',
+      data: {},
+    };
+    Math.random = () => 0; // to select the sample
+    window.events = [];
+    // eslint-disable-next-line no-underscore-dangle
+    window.fakeSendBeacon = function (url, payload) {
+      if (typeof payload === 'string') {
+        window.events.push(JSON.parse(payload));
+      } else {
+        payload.text().then((text) => {
+          window.events.push(JSON.parse(text));
+        });
+      }
+    };
+  </script>
+  <script defer data-script="rum-standalone.js" data-rate="low" src="../../src/micro.js">
+  </script>
+</head>
+
+<body>
+  <script type="module">
+    import { runTests } from '@web/test-runner-mocha';
+    import { assert } from '@esm-bundle/chai';
+    /* eslint-env mocha */
+    runTests(async () => {
+      describe('Operational Telemetry - Micro-Loader with data-rate="low"', () => {
+        it('When selected with low rate, sends data with weight 1000', async () => {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          const event = window.events[0];
+          assert.strictEqual(event.weight, 1000);
+          assert.strictEqual(event.checkpoint, 'top')
+          assert.include(event.referer, 'optel-low.test.html');
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
+

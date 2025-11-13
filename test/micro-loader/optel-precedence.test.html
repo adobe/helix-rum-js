@@ -1,0 +1,51 @@
+<html>
+
+<head>
+  <script>
+    // this is set-up for the test
+    // Add ?optel=off to URL to test precedence over data-rate="on"
+    const url = new URL(window.location.href);
+    url.searchParams.set('optel', 'off');
+    window.history.replaceState({}, '', url.toString());
+
+    window.RUM_PARAMS = { program: 'pXXXXXX', environment: 'eYYYYYY' };
+    window.sendBeaconArgs = {
+      url: 'never has been set',
+      data: {},
+    };
+    // eslint-disable-next-line no-underscore-dangle
+    navigator._sendBeacon = navigator.sendBeacon;
+    navigator.sendBeacon = (url, data) => {
+      const json = JSON.parse(data);
+      if (json.checkpoint === 'top') {
+        sendBeaconArgs.url = url;
+        sendBeaconArgs.data = json;
+      }
+      return true;
+    };
+  </script>
+  <script defer data-script="standalone.js" data-rate="on" src="../../src/micro.js">
+  </script>
+</head>
+
+<body>
+  <script type="module">
+    import { runTests } from '@web/test-runner-mocha';
+    import { assert } from '@esm-bundle/chai';
+    /* eslint-env mocha */
+    runTests(async () => {
+      describe('Operational Telemetry - URL Parameter Precedence', () => {
+        it('URL parameter ?optel=off overrides data-rate="on"', async () => {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          const standAloneScript = document.querySelector('script[src="standalone.js"]')
+          assert.ok(standAloneScript === null, "standalone.js should not be loaded");
+          assert.strictEqual(window.sendBeaconArgs.url, 'never has been set');
+          assert.strictEqual(window.WAS_SELECTED, undefined);
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
+
