@@ -20,7 +20,7 @@ export function sampleRUM(checkpoint, data) {
       const params = new URLSearchParams(window.location.search);
       const { currentScript } = document;
       const rate = params.get('rum') || window.SAMPLE_PAGEVIEWS_AT_RATE
-        || params.get('optel') || currentScript?.dataset?.rate;
+        || params.get('optel') || (currentScript && currentScript.dataset.rate);
       const rateValue = {
         on: 1,
         off: 0,
