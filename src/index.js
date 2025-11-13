@@ -30,8 +30,8 @@ export function sampleRUM(checkpoint, data) {
       const weight = rateValue !== undefined ? rateValue : 100;
       const id = (window.hlx.rum && window.hlx.rum.id)
         || crypto.randomUUID().slice(-9);
-      const isSelected = Boolean((window.hlx.rum && window.hlx.rum.isSelected)
-        || (weight && Math.random() * weight < 1));
+      const isSelected = (window.hlx.rum && window.hlx.rum.isSelected)
+        || (weight > 0 && Math.random() * weight < 1);
       // eslint-disable-next-line object-curly-newline, max-len
       window.hlx.rum = { weight, id, isSelected, firstReadTime: window.performance ? window.performance.timeOrigin : Date.now(), sampleRUM, queue: [], collector: (...args) => window.hlx.rum.queue.push(args) };
       if (isSelected) {
