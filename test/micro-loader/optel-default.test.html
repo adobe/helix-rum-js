@@ -1,0 +1,45 @@
+<html>
+
+<head>
+  <script>
+    // this is set-up for the test
+    window.RUM_PARAMS = { program: 'pXXXXXX', environment: 'eYYYYYY' };
+    window.sendBeaconArgs = {
+      url: 'never has been set',
+      data: {},
+    };
+    Math.random = () => 0; // to select the sample
+    // eslint-disable-next-line no-underscore-dangle
+    navigator._sendBeacon = navigator.sendBeacon;
+    navigator.sendBeacon = (url, data) => {
+      const json = JSON.parse(data);
+      if (json.checkpoint === 'top') {
+        sendBeaconArgs.url = url;
+        sendBeaconArgs.data = json;
+      }
+      return true;
+    };
+  </script>
+  <script defer data-script="standalone.js" data-rate="20" src="../../src/micro.js">
+  </script>
+</head>
+
+<body>
+  <script type="module">
+    import { runTests } from '@web/test-runner-mocha';
+    import { assert } from '@esm-bundle/chai';
+    /* eslint-env mocha */
+    runTests(async () => {
+      describe('Operational Telemetry - Micro-Loader', () => {
+        it('when set to anything, sets it to 100', async () => {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          assert.strictEqual(window.sendBeaconArgs.url, `https://rum.hlx.page/.rum/1?program=pXXXXXX&environment=eYYYYYY`);
+          assert.strictEqual(window.sendBeaconArgs.data.checkpoint, 'top');
+          assert.strictEqual(window.WAS_SELECTED, true);
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
