@@ -8,6 +8,7 @@
       url: 'never has been set',
       data: {},
     };
+    Math.random = () => 0; // to select the sample
     // eslint-disable-next-line no-underscore-dangle
     navigator._sendBeacon = navigator.sendBeacon;
     navigator.sendBeacon = (url, data) => {
