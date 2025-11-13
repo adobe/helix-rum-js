@@ -1,3 +1,34 @@
+## [2.13.6](https://github.com/adobe/helix-rum-js/compare/v2.13.5...v2.13.6) (2025-10-17)
+
+
+### Bug Fixes
+
+* upgrade @semantic-release/npm to 13.0.0 for provenance support ([#312](https://github.com/adobe/helix-rum-js/issues/312)) ([46229ad](https://github.com/adobe/helix-rum-js/commit/46229ad428b50e0b182f2e1de05dfc1b2060ec18))
+
+## [2.13.5](https://github.com/adobe/helix-rum-js/compare/v2.13.4...v2.13.5) (2025-10-17)
+
+
+### Bug Fixes
+
+* enable npm provenance for publishing with automation tokens ([#311](https://github.com/adobe/helix-rum-js/issues/311)) ([de13bc6](https://github.com/adobe/helix-rum-js/commit/de13bc612a5d393264b3c34c7c3dad7da46e81ad))
+
+## [2.13.4](https://github.com/adobe/helix-rum-js/compare/v2.13.3...v2.13.4) (2025-10-17)
+
+
+### Bug Fixes
+
+* specify Node.js 24.10.0 for Release job to meet semantic-release v25 requirements ([#310](https://github.com/adobe/helix-rum-js/issues/310)) ([1aa611b](https://github.com/adobe/helix-rum-js/commit/1aa611b630d0ac3b23b777fe1daa04c7440b51ec))
+* specify Node.js versions to meet semantic-release v25 requirements ([5b58d09](https://github.com/adobe/helix-rum-js/commit/5b58d0917726b1ed8dff7923ab73845a1865d79d))
+* update @adobe/eslint-config-helix to 3.0.12 with compatible lockfile ([#309](https://github.com/adobe/helix-rum-js/issues/309)) ([732e4d2](https://github.com/adobe/helix-rum-js/commit/732e4d243433d168fed43d3591d562cbd2e240b5))
+* update semantic-release to v25 and node to 24.x for OIDC ([14dcc0f](https://github.com/adobe/helix-rum-js/commit/14dcc0fe796ec1efc40d80b56ed9ee1706154852))
+
+## [2.13.3](https://github.com/adobe/helix-rum-js/compare/v2.13.2...v2.13.3) (2025-10-10)
+
+
+### Bug Fixes
+
+* **deps:** sync package-lock.json with package.json ([#295](https://github.com/adobe/helix-rum-js/issues/295)) ([5d02b58](https://github.com/adobe/helix-rum-js/commit/5d02b585ffe85d003c2a97e3e32cd064fc8a5137))
+
 ## [2.13.2](https://github.com/adobe/helix-rum-js/compare/v2.13.1...v2.13.2) (2025-10-10)
 
 
