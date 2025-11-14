@@ -8,7 +8,8 @@ var c = document.currentScript,
   // v is the rate of the current script element
   v = q.get('rum') || q.get('optel') || d.rate,
   // w is the rate of the current script element
-  w = { on: 1, off: 0, high: 10, low: 1e3 }[v] || 100,
+  t = { on: 1, off: 0, high: 10, low: 1e3 }[v],
+  w = t !== undefined ? t : 100,
   // r is the rum object, we initialize it if it doesn't exist
   r = (window.hlx = window.hlx || {}).rum ||
     // generate a random id for the rum object

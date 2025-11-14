@@ -20,7 +20,7 @@
       return true;
     };
   </script>
-  <script defer data-script="standalone.js" data-rate="off" src="../../src/micro.js">
+  <script defer data-script="standalone.js" data-rate="20" src="../../src/micro.js">
   </script>
 </head>
 
@@ -31,9 +31,11 @@
     /* eslint-env mocha */
     runTests(async () => {
       describe('Operational Telemetry - Micro-Loader', () => {
-        it('when not-selected, no data is sent', async () => {
-          assert.strictEqual(window.sendBeaconArgs.url, 'never has been set');
-          assert.strictEqual(window.WAS_SELECTED, undefined);
+        it('when set to anything, sets it to 100', async () => {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          assert.strictEqual(window.sendBeaconArgs.url, `https://rum.hlx.page/.rum/1?program=pXXXXXX&environment=eYYYYYY`);
+          assert.strictEqual(window.sendBeaconArgs.data.checkpoint, 'top');
+          assert.strictEqual(window.WAS_SELECTED, true);
         });
       });
     });
