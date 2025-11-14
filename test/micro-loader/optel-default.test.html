@@ -9,18 +9,19 @@
       data: {},
     };
     Math.random = () => 0; // to select the sample
+    window.events = [];
     // eslint-disable-next-line no-underscore-dangle
-    navigator._sendBeacon = navigator.sendBeacon;
-    navigator.sendBeacon = (url, data) => {
-      const json = JSON.parse(data);
-      if (json.checkpoint === 'top') {
-        sendBeaconArgs.url = url;
-        sendBeaconArgs.data = json;
+    window.fakeSendBeacon = function (url, payload) {
+      if (typeof payload === 'string') {
+        window.events.push(JSON.parse(payload));
+      } else {
+        payload.text().then((text) => {
+          window.events.push(JSON.parse(text));
+        });
       }
-      return true;
     };
   </script>
-  <script defer data-script="standalone.js" data-rate="20" src="../../src/micro.js">
+  <script defer data-script="rum-standalone.js" data-rate="20" src="../../src/micro.js">
   </script>
 </head>
 
@@ -33,9 +34,10 @@
       describe('Operational Telemetry - Micro-Loader', () => {
         it('when set to anything, sets it to 100', async () => {
           await new Promise(resolve => setTimeout(resolve, 500));
-          assert.strictEqual(window.sendBeaconArgs.url, `https://rum.hlx.page/.rum/1?program=pXXXXXX&environment=eYYYYYY`);
-          assert.strictEqual(window.sendBeaconArgs.data.checkpoint, 'top');
-          assert.strictEqual(window.WAS_SELECTED, true);
+          const event = window.events[0];
+          assert.strictEqual(event.weight, 100);
+          assert.strictEqual(event.checkpoint, 'top')
+          assert.include(event.referer, 'optel-default.test.html');
         });
       });
     });
