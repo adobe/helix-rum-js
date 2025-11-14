@@ -1,3 +1,10 @@
+## [2.13.7](https://github.com/adobe/helix-rum-js/compare/v2.13.6...v2.13.7) (2025-11-14)
+
+
+### Bug Fixes
+
+* adding a np check for error.stack ([#314](https://github.com/adobe/helix-rum-js/issues/314)) ([a33aa40](https://github.com/adobe/helix-rum-js/commit/a33aa4063fa3d337c0eca4c2b3527467f73f14e7))
+
 ## [2.13.6](https://github.com/adobe/helix-rum-js/compare/v2.13.5...v2.13.6) (2025-10-17)
 
 
