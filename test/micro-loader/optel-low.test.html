@@ -5,7 +5,7 @@
     // this is set-up for the test
     window.RUM_PARAMS = { program: 'pXXXXXX', environment: 'eYYYYYY' };
     window.sendBeaconArgs = {
-      url: 'never has been set',
+      url: '',
       data: {},
     };
     Math.random = () => 0; // to select the sample
@@ -21,7 +21,7 @@
       }
     };
   </script>
-  <script defer data-script="rum-standalone.js" data-rate="20" src="../../src/micro.js">
+  <script defer data-script="rum-standalone.js" data-rate="low" src="../../src/micro.js">
   </script>
 </head>
 
@@ -31,13 +31,13 @@
     import { assert } from '@esm-bundle/chai';
     /* eslint-env mocha */
     runTests(async () => {
-      describe('Operational Telemetry - Micro-Loader', () => {
-        it('when set to anything, sets it to 100', async () => {
+      describe('Operational Telemetry - Micro-Loader with data-rate="low"', () => {
+        it('When selected with low rate, sends data with weight 1000', async () => {
           await new Promise(resolve => setTimeout(resolve, 500));
           const event = window.events[0];
-          assert.strictEqual(event.weight, 100);
+          assert.strictEqual(event.weight, 1000);
           assert.strictEqual(event.checkpoint, 'top')
-          assert.include(event.referer, 'optel-default.test.html');
+          assert.include(event.referer, 'optel-low.test.html');
         });
       });
     });
@@ -45,3 +45,4 @@
 </body>
 
 </html>
+

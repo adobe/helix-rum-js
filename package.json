@@ -6,9 +6,10 @@
   "type": "module",
   "scripts": {
     "setup-playwright": "npx playwright install --with-deps chromium firefox webkit",
-    "test": "npm run setup-playwright && web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
-    "test-ci": "npm run setup-playwright && web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
-    "test:watch": "web-test-runner --node-resolve --watch --coverage",
+    "prepare-test": "npm run build-standalone && cp dist/rum-standalone.js test/micro-loader/rum-standalone.js",
+    "test": "npm run prepare-test && npm run setup-playwright && web-test-runner --node-resolve --coverage --playwright --browsers chromium",
+    "test-ci": "npm run prepare-test && npm run setup-playwright && web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
+    "test:watch": "npm run prepare-test && web-test-runner --node-resolve --watch --coverage",
     "build-standalone": "rollup --config",
     "prepack": "npm run build-standalone",
     "lint": "eslint .",

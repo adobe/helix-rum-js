@@ -22,9 +22,24 @@ export default {
     exclude: [
       'test/fixtures/**',
       'node_modules/**',
+      'test/micro-loader/rum-standalone.js',
     ],
   },
   files: [
     'test/**/*.test.{html,js}',
   ],
+  middleware: [
+    async function emulateRUM(context, next) {
+      if (context.url.includes('rum-standalone.js')) {
+        await next();
+        context.body = context.body
+          .replace(/navigator\.sendBeacon/g, 'fakeSendBeacon');
+        return true;
+      } else if (context.url.includes('helix-rum-enhancer@')) {
+        context.body = '// Mock RUM enhancer - no-op\nconsole.log("RUM enhancer mock loaded");';
+        context.set('Content-Type', 'application/javascript');
+        return true;
+      }
+      return next();
+    }],
 };
