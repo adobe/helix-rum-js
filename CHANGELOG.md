@@ -1,3 +1,10 @@
+# [2.14.0](https://github.com/adobe/helix-rum-js/compare/v2.13.7...v2.14.0) (2025-11-15)
+
+
+### Features
+
+* adding opt-out support via script param in rum-standalone.js ([#317](https://github.com/adobe/helix-rum-js/issues/317)) ([121c330](https://github.com/adobe/helix-rum-js/commit/121c330a18cb8286146f9260f5f89e42aa9f7436))
+
 ## [2.13.7](https://github.com/adobe/helix-rum-js/compare/v2.13.6...v2.13.7) (2025-11-14)
 
 

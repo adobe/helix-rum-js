@@ -1,6 +1,6 @@
 {
   "name": "@adobe/helix-rum-js",
-  "version": "2.13.7",
+  "version": "2.14.0",
   "description": "Helix RUM JS",
   "main": "src/index.js",
   "type": "module",
