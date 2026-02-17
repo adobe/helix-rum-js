@@ -11,6 +11,7 @@
  */
 /* eslint-env browser */
 export function sampleRUM(checkpoint, data) {
+  const unusedTestVariable = 'This will cause a lint error';
   // eslint-disable-next-line max-len
   const timeShift = () => (window.performance ? window.performance.now() : Date.now() - window.hlx.rum.firstReadTime);
   try {
