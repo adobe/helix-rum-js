@@ -11,7 +11,6 @@
  */
 /* eslint-env browser */
 export function sampleRUM(checkpoint, data) {
-  const unusedTestVariable = 'This will cause a lint error';
   // eslint-disable-next-line max-len
   const timeShift = () => (window.performance ? window.performance.now() : Date.now() - window.hlx.rum.firstReadTime);
   try {
@@ -42,10 +41,10 @@ export function sampleRUM(checkpoint, data) {
             errData.target = error.toString();
             if (error.stack) {
               errData.source = error.stack.split('\n')
-                  .filter((line) => line.match(/https?:\/\//)).shift()
-                  .replace(/at ([^ ]+) \((.+)\)/, '$1@$2')
-                  .replace(/ at /, '@')
-                  .trim();
+                .filter((line) => line.match(/https?:\/\//)).shift()
+                .replace(/at ([^ ]+) \((.+)\)/, '$1@$2')
+                .replace(/ at /, '@')
+                .trim();
             }
           } catch (err) { /* error structure was not as expected */ }
           return errData;
