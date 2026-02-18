@@ -6,6 +6,8 @@
     import { assert } from '@esm-bundle/chai';
 
     const DELAY_MS = 1000;
+    const TOLERANCE_MS = 120;
+    const EARLY_GAP_MS = 200;
 
     const loadFixture = (fixture) => new Promise((resolve, reject) => {
       const iframe = document.createElement('iframe');
@@ -35,36 +37,80 @@
       document.body.append(iframe);
     });
 
+    const timingSummary = (timeline) => JSON.stringify({
+      scenario: timeline.scenario,
+      appScript: timeline.appScript,
+      domContentLoadedEventEnd: timeline.nav?.domContentLoadedEventEnd,
+      loadEventEnd: timeline.nav?.loadEventEnd,
+      loadNow: timeline.loadNow,
+      rumStart: timeline.rum?.startTime,
+      rumEnd: timeline.rum?.responseEnd,
+      rumDuration: timeline.rum?.duration,
+      rumAttrs: timeline.rumAttrs,
+    });
+
+    const assertHasTimingMetrics = (timeline) => {
+      const details = timingSummary(timeline);
+      assert.exists(timeline.rum, `Missing RUM resource metrics: ${details}`);
+      assert.exists(timeline.nav, `Missing navigation timing metrics: ${details}`);
+      assert.isNumber(timeline.rum.startTime, `Invalid RUM startTime: ${details}`);
+      assert.isNumber(timeline.rum.responseEnd, `Invalid RUM responseEnd: ${details}`);
+      assert.isNumber(timeline.rum.duration, `Invalid RUM duration: ${details}`);
+      assert.isNumber(timeline.appScript, `Invalid app script timing: ${details}`);
+      assert.isNumber(timeline.nav.domContentLoadedEventEnd, `Invalid DOMContentLoaded timing: ${details}`);
+      assert.isNumber(timeline.loadNow, `Invalid load timestamp: ${details}`);
+    };
+
     /* eslint-env mocha */
     runTests(async () => {
       describe('standalone script loading mode', () => {
         it('defer undelayed', async () => {
           const timeline = await loadFixture('standalone-defer-undelayed.html');
+          assertHasTimingMetrics(timeline);
+          const details = timingSummary(timeline);
+
           assert.isTrue(timeline.rumAttrs.defer);
           assert.isFalse(timeline.rumAttrs.async);
-          assert.isAtLeast(timeline.appScript, timeline.rum.responseEnd - 100);
+          assert.isAtLeast(timeline.appScript, timeline.rum.responseEnd - TOLERANCE_MS, details);
+          assert.isAtLeast(
+            timeline.nav.domContentLoadedEventEnd,
+            timeline.rum.responseEnd - TOLERANCE_MS,
+            details,
+          );
         });
 
         it('async undelayed', async () => {
           const timeline = await loadFixture('standalone-async-undelayed.html');
+          assertHasTimingMetrics(timeline);
+
           assert.isFalse(timeline.rumAttrs.defer);
           assert.isTrue(timeline.rumAttrs.async);
-          assert.exists(timeline.rum);
-          assert.exists(timeline.appScript);
         });
 
         it('defer delayed', async () => {
           const timeline = await loadFixture('standalone-defer-delayed.html');
+          assertHasTimingMetrics(timeline);
+          const details = timingSummary(timeline);
+
           assert.isAtLeast(timeline.rum.duration, DELAY_MS - 50);
-          assert.isAtLeast(timeline.nav.domContentLoadedEventEnd, timeline.rum.responseEnd - 120);
-          assert.isAtLeast(timeline.appScript, timeline.rum.responseEnd - 120);
+          assert.isAtLeast(
+            timeline.nav.domContentLoadedEventEnd,
+            timeline.rum.responseEnd - TOLERANCE_MS,
+            details,
+          );
+          assert.isAtLeast(timeline.loadNow, timeline.rum.responseEnd - TOLERANCE_MS, details);
+          assert.isAtLeast(timeline.appScript, timeline.rum.responseEnd - TOLERANCE_MS, details);
         });
 
         it('async delayed', async () => {
           const timeline = await loadFixture('standalone-async-delayed.html');
+          assertHasTimingMetrics(timeline);
+          const details = timingSummary(timeline);
+
           assert.isAtLeast(timeline.rum.duration, DELAY_MS - 50);
-          assert.isBelow(timeline.nav.domContentLoadedEventEnd, timeline.rum.responseEnd - 200);
-          assert.isBelow(timeline.appScript, timeline.rum.responseEnd - 200);
+          assert.isBelow(timeline.nav.domContentLoadedEventEnd, timeline.rum.responseEnd - EARLY_GAP_MS, details);
+          assert.isBelow(timeline.appScript, timeline.rum.responseEnd - EARLY_GAP_MS, details);
+          assert.isAtLeast(timeline.loadNow, timeline.rum.responseEnd - TOLERANCE_MS, details);
         });
       });
     });

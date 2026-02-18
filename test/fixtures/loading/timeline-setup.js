@@ -21,6 +21,7 @@ window.addEventListener('load', () => {
   const rum = performance.getEntriesByType('resource')
     .find((entry) => entry.name.includes('rum-standalone.js'));
   const rumScript = document.querySelector('script[data-test-rum]');
+  window.testTimeline.loadNow = performance.now();
 
   window.testTimeline.nav = navigation ? {
     domContentLoadedEventEnd: navigation.domContentLoadedEventEnd,
