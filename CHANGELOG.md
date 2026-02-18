@@ -1,3 +1,11 @@
+## [2.14.1](https://github.com/adobe/helix-rum-js/compare/v2.14.0...v2.14.1) (2026-02-18)
+
+
+### Bug Fixes
+
+* add lint check to CI workflow ([8b0ef66](https://github.com/adobe/helix-rum-js/commit/8b0ef6614b294758b922ce8603bcac403b5ec2e8))
+* resolve lint errors ([e466d29](https://github.com/adobe/helix-rum-js/commit/e466d29c93516ae4a148b0187258be0b3c47cec5))
+
 # [2.14.0](https://github.com/adobe/helix-rum-js/compare/v2.13.7...v2.14.0) (2025-11-15)
 
 
