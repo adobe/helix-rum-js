@@ -1,0 +1,15 @@
+<html>
+
+<head>
+  <script>
+    window.testTimeline = { scenario: 'async-undelayed' };
+  </script>
+  <script src="/test/fixtures/loading/timeline-setup.js"></script>
+  <script async data-test-rum src="/test/micro-loader/rum-standalone.js?delayms=0&scenario=async-undelayed"></script>
+  <script defer src="/test/fixtures/loading/app-defer-marker.js"></script>
+</head>
+
+<body>
+</body>
+
+</html>

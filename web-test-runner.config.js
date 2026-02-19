@@ -31,9 +31,21 @@ export default {
   middleware: [
     async function emulateRUM(context, next) {
       if (context.url.includes('rum-standalone.js')) {
+        const requestURL = new URL(context.url, 'http://localhost');
+        const delayMs = Number.parseInt(requestURL.searchParams.get('delayms') || '0', 10);
+        if (Number.isFinite(delayMs) && delayMs > 0) {
+          await new Promise((resolve) => {
+            setTimeout(resolve, delayMs);
+          });
+        }
         await next();
-        context.body = context.body
-          .replace(/navigator\.sendBeacon/g, 'fakeSendBeacon');
+        if (typeof context.body === 'string') {
+          context.body = context.body
+            .replace(/navigator\.sendBeacon/g, 'fakeSendBeacon');
+        } else if (Buffer.isBuffer(context.body)) {
+          context.body = context.body.toString()
+            .replace(/navigator\.sendBeacon/g, 'fakeSendBeacon');
+        }
         return true;
       } else if (context.url.includes('helix-rum-enhancer@')) {
         context.body = '// Mock RUM enhancer - no-op\nconsole.log("RUM enhancer mock loaded");';
