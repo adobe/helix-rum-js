@@ -1,0 +1,44 @@
+<!--
+  Copyright 2026 Adobe. All rights reserved.
+  This file is licensed to you under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License. You may obtain a copy
+  of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software distributed under
+  the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+  OF ANY KIND, either express or implied. See the License for the specific language
+  governing permissions and limitations under the License.
+-->
+<html>
+
+<head>
+  <script>
+    // Simulate a null document.currentScript to trigger the NP exception path
+    Object.defineProperty(document, 'currentScript', {
+      get: () => null,
+      configurable: true,
+    });
+    window.scriptErrored = false;
+    window.addEventListener('error', () => { window.scriptErrored = true; });
+  </script>
+  <script defer src="../../src/micro.js"></script>
+</head>
+
+<body>
+  <script type="module">
+    import { runTests } from '@web/test-runner-mocha';
+    import { assert } from '@esm-bundle/chai';
+    /* eslint-env mocha */
+    runTests(async () => {
+      describe('Micro-Loader - Null currentScript', () => {
+        it('does not throw when document.currentScript is null', async () => {
+          await new Promise(resolve => setTimeout(resolve, 500));
+          assert.strictEqual(window.scriptErrored, false,
+            'micro.js should not throw when document.currentScript is null');
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
