@@ -1,4 +1,5 @@
 (function() {
+try {
 // c is the current script element
 var c = document.currentScript,
   // d is the dataset of the current script element
@@ -31,5 +32,6 @@ if (r.isSelected || ((w && Math.random() * w < 1) && (r.isSelected = true))) {
   // append the new script element to the head of the document
   document.head.append(n);
 }
+} catch (e) { /* noop */ }
 // these comments will not make it into the output
 })();
