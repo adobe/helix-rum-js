@@ -1,3 +1,10 @@
+## [2.14.2](https://github.com/adobe/helix-rum-js/compare/v2.14.1...v2.14.2) (2026-02-23)
+
+
+### Bug Fixes
+
+* adding try/catch to ensure safe execution of the script ([#323](https://github.com/adobe/helix-rum-js/issues/323)) ([38508f3](https://github.com/adobe/helix-rum-js/commit/38508f3c037a52b2660a77b60879f2e8583a7210))
+
 ## [2.14.1](https://github.com/adobe/helix-rum-js/compare/v2.14.0...v2.14.1) (2026-02-18)
 
 
