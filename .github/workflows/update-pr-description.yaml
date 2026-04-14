@@ -20,13 +20,16 @@ jobs:
               repo: context.repo.repo,
               pull_number: context.issue.number
             });
-            // Get the branch name from the PR head ref
-            const branchName = context.payload.pull_request.head.ref.replace(/[^a-zA-Z0-9-]/g, '-');
-            const testUrl = `https://${branchName}--helix-rum-js--adobe.aem.live/test/static.html`;
+            // Replace any non-alphanumeric, non-hyphen characters with a single '-' for AEM URLs
+            const branchName = context.payload.pull_request.head.ref.replace(/[^a-zA-Z0-9-]+/g, '-');
+            const domainLabel = `${branchName}--helix-rum-js--adobe`;
+            const testContent = domainLabel.length > 63
+              ? `Branch name is too long to generate a valid preview URL (${domainLabel.length}/63 DNS label characters).`
+              : `https://${domainLabel}.aem.live/test/static.html`;
             const testSection = `
 
             ## Test URL
-            ${testUrl}
+            ${testContent}
             `;
 
             // Check if the test section already exists
