@@ -20,11 +20,8 @@ jobs:
               repo: context.repo.repo,
               pull_number: context.issue.number
             });
-            // Sanitize branch name: replace non-alphanumeric chars, collapse consecutive hyphens, trim leading/trailing hyphens
-            const branchName = context.payload.pull_request.head.ref
-              .replace(/[^a-zA-Z0-9-]/g, '-')
-              .replace(/-+/g, '-')
-              .replace(/^-+|-+$/g, '');
+            // Replace any non-alphanumeric, non-hyphen characters with a single '-' for AEM URLs
+            const branchName = context.payload.pull_request.head.ref.replace(/[^a-zA-Z0-9-]+/g, '-');
             const domainLabel = `${branchName}--helix-rum-js--adobe`;
             const testContent = domainLabel.length > 63
               ? `Branch name is too long to generate a valid preview URL (${domainLabel.length}/63 DNS label characters).`
