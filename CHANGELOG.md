@@ -1,3 +1,10 @@
+## [2.14.3](https://github.com/adobe/helix-rum-js/compare/v2.14.2...v2.14.3) (2026-04-14)
+
+
+### Bug Fixes
+
+* **ci:** guard against long DNS labels in PR description URL ([#336](https://github.com/adobe/helix-rum-js/issues/336)) ([6470710](https://github.com/adobe/helix-rum-js/commit/6470710f94d15262edb085957906ca72f36fbb4c))
+
 ## [2.14.2](https://github.com/adobe/helix-rum-js/compare/v2.14.1...v2.14.2) (2026-02-23)
 
 
