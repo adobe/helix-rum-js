@@ -56,6 +56,28 @@ describe('sampleRUM', () => {
     navigator.sendBeacon = navigator._sendBeacon;
   });
 
+  it('top checkpoint referer does not include query params', () => {
+    const sendBeaconArgs = {};
+    // eslint-disable-next-line no-underscore-dangle
+    navigator._sendBeacon = navigator.sendBeacon;
+    navigator.sendBeacon = (url, data) => {
+      sendBeaconArgs.url = url;
+      sendBeaconArgs.data = JSON.parse(data);
+      return true;
+    };
+
+    sampleRUM();
+
+    // beforeEach adds ?rum=on to the URL; referer must still be param-free
+    assert.strictEqual(
+      sendBeaconArgs.data.referer,
+      window.location.origin + window.location.pathname,
+    );
+    assert.ok(!sendBeaconArgs.data.referer.includes('?'), 'referer must not contain query params');
+    // eslint-disable-next-line no-underscore-dangle
+    navigator.sendBeacon = navigator._sendBeacon;
+  });
+
   it('rum sendPing available', () => {
     const sendBeaconArgs = {};
     // eslint-disable-next-line no-underscore-dangle
