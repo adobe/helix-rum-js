@@ -9,4 +9,5 @@ logs
 test-results.xml
 .env
 .idea
-test/micro-loader/rum-standalone.js.worktrees
+test/micro-loader/rum-standalone.js
+.worktrees
