@@ -80,7 +80,7 @@ export function sampleRUM(checkpoint, data) {
         sampleRUM.collectBaseURL = sampleRUM.collectBaseURL || sampleRUM.baseURL;
         sampleRUM.sendPing = (ck, time, pingData = {}) => {
           // eslint-disable-next-line max-len, object-curly-newline
-          const rumData = JSON.stringify({ weight, id, referer: window.location.href, checkpoint: ck, t: time, ...pingData });
+          const rumData = JSON.stringify({ weight, id, referer: window.location.origin + window.location.pathname, checkpoint: ck, t: time, ...pingData });
           const urlParams = window.RUM_PARAMS ? (new URLSearchParams(window.RUM_PARAMS).toString() || '') : '';
           const { href: url, origin } = new URL(`.rum/${weight}${urlParams ? `?${urlParams}` : ''}`, sampleRUM.collectBaseURL);
           const body = origin === window.location.origin ? new Blob([rumData], { type: 'application/json' }) : rumData;

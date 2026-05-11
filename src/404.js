@@ -20,7 +20,8 @@ try {
   sampleRUM.enhancerContext = { enhancerVersion, enhancerHash };
   window.RUM_BASE = window.RUM_BASE || scriptSrc;
   window.RUM_PARAMS = window.RUM_PARAMS || scriptParams;
-  sampleRUM('404', { source: document.referrer });
+  const { origin = '', pathname = '' } = document.referrer ? new URL(document.referrer) : {};
+  sampleRUM('404', { source: origin + pathname });
 } catch (error) {
   // something went wrong
 }
