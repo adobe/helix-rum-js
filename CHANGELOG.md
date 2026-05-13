@@ -1,3 +1,10 @@
+## [2.14.4](https://github.com/adobe/helix-rum-js/compare/v2.14.3...v2.14.4) (2026-05-13)
+
+
+### Bug Fixes
+
+* strip query params from referer and referrer source before sending beacon ([#338](https://github.com/adobe/helix-rum-js/issues/338)) ([ad1bb6f](https://github.com/adobe/helix-rum-js/commit/ad1bb6f38dbde78e9101f873269f318ef78512b3))
+
 ## [2.14.3](https://github.com/adobe/helix-rum-js/compare/v2.14.2...v2.14.3) (2026-04-14)
 
 
