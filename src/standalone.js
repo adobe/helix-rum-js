@@ -29,7 +29,8 @@ try {
     && navigation.responseStatus === 404);
 
   if (is404) {
-    sampleRUM('404', { source: document.referrer });
+    const { origin = '', pathname = '' } = document.referrer ? new URL(document.referrer) : {};
+    sampleRUM('404', { source: origin + pathname });
   } else {
     sampleRUM();
   }
