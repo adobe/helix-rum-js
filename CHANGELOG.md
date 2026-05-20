@@ -1,3 +1,15 @@
+# [2.15.0](https://github.com/adobe/helix-rum-js/compare/v2.14.4...v2.15.0) (2026-05-20)
+
+
+### Bug Fixes
+
+* correct copyright year to 2026 ([df48a45](https://github.com/adobe/helix-rum-js/commit/df48a45ff45a96a86716a48ace36d70b91fc7b2a))
+
+
+### Features
+
+* annotate webdriver sessions in beacon UA for bot detection ([e4f325d](https://github.com/adobe/helix-rum-js/commit/e4f325dbd435c67f4ecd08edd040973a3d92c11c))
+
 ## [2.14.4](https://github.com/adobe/helix-rum-js/compare/v2.14.3...v2.14.4) (2026-05-13)
 
 
