@@ -1,3 +1,10 @@
+## [2.15.1](https://github.com/adobe/helix-rum-js/compare/v2.15.0...v2.15.1) (2026-06-14)
+
+
+### Bug Fixes
+
+* Update micro.js to set default rate to 1:1000 ([51581d6](https://github.com/adobe/helix-rum-js/commit/51581d6ed0f52c998de125cabbb4ffcdfe57babb))
+
 # [2.15.0](https://github.com/adobe/helix-rum-js/compare/v2.14.4...v2.15.0) (2026-05-20)
 
 
