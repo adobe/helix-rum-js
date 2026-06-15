@@ -1,3 +1,10 @@
+## [2.15.2](https://github.com/adobe/helix-rum-js/compare/v2.15.1...v2.15.2) (2026-06-15)
+
+
+### Bug Fixes
+
+* release-1000 ([477af94](https://github.com/adobe/helix-rum-js/commit/477af9480088bf6c07c2b8dee68b08694600a78d))
+
 ## [2.15.1](https://github.com/adobe/helix-rum-js/compare/v2.15.0...v2.15.1) (2026-06-14)
 
 
