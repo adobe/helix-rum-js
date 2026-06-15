@@ -173,14 +173,14 @@ describe('sampleRUM - optel parameter', () => {
   });
 
   describe('default weight when optel has invalid value', () => {
-    it('defaults to weight 100 for invalid optel value', () => {
+    it('defaults to weight 1000 for invalid optel value', () => {
       const usp = new URLSearchParams(window.location.search);
       usp.append('optel', 'invalid');
       window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
 
       sampleRUM();
 
-      assert.strictEqual(window.hlx.rum.weight, 100);
+      assert.strictEqual(window.hlx.rum.weight, 1000);
     });
   });
 });
