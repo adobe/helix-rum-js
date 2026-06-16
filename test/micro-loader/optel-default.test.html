@@ -32,10 +32,10 @@
     /* eslint-env mocha */
     runTests(async () => {
       describe('Operational Telemetry - Micro-Loader', () => {
-        it('when set to anything, sets it to 1000', async () => {
+        it('when set to anything, sets it to 100', async () => {
           await new Promise(resolve => setTimeout(resolve, 500));
           const event = window.events[0];
-          assert.strictEqual(event.weight, 1000);
+          assert.strictEqual(event.weight, 100);
           assert.strictEqual(event.checkpoint, 'top')
           assert.include(event.referer, 'optel-default.test.html');
         });
