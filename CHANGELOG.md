@@ -1,3 +1,10 @@
+## [2.15.3](https://github.com/adobe/helix-rum-js/compare/v2.15.2...v2.15.3) (2026-06-17)
+
+
+### Bug Fixes
+
+* revert default sampling rate back to 1:100 ([791efa1](https://github.com/adobe/helix-rum-js/commit/791efa1f59d0da9e8b8eb565ec0205840a6f1968)), closes [#340](https://github.com/adobe/helix-rum-js/issues/340) [#341](https://github.com/adobe/helix-rum-js/issues/341) [#342](https://github.com/adobe/helix-rum-js/issues/342) [#341](https://github.com/adobe/helix-rum-js/issues/341)
+
 ## [2.15.2](https://github.com/adobe/helix-rum-js/compare/v2.15.1...v2.15.2) (2026-06-15)
 
 
