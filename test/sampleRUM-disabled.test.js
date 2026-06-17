@@ -105,10 +105,10 @@ describe('sampleRUM - RUM disabled', () => {
       sampleRUM();
       assert.strictEqual(window.hlx.rum.weight, 1000);
     });
-    it('defaults to 1000 sampling rate', async () => {
+    it('defaults to 100 sampling rate', async () => {
       delete window.SAMPLE_PAGEVIEWS_AT_RATE;
       sampleRUM();
-      assert.strictEqual(window.hlx.rum.weight, 1000);
+      assert.strictEqual(window.hlx.rum.weight, 100);
     });
   });
 });
