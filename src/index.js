@@ -53,11 +53,12 @@ export function sampleRUM(checkpoint, data) {
 
         // rejections coming from `el.onerror = reject` (e.g. loadScript/loadCSS) carry a
         // DOM Event as reason, which serializes to nothing useful. Report the failing
-        // element instead, falling back to the event type.
+        // element instead, falling back to the event type. Cap the length: the outerHTML
+        // of a large element would otherwise bloat the beacon.
         const dataFromEventObj = (event) => ({
           source: 'Unhandled Rejection',
-          target: (event.target && (event.target.outerHTML || event.target.toString()))
-            || event.type,
+          target: ((event.target && (event.target.outerHTML || event.target.toString()))
+            || event.type).slice(0, 200),
         });
 
         window.addEventListener('error', ({ error }) => {
