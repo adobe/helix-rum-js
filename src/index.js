@@ -55,14 +55,16 @@ export function sampleRUM(checkpoint, data) {
         // DOM Event as reason, which serializes to nothing useful. Report a locator for
         // the failing element instead - tag name plus resource URL, rather than the
         // outerHTML, which would put attribute values and inline script or style content
-        // into the beacon. Falls back to the event type, and is capped so that a long
-        // (e.g. data:) URL cannot bloat the payload.
+        // into the beacon. Only string parts are kept, since `href` on an SVG element is
+        // an SVGAnimatedString rather than a URL. Falls back to the event type, and is
+        // capped so that a long (e.g. data:) URL cannot bloat the payload.
         const dataFromEventObj = (event) => {
           const errData = { source: 'Unhandled Rejection', target: 'Unknown' };
           try {
             const el = event.target;
             const locator = el && el.tagName
-              ? [el.tagName.toLowerCase(), el.src, el.href].filter((part) => part).join('@')
+              ? [el.tagName.toLowerCase(), el.src, el.href]
+                .filter((part) => part && typeof part === 'string').join('@')
               : el && el.toString();
             errData.target = (locator || event.type).slice(0, 200);
           } catch (err) { /* event structure was not as expected */ }
