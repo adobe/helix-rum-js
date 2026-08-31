@@ -51,10 +51,13 @@ export function sampleRUM(checkpoint, data) {
           return errData;
         };
 
-        const dataFromRejectionEvent = (reason) => ({
+        // rejections coming from `el.onerror = reject` (e.g. loadScript/loadCSS) carry a
+        // DOM Event as reason, which serializes to nothing useful. Report the failing
+        // element instead, falling back to the event type.
+        const dataFromEventObj = (event) => ({
           source: 'Unhandled Rejection',
-          target: (reason.target && (reason.target.outerHTML || reason.target.toString()))
-            || Object.getOwnPropertyNames(reason).join(','),
+          target: (event.target && (event.target.outerHTML || event.target.toString()))
+            || event.type,
         });
 
         window.addEventListener('error', ({ error }) => {
@@ -69,8 +72,8 @@ export function sampleRUM(checkpoint, data) {
           };
           if (reason instanceof Error) {
             errData = dataFromErrorObj(reason);
-          } else if (reason instanceof PromiseRejectionEvent) {
-            errData = dataFromRejectionEvent(reason);
+          } else if (reason instanceof Event) {
+            errData = dataFromEventObj(reason);
           }
           sampleRUM('error', errData);
         });

@@ -29,20 +29,17 @@ describe('sampleRUM simple error capture', () => {
     after(config);
   });
 
-  it('rum capture unhandled promise rejection where reason is a DOM event on an element', async () => {
+  it('rum capture unhandled promise rejection where reason is a DOM event on a non-element', async () => {
     await test(async () => {
-      // the `loadScript` pattern used by the AEM boilerplate: `script.onerror = reject`
-      await new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = '/test/errors/does-not-exist.js';
-        script.onload = resolve;
-        script.onerror = reject;
-        document.head.append(script);
-      });
+      // e.g. `xhr.onerror = reject` - the target is not part of the DOM
+      const xhr = new XMLHttpRequest();
+      const event = new Event('error');
+      xhr.dispatchEvent(event);
+      await Promise.reject(event);
     }, (source) => {
       assert.strictEqual(source, 'Unhandled Rejection');
     }, (target) => {
-      assert.match(target, /^<script src="[^"]*does-not-exist\.js"/, 'target should be the outerHTML of the failing script');
+      assert.strictEqual(target, '[object XMLHttpRequest]');
     }, config.queue);
   });
 });
