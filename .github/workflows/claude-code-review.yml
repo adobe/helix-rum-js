@@ -40,6 +40,10 @@ jobs:
           use_bedrock: "true"
           allowed_bots: "renovate"
 
+          # Post a tracking comment and update it with the review. Without this
+          # the action runs in agent mode and Claude's output goes nowhere.
+          track_progress: true
+
           prompt: |
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
@@ -52,9 +56,14 @@ jobs:
             - Test coverage
 
             Be constructive and helpful in your feedback. Use inline comments
-            for specific issues and a top-level comment for general
-            observations.
+            for specific issues; general observations belong in the summary,
+            which is posted for you as the tracking comment.
 
+          # No `gh` grants. `gh pr comment --body "$AWS_BEARER_TOKEN_BEDROCK"`
+          # would publish the Bedrock credential to a public PR, and `gh --jq`
+          # can read the environment. The inline-comment MCP tool takes
+          # structured arguments and cannot interpolate env vars; `git` reads
+          # local state and cannot publish.
           claude_args: |
             --model us.anthropic.claude-opus-4-8
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr view:*),Bash(gh pr diff:*),Read,Glob,Grep"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(git diff:*),Bash(git log:*),Read,Glob,Grep"
