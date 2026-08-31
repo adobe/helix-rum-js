@@ -55,15 +55,35 @@ jobs:
             - Security concerns
             - Test coverage
 
-            Be constructive and helpful in your feedback. Use inline comments
-            for specific issues; general observations belong in the summary,
-            which is posted for you as the tracking comment.
+            Be constructive and helpful in your feedback.
+
+            Anchor every specific finding to its line with
+            mcp__github_inline_comment__create_inline_comment. This overrides
+            the "never create new comments" rule above: inline review comments
+            are expected here and do not count as new comments. Keep only
+            cross-cutting observations and the overall verdict in your tracking
+            comment, and do not repeat there what you already said inline.
 
           # No `gh` grants. `gh pr comment --body "$AWS_BEARER_TOKEN_BEDROCK"`
           # would publish the Bedrock credential to a public PR, and `gh --jq`
           # can read the environment. The inline-comment MCP tool takes
-          # structured arguments and cannot interpolate env vars; `git` reads
-          # local state and cannot publish.
+          # structured arguments and cannot interpolate env vars; `git diff`
+          # and `git log` read local state and cannot publish.
+          #
+          # tag mode grants git add/commit/rm/push by default so Claude can
+          # implement fixes. This workflow only reviews, and `git commit -m
+          # "$AWS_BEARER_TOKEN_BEDROCK"` followed by a push would leak the
+          # credential the same way `gh pr comment` would, so deny them. Deny
+          # rules win over allow rules.
+          #
+          # npm is allowed so the review can check its claims against a real
+          # lint and test run. Note this executes package scripts from the PR
+          # head: the action restores .claude, CLAUDE.md and .husky from base
+          # as untrusted, but not package.json. Narrowing the grant does not
+          # change that, since the PR author defines what `lint` and `test`
+          # run. Same-repo PRs only (fork guard above), so this is bounded by
+          # push access, and the Bedrock account is staging.
           claude_args: |
             --model us.anthropic.claude-opus-4-8
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(git diff:*),Bash(git log:*),Read,Glob,Grep"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(git diff:*),Bash(git log:*),Bash(npm ci:*),Bash(npm run lint:*),Bash(npm test:*),Read,Glob,Grep"
+            --disallowedTools "Bash(git add:*),Bash(git commit:*),Bash(git rm:*),Write,Edit"
