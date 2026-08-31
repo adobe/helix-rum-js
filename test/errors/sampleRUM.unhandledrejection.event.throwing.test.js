@@ -29,19 +29,23 @@ describe('sampleRUM simple error capture', () => {
     after(config);
   });
 
-  it('rum capture unhandled promise rejection where reason is a DOM event on a non-element', async () => {
+  it('rum capture unhandled promise rejection where the event target throws', async () => {
     await test(async () => {
-      // e.g. `xhr.onerror = reject` - the target is not part of the DOM
-      const xhr = new XMLHttpRequest();
+      // an exotic EventTarget whose property access throws must not take down the
+      // whole unhandledrejection handler
+      class ExplodingTarget extends EventTarget {
+        // eslint-disable-next-line class-methods-use-this
+        get tagName() {
+          throw new Error('property access is not safe');
+        }
+      }
       const event = new Event('error');
-      // `target` persists after dispatch (only `currentTarget`/`eventPhase` are reset),
-      // so the xhr is still the target when the rejection is handled
-      xhr.dispatchEvent(event);
+      new ExplodingTarget().dispatchEvent(event);
       await Promise.reject(event);
     }, (source) => {
       assert.strictEqual(source, 'Unhandled Rejection');
     }, (target) => {
-      assert.strictEqual(target, '[object XMLHttpRequest]');
+      assert.strictEqual(target, 'Unknown');
     }, config.queue);
   });
 });

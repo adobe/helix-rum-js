@@ -58,14 +58,15 @@ export function sampleRUM(checkpoint, data) {
         // into the beacon. Falls back to the event type, and is capped so that a long
         // (e.g. data:) URL cannot bloat the payload.
         const dataFromEventObj = (event) => {
-          const el = event.target;
-          const locator = el && el.tagName
-            ? [el.tagName.toLowerCase(), el.src, el.href].filter((part) => part).join('@')
-            : el && el.toString();
-          return {
-            source: 'Unhandled Rejection',
-            target: (locator || event.type).slice(0, 200),
-          };
+          const errData = { source: 'Unhandled Rejection', target: 'Unknown' };
+          try {
+            const el = event.target;
+            const locator = el && el.tagName
+              ? [el.tagName.toLowerCase(), el.src, el.href].filter((part) => part).join('@')
+              : el && el.toString();
+            errData.target = (locator || event.type).slice(0, 200);
+          } catch (err) { /* event structure was not as expected */ }
+          return errData;
         };
 
         window.addEventListener('error', ({ error }) => {
