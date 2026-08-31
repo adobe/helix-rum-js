@@ -40,6 +40,10 @@ jobs:
           use_bedrock: "true"
           allowed_bots: "renovate"
 
+          # Post a tracking comment and update it with the review. Without this
+          # the action runs in agent mode and Claude's output goes nowhere.
+          track_progress: true
+
           prompt: |
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
@@ -57,4 +61,4 @@ jobs:
 
           claude_args: |
             --model us.anthropic.claude-opus-4-8
-            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr view:*),Bash(gh pr diff:*),Read,Glob,Grep"
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr view:*),Bash(gh pr diff:*),Read,Glob,Grep"
