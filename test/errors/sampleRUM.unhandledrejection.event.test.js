@@ -42,7 +42,7 @@ describe('sampleRUM simple error capture', () => {
     }, (source) => {
       assert.strictEqual(source, 'Unhandled Rejection');
     }, (target) => {
-      assert.match(target, /^<script src="[^"]*does-not-exist\.js"/, 'target should be the outerHTML of the failing script');
+      assert.match(target, /^script@https?:\/\/[^/]+\/test\/errors\/does-not-exist\.js$/, 'target should locate the failing script');
     }, config.queue);
   });
 });

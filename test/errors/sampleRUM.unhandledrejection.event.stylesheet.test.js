@@ -29,21 +29,21 @@ describe('sampleRUM simple error capture', () => {
     after(config);
   });
 
-  it('rum capture unhandled promise rejection truncates an oversized event target', async () => {
+  it('rum capture unhandled promise rejection where the event target is a stylesheet', async () => {
     await test(async () => {
+      // the `loadCSS` pattern used by the AEM boilerplate: `link.onerror = reject`
       await new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        // a long URL (a data: URL in the wild) must not blow up the beacon
-        script.src = `/test/errors/${'x'.repeat(400)}.js`;
-        script.onload = resolve;
-        script.onerror = reject;
-        document.head.append(script);
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/test/errors/does-not-exist.css';
+        link.onload = resolve;
+        link.onerror = reject;
+        document.head.append(link);
       });
     }, (source) => {
       assert.strictEqual(source, 'Unhandled Rejection');
     }, (target) => {
-      assert.strictEqual(target.length, 200, 'target should be capped at 200 characters');
-      assert.match(target, /^script@https?:\/\//, 'target should keep the head of the locator');
+      assert.match(target, /^link@https?:\/\/[^/]+\/test\/errors\/does-not-exist\.css$/, 'target should locate the failing stylesheet');
     }, config.queue);
   });
 });
