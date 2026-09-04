@@ -1,3 +1,20 @@
+# [2.16.0](https://github.com/adobe/helix-rum-js/compare/v2.15.3...v2.16.0) (2026-09-04)
+
+
+### Bug Fixes
+
+* **error:** cap reported event target at 200 characters ([1996331](https://github.com/adobe/helix-rum-js/commit/19963310109ec4bd423155029b1cf7cd660a8041))
+* **error:** guard event target access, matching dataFromErrorObj ([4319103](https://github.com/adobe/helix-rum-js/commit/43191031453f7de7604aca74601bb9b5a4512518))
+* **error:** keep only string parts in the event target locator ([fae620d](https://github.com/adobe/helix-rum-js/commit/fae620d10f344bcf4d1e42ebe0b275121bd30ae3))
+* **error:** report a locator instead of outerHTML for event targets ([90a493a](https://github.com/adobe/helix-rum-js/commit/90a493aee07592fa99dbd456148b779f1e1f2dff))
+* Update copyright year to 2025 ([a4f0f08](https://github.com/adobe/helix-rum-js/commit/a4f0f08a011365798f63836bcc3d247f2f5cd47d))
+
+
+### Features
+
+* **error:** Add support for PromiseRejectionEvent error tracking ([64bbe49](https://github.com/adobe/helix-rum-js/commit/64bbe4913bf059f95af85ba089face9bd00bfc0e))
+* **error:** report failing element for DOM Event rejections ([fbfec06](https://github.com/adobe/helix-rum-js/commit/fbfec06489ad09c7f9ac064b6155241aa89eac40))
+
 ## [2.15.3](https://github.com/adobe/helix-rum-js/compare/v2.15.2...v2.15.3) (2026-06-17)
 
 
