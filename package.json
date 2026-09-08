@@ -61,7 +61,7 @@
     "lint-staged": "17.3.0",
     "mocha": "11.8.0",
     "mocha-multi-reporters": "1.5.1",
-    "rollup": "4.62.4",
+    "rollup": "4.62.5",
     "rollup-plugin-cleanup": "3.2.1",
     "rollup-plugin-eslint-bundle": "9.0.0",
     "@semantic-release/npm": "13.1.5",
