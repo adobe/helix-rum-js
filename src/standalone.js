@@ -36,8 +36,12 @@ try {
   } else {
     const { origin = '', pathname = '' } = document.referrer ? new URL(document.referrer) : {};
     const source = origin + pathname;
-    if (is404) sampleRUM('404', { source });
-    if (is4xx) sampleRUM('4xx', { source, target: String(numericStatus) });
+    if (is404) {
+      sampleRUM('404', { source });
+    }
+    if (is4xx) {
+      sampleRUM('4xx', { source, target: String(numericStatus) });
+    }
   }
 } catch (error) {
   // something went wrong
