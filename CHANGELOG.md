@@ -1,3 +1,15 @@
+# [2.17.0](https://github.com/adobe/helix-rum-js/compare/v2.16.0...v2.17.0) (2026-09-17)
+
+
+### Bug Fixes
+
+* lint and test coverage ([90e165b](https://github.com/adobe/helix-rum-js/commit/90e165bd488b94d0c024cddd71ecfe83b74e48b8))
+
+
+### Features
+
+* sample new 4xx checkpoint ([a6676c3](https://github.com/adobe/helix-rum-js/commit/a6676c334a9a1417d9f2ea5a2a5d25fdc08f3e3b))
+
 # [2.16.0](https://github.com/adobe/helix-rum-js/compare/v2.15.3...v2.16.0) (2026-09-04)
 
 
