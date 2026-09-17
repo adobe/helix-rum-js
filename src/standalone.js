@@ -25,14 +25,23 @@ try {
   window.RUM_PARAMS = window.RUM_PARAMS || scriptParams;
 
   const [navigation] = (window.performance && window.performance.getEntriesByType('navigation')) || [];
-  const is404 = status === '404' || (navigation && navigation.name === window.location.href
-    && navigation.responseStatus === 404);
+  const responseStatus = status ?? (navigation && navigation.name === window.location.href
+    ? navigation.responseStatus : undefined);
+  const numericStatus = Number(responseStatus);
+  const is404 = responseStatus === '404' || responseStatus === 404;
+  const is4xx = Number.isFinite(numericStatus) && numericStatus >= 400 && numericStatus < 500;
 
-  if (is404) {
-    const { origin = '', pathname = '' } = document.referrer ? new URL(document.referrer) : {};
-    sampleRUM('404', { source: origin + pathname });
-  } else {
+  if (!is404 && !is4xx) {
     sampleRUM();
+  } else {
+    const { origin = '', pathname = '' } = document.referrer ? new URL(document.referrer) : {};
+    const source = origin + pathname;
+    if (is404) {
+      sampleRUM('404', { source });
+    }
+    if (is4xx) {
+      sampleRUM('4xx', { source, target: String(numericStatus) });
+    }
   }
 } catch (error) {
   // something went wrong
