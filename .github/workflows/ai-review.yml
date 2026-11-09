@@ -1,0 +1,30 @@
+name: AI Review
+
+on:
+  pull_request:
+
+concurrency:
+  group: ai-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  ai-review:
+    uses: adobe/helix-shared-workflows/.github/workflows/ai-review.yml@v1
+    secrets:
+      AWS_BEARER_TOKEN_BEDROCK: ${{ secrets.AWS_BEARER_TOKEN_BEDROCK }}
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+      statuses: write
+    with:
+      # builds the standalone bundle, installs Playwright and runs web-test-runner in
+      # Chromium, Firefox and WebKit; coverage/lcov.info goes to the reviewers
+      test: npm run test-ci
+      test-timeout-minutes: 30
+      browsers: true
+      review-prompt: >-
+        helix-rum-js is the RUM sampling script that AEM sites load on every page, so
+        size, robustness and not disturbing the host page matter. `npm run lint` lints it,
+        `npm run build-standalone` builds the standalone bundle (rollup) into dist/, and
+        coverage must stay at 100%.
