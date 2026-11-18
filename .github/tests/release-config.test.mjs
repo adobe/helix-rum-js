@@ -80,3 +80,21 @@ test('tagger release-branch pushes use the pinned publisher App token', (t) => {
     assert.ok(job.slice(checkout).includes(checkoutToken), `${file} must check out with it`);
   });
 });
+
+test('releases publish a manifest of every built file', async (t) => {
+  if (!existsSync(new URL('tagger.sh', root))) {
+    t.skip('no tagger-backed release-* publication in this repository');
+    return;
+  }
+  const pkg = JSON.parse(readFileSync(new URL('package.json', root), 'utf8'));
+  assert.match(pkg.scripts.prepack, /&& node release-manifest\.mjs write$/);
+  const { BUILD_ROOTS } = await import(new URL('release-manifest.mjs', root).href);
+  assert.ok(BUILD_ROOTS[pkg.name], `release-manifest.mjs has build roots for ${pkg.name}`);
+  const [, exec] = plugins.find(([name]) => name === '@semantic-release/exec');
+  // eslint-disable-next-line no-template-curly-in-string -- semantic-release template syntax.
+  assert.ok(exec.publishCmd.startsWith('./tagger.sh ${nextRelease.version} --manifest release-manifest.json '));
+  assert.ok(exec.publishCmd.endsWith(' --push'));
+  const [, github] = plugins.find(([name]) => name === '@semantic-release/github');
+  assert.ok(github.assets.some((asset) => asset.path === 'release-manifest.json'));
+  assert.ok(readFileSync(new URL('.gitignore', root), 'utf8').split('\n').includes('/release-manifest.json'));
+});

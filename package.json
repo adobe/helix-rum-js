@@ -11,7 +11,7 @@
     "test-ci": "npm run prepare-test && npm run setup-playwright && web-test-runner --node-resolve --coverage --playwright --browsers chromium firefox webkit",
     "test:watch": "npm run prepare-test && web-test-runner --node-resolve --watch --coverage",
     "build-standalone": "rollup --config",
-    "prepack": "npm run build-standalone",
+    "prepack": "npm run build-standalone && node release-manifest.mjs write",
     "lint": "eslint .",
     "docs": "npx jsdoc2md -c .jsdoc.json --files 'src/*.js'  > docs/API.md",
     "test-release": "node --test .github/tests/*.test.mjs",
