@@ -9,8 +9,8 @@
     "test-ci": "c8 --check-coverage=no mocha",
     "lint": "eslint .",
     "docs": "npx jsdoc2md -c .jsdoc.json --files 'src/*.js'  > docs/API.md",
+    "test-release": "node --test .github/tests/*.test.mjs",
     "semantic-release": "semantic-release",
-    "semantic-release-dry": "semantic-release --dry-run --branches $CI_BRANCH 1.x main",
     "commit": "git-cz",
     "prepare": "husky install"
   },
@@ -33,7 +33,6 @@
   "devDependencies": {
     "@adobe/eslint-config-helix": "2.0.5",
     "@semantic-release/changelog": "6.0.3",
-    "@semantic-release/git": "10.0.1",
     "@semantic-release/npm": "13.2.0",
     "c8": "9.1.0",
     "codecov": "3.8.3",

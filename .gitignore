@@ -9,3 +9,6 @@ logs
 test-results.xml
 .env
 .idea
+
+# Generated release-local notes; never commit these to a source branch.
+/release-notes.md
