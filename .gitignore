@@ -11,3 +11,6 @@ test-results.xml
 .idea
 test/micro-loader/rum-standalone.js
 .worktrees
+
+# Generated release-local notes; never commit these to a source branch.
+/release-notes.md
