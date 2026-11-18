@@ -22,6 +22,8 @@ jobs:
         with:
           node-version: 24.22.2
       - run: npm ci
+      - name: Check release configuration and tooling
+        run: npm run test-release
       - run: npm run test-ci
       - uses: codecov/codecov-action@v4
         with:
@@ -31,7 +33,9 @@ jobs:
     name: Release
     environment: release
     permissions:
-      contents: read
+      contents: write
+      issues: write
+      pull-requests: write
       id-token: write
     runs-on: ubuntu-latest
     needs: test
@@ -46,7 +50,10 @@ jobs:
         with:
           node-version: 24.22.2
       - run: npm ci
-      - run: npm run semantic-release
+      - name: Publish release
+        run: |
+          rm -f release-notes.md
+          npm run semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
           # npm authenticates through OIDC for the protected release environment.
