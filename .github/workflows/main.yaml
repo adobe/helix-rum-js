@@ -1,6 +1,9 @@
 name: Build
 on: [push]
 
+permissions:
+  contents: read
+
 env:
   CI_BUILD_NUM: ${{ github.run_id }}
   CI_BRANCH: ${{ github.ref_name }}
@@ -8,41 +11,42 @@ env:
 jobs:
   test:
     name: Test
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Use Node.js 20
+      - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24.22.2
       - run: npm ci
       - run: npm run test-ci
       - uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-      - name: Semantic Release (Dry Run)
-        run: npm run semantic-release-dry
-        env:
-          GITHUB_TOKEN: ${{ secrets.ADOBE_BOT_GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.ADOBE_BOT_NPM_TOKEN }}
 
   release:
     name: Release
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
     runs-on: ubuntu-latest
     needs: test
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/1.x'
+    # Operator pause switch, not an authorization boundary. Environments still restrict refs.
+    if: vars.RELEASE_ENABLED == 'true' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/1.x')
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Use Node.js 20
+      - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24.22.2
       - run: npm ci
       - run: npm run semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.ADOBE_BOT_GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.ADOBE_BOT_NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+          # npm authenticates through OIDC for the protected release environment.
