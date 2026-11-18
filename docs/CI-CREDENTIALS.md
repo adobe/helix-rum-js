@@ -33,11 +33,11 @@ Run `actionlint .github/workflows/*` and `git diff --check`. Review every `secre
 
 | Environment | Allowed branches | Secrets |
 | --- | --- | --- |
-| `release` | `main`, `1.x` | `RELEASE_GITHUB_TOKEN`; existing Slack notification secrets if used; `LEGACY_NPM_TOKEN` only for the legacy 1.x publisher |
+| `release` | `main`, `1.x` | `RELEASE_GITHUB_TOKEN`; existing Slack notification secrets if used. No npm publishing token. |
 
-Mainline npm publication uses trusted publishing/OIDC; it no longer references NPM_TOKEN. **Configure the npm trusted publisher to require the GitHub environment named `release`.** A workflow filename alone is not the intended branch boundary: branch-controlled workflows can request OIDC too.
+Mainline and 1.x npm publication use trusted publishing/OIDC; neither needs an npm token. **Configure the npm trusted publisher to require the GitHub environment named `release`.** A workflow filename alone is not the intended branch boundary: branch-controlled workflows can request OIDC too.
 
-The 1.x backport preserves its existing token-based npm publisher, but renames its secret to environment-only `LEGACY_NPM_TOKEN`. Do not weaken npm's authentication policy to accommodate an unsupported legacy workflow. If token publishing is prohibited, upgrade the 1.x publisher to OIDC or explicitly retire that release path before completing cutover.
+The 1.x backports grant OIDC only to the protected release job and use an OIDC-capable publisher on Node.js 24. Keep npm's existing requirement for 2FA with bypass-2FA tokens disallowed. Do not provision a legacy npm token or weaken that policy to accommodate old automation.
 
 Remove repository `NPM_TOKEN` / `ADOBE_BOT_NPM_TOKEN` copies and revoke obsolete tokens after replacing their legitimate uses. Slack secrets should also be environment-only if used only for release notifications.
 

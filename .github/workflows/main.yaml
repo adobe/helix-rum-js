@@ -16,10 +16,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Use Node.js 20
+      - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24.22.2
       - run: npm ci
       - run: npm run test-ci
       - uses: codecov/codecov-action@v4
@@ -29,6 +29,9 @@ jobs:
   release:
     name: Release
     environment: release
+    permissions:
+      contents: read
+      id-token: write
     runs-on: ubuntu-latest
     needs: test
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/1.x'
@@ -36,13 +39,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Use Node.js 20
+      - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24.22.2
       - run: npm ci
       - run: npm run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
-          # Legacy publisher: keep this token in the release environment only.
-          NPM_TOKEN: ${{ secrets.LEGACY_NPM_TOKEN }}
+          # npm authenticates through OIDC for the protected release environment.
