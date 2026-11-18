@@ -51,3 +51,32 @@ test('publishing uses the job token and remains explicitly paused by default', (
   assert.ok(text.includes("vars.RELEASE_ENABLED == 'true'"));
   assert.ok(text.includes('contents: write'));
 });
+
+test('tagger release-branch pushes use the pinned publisher App token', (t) => {
+  if (!existsSync(new URL('tagger.sh', root))) {
+    t.skip('no tagger-backed release-* publication in this repository');
+    return;
+  }
+  const action = 'actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510';
+  /* eslint-disable no-template-curly-in-string -- GitHub workflow syntax, not JavaScript. */
+  const inputs = [
+    'client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}',
+    'private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}',
+    'permission-contents: write',
+  ];
+  const checkoutToken = 'token: ${{ steps.publisher.outputs.token }}';
+  /* eslint-enable no-template-curly-in-string */
+  ['.github/workflows/main.yaml', '.github/workflows/verify-release-auth.yml'].forEach((file) => {
+    const text = readFileSync(new URL(file, root), 'utf8');
+    // Look only at the publishing job, which starts at its release environment.
+    const job = text.slice(text.indexOf('environment: release'));
+    assert.ok(text.includes('environment: release'), `${file} must use the release environment`);
+    const mint = job.indexOf('id: publisher');
+    assert.ok(mint >= 0, `${file} must mint a publisher token in the release job`);
+    assert.ok(job.includes(action), `${file} must use the SHA-pinned token action`);
+    inputs.forEach((input) => assert.ok(job.includes(input), `${file}: ${input}`));
+    const checkout = job.indexOf('actions/checkout');
+    assert.ok(checkout > mint, `${file} must mint the token before checkout`);
+    assert.ok(job.slice(checkout).includes(checkoutToken), `${file} must check out with it`);
+  });
+});

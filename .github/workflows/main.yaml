@@ -43,8 +43,18 @@ jobs:
       pull-requests: write
       id-token: write # needed for npm trusted publishers with OIDC
     steps:
+      - name: Mint a release-branch token
+        # Short-lived installation token for helix-rum-release-publisher, the only
+        # identity allowed to write release-* branches. Key lives in this environment.
+        id: publisher
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
       - uses: actions/checkout@v6
         with:
+          token: ${{ steps.publisher.outputs.token }}
           persist-credentials: true
       - name: Use Node.js
         uses: actions/setup-node@v6

@@ -11,16 +11,24 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment: release
     permissions:
-      contents: write
+      contents: read # release-* writes use the publisher App token below
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - name: Mint a release-branch token
+        # Short-lived installation token for helix-rum-release-publisher, the only
+        # identity allowed to write release-* branches. Key lives in this environment.
+        id: publisher
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
       - uses: actions/checkout@v6
         with:
+          token: ${{ steps.publisher.outputs.token }}
           persist-credentials: true
       - name: Push a canary and verify AEM Code Sync delivery
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
         run: |
           version="0.0.0-auth.$GITHUB_RUN_ID"
           branch="release-0-0-0-auth-$GITHUB_RUN_ID"
