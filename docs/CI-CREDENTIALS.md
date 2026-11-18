@@ -33,7 +33,9 @@ The release job and the canary mint a short-lived installation token with `actio
 
 Why not `GITHUB_TOKEN`: GitHub does not honor the GitHub Actions identity in branch push allowances or ruleset bypass lists. The first canary run failed with GH006 for this reason. Ordinary workflows with `contents: write` therefore cannot write `release-*`; only jobs that can read the `release` environment's key can, and that environment only admits `main` and `1.x`.
 
-Pushes made with the App token trigger ordinary `push` workflows on the release branches (as the old bot pushes did); the release job itself only runs on `main`/`1.x`. AEM Code Sync is an external integration; check delivery with the canary workflow before relying on this path.
+Checkout persists the App token for the whole release job, so semantic-release's `vX.Y.Z` tag push also goes out as the App. Neither repository has tag protection or rulesets today. If a tag ruleset is added, it must allow `helix-rum-release-publisher`. The delivery canary exercises only the `release-*` path; the first real release exercises the tag push.
+
+App-token pushes of both release branches and tags trigger ordinary `push` workflows, as the old bot pushes did; the release job itself only runs on `main`/`1.x`. AEM Code Sync is an external integration; check delivery with the canary workflow before relying on this path.
 
 To rotate the key: generate a new private key in the App settings, pipe it into both repositories' `release` environment secret, then delete the old key in the App settings.
 
