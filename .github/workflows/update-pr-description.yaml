@@ -4,6 +4,10 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   update-pr-description:
     name: Update PR Description
@@ -49,5 +53,3 @@ jobs:
             });
 
             console.log('PR description updated with test URL');
-        env:
-          GITHUB_TOKEN: ${{ secrets.ADOBE_BOT_GITHUB_TOKEN }}
