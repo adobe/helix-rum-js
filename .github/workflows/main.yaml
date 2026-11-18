@@ -11,6 +11,7 @@ env:
 jobs:
   test:
     name: Test
+    timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -32,7 +33,8 @@ jobs:
     environment: release
     runs-on: ubuntu-latest
     needs: test
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/1.x'
+    # Operator pause switch, not an authorization boundary. Environments still restrict refs.
+    if: vars.RELEASE_ENABLED == 'true' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/1.x')
     permissions:
       contents: write
       issues: write
