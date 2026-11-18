@@ -3,7 +3,7 @@
 ## Selected authorization model
 
 - npm publication uses OIDC through a trusted publisher requiring the GitHub `release` environment. Mainline and 1.x need no npm token.
-- GitHub publication uses the job's short-lived `github.token` / `GITHUB_TOKEN`, not `adobe-bot`, a PAT, a custom App key or `RELEASE_GITHUB_TOKEN`.
+- GitHub API calls (releases, comments) use the job's short-lived `github.token` / `GITHUB_TOKEN`. `release-*` pushes use a short-lived token from the private publisher App, minted inside the `release` environment. No `adobe-bot`, PAT or `RELEASE_GITHUB_TOKEN`.
 - Build/test jobs default to read-only repository access. Only publishing jobs request the write permissions needed for tags, GitHub releases and release-branch updates. Metadata helpers retain their explicit, narrower permissions.
 - Stored provider/notification credentials belong in the corresponding protected environment, never a shared publishing credential exposed to branch CI.
 
@@ -21,17 +21,21 @@ Release-local notes are generated in `release-notes.md`, attached to the GitHub 
 
 No publisher gets a PR-review or force-push bypass on source branches. The old `adobe-bot` review allowances are removed. Repository review requirements remain enabled for administrators as well.
 
-## Preserved AEM delivery path and accepted trade-off
+## Preserved AEM delivery path and release-branch writer
 
 The tagger-backed 2.x publication path remains:
 
 `release-* branches → AEM Code Sync → aem.live`
 
-The GitHub Actions App identity is allowed to create/update/force-update only the existing `release-*` branch pattern. Deletion remains blocked. Source-branch bypasses are not granted to this identity.
+Only the private GitHub App **helix-rum-release-publisher** may create, update or force-update `release-*` branches. Deletion remains blocked, and the App has no bypass on `main` or `1.x`. It has repository contents read/write only, and is installed only on helix-rum-js and helix-rum-enhancer.
 
-**Accepted policy trade-off:** this is the generic GitHub Actions identity, not a job- or environment-specific branch writer. Another same-repository workflow that can request a write token can use the release-branch allowance too. The maintainer explicitly selected this model rather than a dedicated publisher App. Do not describe protected environments as isolating GitHub release-branch writes to one workflow; they still protect npm OIDC claims and stored environment secrets.
+The release job and the canary mint a short-lived installation token with `actions/create-github-app-token` (pinned by commit SHA). They use the App client ID from the `release` environment variable `RELEASE_APP_CLIENT_ID` and the private key from the `release` environment secret `RELEASE_APP_PRIVATE_KEY`. The token is scoped to the current repository with `contents: write` and revoked when the job ends. Checkout persists it, so `tagger.sh` pushes release branches as the App. GitHub API calls (releases, issue and PR comments) still use the job's `GITHUB_TOKEN`.
 
-GitHub Actions does not recursively run ordinary workflows for pushes made with GITHUB_TOKEN. AEM Code Sync is an external integration; delivery must be checked with the canary workflow before relying on this path. No live delivery claim is based solely on local Git tests.
+Why not `GITHUB_TOKEN`: GitHub does not honor the GitHub Actions identity in branch push allowances or ruleset bypass lists. The first canary run failed with GH006 for this reason. Ordinary workflows with `contents: write` therefore cannot write `release-*`; only jobs that can read the `release` environment's key can, and that environment only admits `main` and `1.x`.
+
+Pushes made with the App token trigger ordinary `push` workflows on the release branches (as the old bot pushes did); the release job itself only runs on `main`/`1.x`. AEM Code Sync is an external integration; check delivery with the canary workflow before relying on this path.
+
+To rotate the key: generate a new private key in the App settings, pipe it into both repositories' `release` environment secret, then delete the old key in the App settings.
 
 ## Validation
 
@@ -41,7 +45,7 @@ Run the normal lint/browser/Node suites and `actionlint .github/workflows/*` as 
 
 ## Release environment
 
-Allow only reviewed `main` and `1.x` refs. Keep the npm trusted publisher bound to environment `release` and keep bypass-2FA npm tokens disallowed. No GitHub/npm secret is required. Existing Slack notification credentials, if used, are a separate environment-scoped integration.
+Allow only reviewed `main` and `1.x` refs. Keep the npm trusted publisher bound to environment `release` and keep bypass-2FA npm tokens disallowed. No npm secret is required. The only GitHub credential is the publisher App key described above. Existing Slack notification credentials, if used, are a separate environment-scoped integration.
 
 ### Tagger-backed publication
 
@@ -51,7 +55,7 @@ For the 2.x workflows, `tagger.sh` starts from the checked-out source commit and
 - A prerelease updates only its normalized exact branch.
 - With `--push`, remote refs are updated atomically using explicit per-ref leases. A rejected or concurrently changed ref fails the whole push; there is no partial/sequential fallback.
 - Without `--push`, local refs are updated transactionally for inspection. Checked-out release refs are refused.
-- Earlier exact versions are left alone by a newer release. This is not a write-once guarantee: deliberately republishing the same version can still rewrite its exact branch under the accepted writer policy.
+- Earlier exact versions are left alone by a newer release. This is not a write-once guarantee: deliberately republishing the same version can still rewrite its exact branch through the publisher App.
 - Normal git/npm release tags remain semantic-release's responsibility. The tagger only publishes generated branches.
 
 ### Live authentication/Code Sync smoke test
