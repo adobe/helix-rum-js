@@ -1,0 +1,40 @@
+name: Verify release-branch delivery
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    # This writes only a unique prerelease-shaped canary, never a stable alias.
+    if: github.ref == 'refs/heads/main'
+    environment: release
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: true
+      - name: Push a canary and verify AEM Code Sync delivery
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          version="0.0.0-auth.$GITHUB_RUN_ID"
+          branch="release-0-0-0-auth-$GITHUB_RUN_ID"
+          probe="test/release-auth-$GITHUB_RUN_ID.json"
+          received=$(mktemp)
+          trap 'rm -f "$probe" "$received"' EXIT
+          printf '{"source":"%s","run":"%s"}\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" > "$probe"
+          ./tagger.sh "$version" "$probe" --push
+          owner="${GITHUB_REPOSITORY%/*}"
+          repo="${GITHUB_REPOSITORY#*/}"
+          url="https://$branch--$repo--$owner.aem.live/$probe"
+          curl --proto '=https' --proto-redir '=https' --fail --location \
+            --retry 6 --retry-all-errors --retry-delay 5 --retry-max-time 120 \
+            --max-time 20 --output "$received" "$url"
+          cmp "$probe" "$received"
+          echo "Verified release-branch delivery: $url"
+          echo 'The canary branch is retained; no stable alias or npm release was changed.'

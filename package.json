@@ -14,8 +14,8 @@
     "prepack": "npm run build-standalone",
     "lint": "eslint .",
     "docs": "npx jsdoc2md -c .jsdoc.json --files 'src/*.js'  > docs/API.md",
+    "test-release": "node --test .github/tests/*.test.mjs",
     "semantic-release": "semantic-release",
-    "semantic-release-dry": "semantic-release --dry-run --branches $CI_BRANCH",
     "commit": "git-cz",
     "prepare": "husky install"
   },
@@ -44,7 +44,6 @@
     "@rollup/plugin-replace": "6.0.3",
     "@semantic-release/changelog": "7.0.0",
     "@semantic-release/exec": "7.1.0",
-    "@semantic-release/git": "11.0.1",
     "@web/test-runner": "1.0.0",
     "@web/test-runner-commands": "1.0.1",
     "@web/test-runner-mocha": "1.0.0",
