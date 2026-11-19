@@ -8,7 +8,7 @@ fail() {
 }
 
 if (( $# < 2 )); then
-  fail 'Usage: tagger.sh <version> <file> [files...] [--push]'
+  fail 'Usage: tagger.sh <version> [--manifest release-manifest.json] [files...] [--push]'
 fi
 VERSION=$1
 shift
@@ -16,15 +16,35 @@ shift
   || fail 'Expected a semantic version'
 
 PUSH=false
+MANIFEST=''
 FILES=()
 while (( $# )); do
   case "$1" in
     --push) PUSH=true ;;
+    --manifest)
+      (( $# > 1 )) || fail '--manifest requires a path'
+      MANIFEST=$2
+      shift
+      ;;
     --*) fail "Unknown option: $1" ;;
     *) FILES+=("$1") ;;
   esac
   shift
 done
+
+if [[ -n "$MANIFEST" ]]; then
+  # The manifest lists every built executable file. Verify it against the files on disk
+  # and this version, then publish exactly those files plus the manifest itself.
+  MANIFEST_TOOL="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/release-manifest.mjs"
+  node "$MANIFEST_TOOL" verify "$MANIFEST" "$VERSION" || fail "Release manifest verification failed: $MANIFEST"
+  MANIFEST_FILES=$(node "$MANIFEST_TOOL" files "$MANIFEST") || fail "Cannot read $MANIFEST"
+  while IFS= read -r file; do
+    if [[ -n "$file" ]]; then
+      FILES+=("$file")
+    fi
+  done <<< "$MANIFEST_FILES"
+  FILES+=("$MANIFEST")
+fi
 (( ${#FILES[@]} > 0 )) || fail 'At least one release file is required'
 
 ROOT=$(git rev-parse --show-toplevel)
@@ -55,8 +75,14 @@ for branch in "${BRANCHES[@]}"; do
   git check-ref-format "refs/heads/$branch"
   REFS+=("refs/heads/$branch")
 done
+# Exact-version branches are write-once (also enforced by a repository ruleset).
+# Aliases such as release-2-x move to the newest release.
+EXACT_REF=${REFS[0]}
 
 if [[ "$PUSH" == false ]]; then
+  if git show-ref --verify --quiet "$EXACT_REF"; then
+    fail "Exact release branch already exists and is write-once: $EXACT_REF"
+  fi
   # update-ref must not move a branch checked out in this or another worktree.
   WORKTREES=$(git worktree list --porcelain)
   for ref in "${REFS[@]}"; do
@@ -95,6 +121,9 @@ if [[ "$PUSH" == true ]]; then
         expected=$oid
       fi
     done <<< "$REMOTE_STATE"
+    if [[ "$ref" == "$EXACT_REF" && -n "$expected" ]]; then
+      fail "Exact release branch already exists and is write-once: $EXACT_REF"
+    fi
     LEASES+=("--force-with-lease=$ref:$expected")
     REFSPECS+=("$COMMIT:$ref")
   done

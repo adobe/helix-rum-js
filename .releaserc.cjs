@@ -12,6 +12,7 @@ module.exports = {
     ["@semantic-release/github", {
       "assets": [
         { "path": "release-notes.md", "label": "Release notes" },
+        { "path": "release-manifest.json", "label": "Release manifest (SHA-384 of every served file)" },
         {
           "path": "dist/rum-standalone.js",
           "label": "RUM Standalone JS"
@@ -47,7 +48,7 @@ module.exports = {
       ]
     }],
     ["@semantic-release/exec", {
-      "publishCmd": "./tagger.sh ${nextRelease.version} dist/rum-standalone.js dist/rum-standalone-404.js dist/micro.js package.json package-lock.json release-notes.md --push"
+      "publishCmd": "./tagger.sh ${nextRelease.version} --manifest release-manifest.json package.json package-lock.json release-notes.md --push"
     }],
     ["semantic-release-slack-bot", {
       notifyOnSuccess: true,
