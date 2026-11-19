@@ -57,5 +57,5 @@ module.exports = {
       slackChannel: "optel-explorers",
     }],
   ],
-  branches: ['main', '1.x'],
+  branches: ['main'],
 };

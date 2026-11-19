@@ -3,7 +3,7 @@
 ## Selected authorization model
 
 - npm publication uses OIDC through a trusted publisher requiring the GitHub `release` environment. `main` needs no npm token; `1.x` is frozen (see below).
-- GitHub API calls (releases, comments) use the job's short-lived `github.token` / `GITHUB_TOKEN`. `release-*` pushes use a short-lived token from the private publisher App, minted inside the `release` environment. No `adobe-bot`, PAT or `RELEASE_GITHUB_TOKEN`.
+- GitHub API calls (releases, comments) use the job's short-lived `github.token` / `GITHUB_TOKEN`. All git pushes in the release job (`release-*` branches and semantic-release's `vX.Y.Z` tags) use a short-lived token from the private publisher App, minted inside the `release` environment. No `adobe-bot`, PAT or `RELEASE_GITHUB_TOKEN`.
 - Build/test jobs default to read-only repository access. Only publishing jobs request the write permissions needed for tags, GitHub releases and release-branch updates. Metadata helpers retain their explicit, narrower permissions.
 - Stored provider/notification credentials belong in the corresponding protected environment, never a shared publishing credential exposed to branch CI.
 
@@ -33,9 +33,9 @@ The release job and the canary mint a short-lived installation token with `actio
 
 Why not `GITHUB_TOKEN`: GitHub does not honor the GitHub Actions identity in branch push allowances or ruleset bypass lists. The first canary run failed with GH006 for this reason. Ordinary workflows with `contents: write` therefore cannot write `release-*`; only jobs that can read the `release` environment's key can, and that environment only admits `main`.
 
-Checkout persists the App token for the whole release job, so semantic-release's `vX.Y.Z` tag push also goes out as the App. Neither repository has tag protection or rulesets today. If a tag ruleset is added, it must allow `helix-rum-release-publisher`. The delivery canary exercises only the `release-*` path; the first real release exercises the tag push.
+Checkout persists the App token for the whole release job, so semantic-release's `vX.Y.Z` tag push also goes out as the App. As of 18 November 2026, no tag protection or tag ruleset exists in helix-rum-js or helix-rum-enhancer (the only ruleset targets exact `release-*` branches). If a tag ruleset is added, it must allow `helix-rum-release-publisher`. The delivery canary exercises only the `release-*` path; the first real release exercises the tag push.
 
-App-token pushes of both release branches and tags trigger ordinary `push` workflows, as the old bot pushes did; the release job itself only runs on `main`. AEM Code Sync is an external integration; check delivery with the canary workflow before relying on this path.
+App-token pushes of both release branches and tags trigger ordinary `push` workflows, as the old bot pushes did; the release job itself only runs on `main` (its `if:` and `.releaserc.cjs` `branches` name only `main`, and the `release` environment only admits `main`). AEM Code Sync is an external integration; check delivery with the canary workflow before relying on this path.
 
 To rotate the key: generate a new private key in the App settings, pipe it into both repositories' `release` environment secret, then delete the old key in the App settings.
 
@@ -72,4 +72,9 @@ This workflow exists on the tagger-backed 2.x mainline only.
 
 `1.x` is frozen. Its branch protection has **Lock branch** enabled, which makes it read-only for everyone, administrators included. The `release` environment no longer admits `1.x`, so no run on `1.x` can use npm OIDC or the publisher App key. The last 1.x release stays as published (helix-rum-js 1.9.0, npm dist-tag `release-1.x`). Renovate only targets `main` (no `baseBranches` override).
 
-To unfreeze, a maintainer must deliberately unlock the branch and add `1.x` back to the `release` environment.
+To unfreeze, a maintainer must deliberately do all of these; skipping one leaves 1.x silently half-working:
+
+1. Disable **Lock branch** on the `1.x` branch protection rule.
+2. Add `1.x` back to the `release` environment's deployment branch policy.
+3. Add `refs/heads/1.x` to the release job's `if:` in `.github/workflows/main.yaml` and `1.x` to `branches` in `.releaserc.cjs` on `main`.
+4. Add `1.x` to Renovate's `baseBranches` in `.renovaterc.json` (with `main`), so the branch gets dependency updates again.
