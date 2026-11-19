@@ -271,3 +271,50 @@ test('a stale, incomplete or mismatched manifest fails before any ref changes', 
 
   assert.equal(f.git('ls-remote', '--heads', 'origin'), before);
 });
+
+test('versions whose branch name would be ambiguous are rejected before any ref changes', (t) => {
+  const f = fixture(t);
+  f.generate('2.4.0');
+  const before = f.git('show-ref');
+  ['2.4.0-rc-1', '2.4.0+build.1', '2.4.0-rc.1+build', '2.4.0-rc.1-x'].forEach((version) => {
+    const result = f.publish(version);
+    assert.notEqual(result.status, 0, version);
+    assert.match(result.stderr, /Unsupported version/, version);
+  });
+  assert.equal(f.git('show-ref'), before);
+  assert.equal(f.publish('2.4.0-rc.1').status, 0);
+});
+
+test('--check passes for a new version and fails once its exact branch exists', (t) => {
+  const f = fixture(t);
+  const check = (version) => f.run('/bin/bash', ['tagger.sh', version, '--check']);
+  const ok = check('2.3.4');
+  assert.equal(ok.status, 0, ok.stderr);
+  assert.match(ok.stdout, /release-2-3-4 is available/);
+  f.generate('2.3.4');
+  assert.equal(f.publish('2.3.4', true).status, 0);
+  const remote = f.git('ls-remote', '--heads', 'origin');
+  const taken = check('2.3.4');
+  assert.notEqual(taken.status, 0);
+  assert.match(taken.stderr, /write-once/);
+  assert.equal(check('2.3.5').status, 0);
+  assert.notEqual(f.run('/bin/bash', ['tagger.sh', '2.3.5', '--check', 'package.json']).status, 0);
+  assert.notEqual(f.run('/bin/bash', ['tagger.sh', '2.3.5', '--check', '--push']).status, 0);
+  f.git('remote', 'set-url', 'origin', join(f.dir, 'missing.git'));
+  const offline = check('2.3.5');
+  assert.notEqual(offline.status, 0);
+  assert.match(offline.stderr, /Cannot check/);
+  f.git('remote', 'set-url', 'origin', f.remote);
+  assert.equal(f.git('ls-remote', '--heads', 'origin'), remote);
+});
+
+test('release-manifest.mjs accepts an absolute manifest path', (t) => {
+  const f = fixture(t);
+  f.generate('2.3.4');
+  const path = join(f.dir, 'elsewhere.json');
+  const write = f.run('node', ['release-manifest.mjs', 'write', path]);
+  assert.equal(write.status, 0, write.stderr);
+  assert.equal(JSON.parse(readFileSync(path, 'utf8')).version, '2.3.4');
+  const verify = f.run('node', ['release-manifest.mjs', 'verify', path, '2.3.4']);
+  assert.equal(verify.status, 0, verify.stderr);
+});
