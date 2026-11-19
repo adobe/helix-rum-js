@@ -35,7 +35,7 @@ Why not `GITHUB_TOKEN`: GitHub does not honor the GitHub Actions identity in bra
 
 Checkout persists the App token for the whole release job, so semantic-release's `vX.Y.Z` tag push also goes out as the App. As of 18 November 2026, no tag protection or tag ruleset exists in helix-rum-js or helix-rum-enhancer (the only ruleset targets exact `release-*` branches). If a tag ruleset is added, it must allow `helix-rum-release-publisher`. The delivery canary exercises only the `release-*` path; the first real release exercises the tag push.
 
-App-token pushes of both release branches and tags trigger ordinary `push` workflows, as the old bot pushes did; the release job itself only runs on `main` (its `if:` and `.releaserc.cjs` `branches` name only `main`, and the `release` environment only admits `main`). AEM Code Sync is an external integration; check delivery with the canary workflow before relying on this path.
+App-token pushes of both release branches and tags trigger ordinary `push` workflows, as the old bot pushes did; on `main`, the release job's `if:` and `.releaserc.cjs` `branches` name only `main`. A push runs the workflow files of the branch it lands on, and the frozen `1.x` branch's own copies still name `1.x`. What stops a 1.x release is the branch lock and the `release` environment admitting only `main`, not `main`'s configuration. AEM Code Sync is an external integration; check delivery with the canary workflow before relying on this path.
 
 To rotate the key: generate a new private key in the App settings, pipe it into both repositories' `release` environment secret, then delete the old key in the App settings.
 
@@ -76,5 +76,5 @@ To unfreeze, a maintainer must deliberately do all of these; skipping one leaves
 
 1. Disable **Lock branch** on the `1.x` branch protection rule.
 2. Add `1.x` back to the `release` environment's deployment branch policy.
-3. Add `refs/heads/1.x` to the release job's `if:` in `.github/workflows/main.yaml` and `1.x` to `branches` in `.releaserc.cjs` on `main`.
+3. Check that the `1.x` branch's own `.github/workflows/main.yaml` (release job `if:`) and `.releaserc.cjs` (`branches`) still admit `1.x`; they do today. Pushes to `1.x` use those copies, not `main`'s.
 4. Add `1.x` to Renovate's `baseBranches` in `.renovaterc.json` (with `main`), so the branch gets dependency updates again.
