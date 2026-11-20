@@ -94,6 +94,9 @@ test('releases publish a manifest of every built file', async (t) => {
   // eslint-disable-next-line no-template-curly-in-string -- semantic-release template syntax.
   assert.ok(exec.publishCmd.startsWith('./tagger.sh ${nextRelease.version} --manifest release-manifest.json '));
   assert.ok(exec.publishCmd.endsWith(' --push'));
+  // The write-once check runs in verifyRelease, before npm and GitHub publish anything.
+  // eslint-disable-next-line no-template-curly-in-string -- semantic-release template syntax.
+  assert.equal(exec.verifyReleaseCmd, './tagger.sh ${nextRelease.version} --check');
   const [, github] = plugins.find(([name]) => name === '@semantic-release/github');
   assert.ok(github.assets.some((asset) => asset.path === 'release-manifest.json'));
   assert.ok(readFileSync(new URL('.gitignore', root), 'utf8').split('\n').includes('/release-manifest.json'));

@@ -24,7 +24,7 @@ import { execFileSync } from 'node:child_process';
 import {
   lstatSync, readdirSync, readFileSync, writeFileSync,
 } from 'node:fs';
-import { join, sep } from 'node:path';
+import { join, resolve, sep } from 'node:path';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
 
@@ -109,7 +109,7 @@ export function createManifest(cwd) {
 }
 
 export function readManifest(cwd, manifestPath) {
-  const manifest = JSON.parse(readFileSync(join(cwd, manifestPath), 'utf8'));
+  const manifest = JSON.parse(readFileSync(resolve(cwd, manifestPath), 'utf8'));
   if (manifest.schema !== SCHEMA || typeof manifest.files !== 'object' || !manifest.files) {
     fail(`${manifestPath} is not a schema ${SCHEMA} release manifest`);
   }
@@ -153,7 +153,7 @@ function main([command, ...args]) {
   if (command === 'write') {
     const path = args[0] || DEFAULT_MANIFEST;
     const manifest = createManifest(cwd);
-    writeFileSync(join(cwd, path), `${JSON.stringify(manifest, null, 2)}\n`);
+    writeFileSync(resolve(cwd, path), `${JSON.stringify(manifest, null, 2)}\n`);
     process.stdout.write(`Wrote ${path}: ${manifest.package}@${manifest.version}, ${Object.keys(manifest.files).length} files\n`);
   } else if (command === 'verify' && args.length === 2) {
     verifyManifest(cwd, args[0], args[1]);

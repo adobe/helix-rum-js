@@ -33,4 +33,6 @@ curl -s --compressed https://release-X-Y-Z--helix-rum-js--adobe.aem.live/<path> 
 
 A repository ruleset, **Write-once exact release branches**, covers `refs/heads/release-[0-9]*-[0-9]*-[0-9]*`, which is every exact version and prerelease branch. It blocks updates, force pushes and deletion, with **no bypass actors**, administrators included. Creating a new exact branch is still allowed for the publisher App, through the classic `release-*` protection. Alias branches such as `release-2-x` and `release-2-17-x` aren't matched and keep moving to the newest release.
 
-`tagger.sh` also refuses to publish when the exact branch already exists, so a rerun fails with a clear message instead of a rejected push.
+`tagger.sh` also refuses to publish when the exact branch already exists. semantic-release runs `tagger.sh <version> --check` in its **verifyRelease** step, before npm or GitHub publish anything, so an existing exact branch stops the whole release instead of failing after npm has already published.
+
+Branch names replace every non-alphanumeric character with `-`, so `tagger.sh` only accepts versions for which that is reversible: no build metadata (`+...`) and no `-` inside prerelease identifiers (`2.4.0-rc.1` is fine, `2.4.0-rc-1` is rejected). Every version published so far meets this.

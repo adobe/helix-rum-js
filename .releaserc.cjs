@@ -48,6 +48,7 @@ module.exports = {
       ]
     }],
     ["@semantic-release/exec", {
+      "verifyReleaseCmd": "./tagger.sh ${nextRelease.version} --check",
       "publishCmd": "./tagger.sh ${nextRelease.version} --manifest release-manifest.json package.json package-lock.json release-notes.md --push"
     }],
     ["semantic-release-slack-bot", {
