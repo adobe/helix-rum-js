@@ -131,6 +131,15 @@ export function verifyManifest(cwd, manifestPath, version) {
   if (manifest.version !== version) {
     problems.push(`version ${manifest.version} does not match ${version}`);
   }
+  // Provenance: the manifest must name the commit being published (tagger.sh builds the
+  // artifact commit on HEAD), so a copied or edited manifest cannot misattribute a release.
+  const head = sourceCommit(cwd);
+  const recorded = manifest.source && manifest.source.commit;
+  if (!head) {
+    problems.push('cannot determine the source commit: git rev-parse HEAD failed');
+  } else if (recorded !== head) {
+    problems.push(`source commit ${recorded || '(missing)'} does not match HEAD ${head}`);
+  }
   const listed = Object.keys(manifest.files).sort();
   const built = builtFiles(cwd, pkg.name);
   built.filter((path) => !listed.includes(path)).forEach((path) => problems.push(`built but not in manifest: ${path}`));

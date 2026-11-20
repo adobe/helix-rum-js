@@ -318,3 +318,38 @@ test('release-manifest.mjs accepts an absolute manifest path', (t) => {
   const verify = f.run('node', ['release-manifest.mjs', 'verify', path, '2.3.4']);
   assert.equal(verify.status, 0, verify.stderr);
 });
+
+test('a manifest with a missing, edited or stale source commit fails before any ref changes', (t) => {
+  const f = fixture(t);
+  f.generate('2.3.4');
+  const write = () => assert.equal(f.run('node', ['release-manifest.mjs', 'write']).status, 0);
+  const manifestPath = join(f.work, 'release-manifest.json');
+  const edit = (change) => {
+    const manifest = change(JSON.parse(readFileSync(manifestPath, 'utf8')));
+    writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
+  };
+  const before = f.git('ls-remote', '--heads', 'origin');
+  const publish = () => f.publish('2.3.4', true, ['--manifest', 'release-manifest.json']);
+
+  write();
+  edit((m) => ({ ...m, source: { commit: '0'.repeat(40) } }));
+  const edited = publish();
+  assert.notEqual(edited.status, 0);
+  assert.match(edited.stderr, /source commit 0{40} does not match HEAD/);
+
+  write();
+  edit((m) => ({ ...m, source: undefined }));
+  const missing = publish();
+  assert.notEqual(missing.status, 0);
+  assert.match(missing.stderr, /source commit \(missing\) does not match HEAD/);
+
+  write();
+  f.git('commit', '--allow-empty', '-m', 'a later source commit');
+  const stale = publish();
+  assert.notEqual(stale.status, 0);
+  assert.match(stale.stderr, /does not match HEAD/);
+
+  assert.equal(f.git('ls-remote', '--heads', 'origin'), before);
+  write();
+  assert.equal(publish().status, 0);
+});
