@@ -78,3 +78,15 @@ To unfreeze, a maintainer must deliberately do all of these; skipping one leaves
 2. Add `1.x` back to the `release` environment's deployment branch policy.
 3. Check that the `1.x` branch's own `.github/workflows/main.yaml` (release job `if:`) and `.releaserc.cjs` (`branches`) still admit `1.x`; they do today. Pushes to `1.x` use those copies, not `main`'s.
 4. Add `1.x` to Renovate's `baseBranches` in `.renovaterc.json` (with `main`), so the branch gets dependency updates again.
+
+## Backfilling release branches from npm
+
+Older taggers published only some built files to the `release-*` branches, and no `release-1-x` alias existed. The collector served the gaps from jsDelivr/unpkg. **Backfill release branch from npm** (`backfill-release.yml`, manual, `main` only, `release` environment) repairs a branch from the published package:
+
+- the tarball must match the registry's sha512 `integrity`;
+- the branch must be `release-<version>`, or `release-<major>-x` for the newest `<major>.x` release;
+- an existing branch only gets the built `.js` files it lacks (debug `*.map.js` builds are skipped); if any file it already serves differs from npm, nothing is pushed;
+- a new branch starts from the `v<version>` tag and gets the package's built files and `package.json`;
+- the push uses the publisher App token. Without the `push` input, it only prints the plan.
+
+Exact `release-X-Y-Z` branches are write-once, so repairing one also needs a deliberate, temporary exclusion of that ref from the **Write-once exact release branches** ruleset, removed right after.

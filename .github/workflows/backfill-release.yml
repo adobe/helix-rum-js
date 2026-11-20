@@ -1,0 +1,61 @@
+name: Backfill release branch from npm
+# One-off repair of served release-* branches that older taggers published incompletely,
+# or that never existed (1.x aliases). Files come from the published npm package, verified
+# against the registry's sha512 integrity. Served files that already exist are never changed.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Published version, e.g. 2.10.5
+        required: true
+      branch:
+        description: release-X-Y-Z for that version, or release-X-x for the newest X.x release
+        required: true
+      push:
+        description: Push the branch (otherwise only print the plan)
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  backfill:
+    if: github.ref == 'refs/heads/main'
+    environment: release
+    permissions:
+      contents: read # release-* writes use the publisher App token below
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Mint a release-branch token
+        # Short-lived installation token for helix-rum-release-publisher, the only
+        # identity allowed to write release-* branches. Key lives in this environment.
+        id: publisher
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          token: ${{ steps.publisher.outputs.token }}
+          persist-credentials: true
+      - name: Use Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: '24.x'
+      - name: Backfill from the npm package
+        # bash (not the default `bash -e`) adds pipefail, so a refused backfill fails the job
+        # instead of reporting tee's exit status.
+        shell: bash
+        env:
+          VERSION: ${{ inputs.version }}
+          BRANCH: ${{ inputs.branch }}
+          PUSH: ${{ inputs.push }}
+        run: |
+          args=("$VERSION" "$BRANCH")
+          if [[ "$PUSH" == true ]]; then
+            args+=(--push)
+          fi
+          node .github/scripts/backfill-release.mjs "${args[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
