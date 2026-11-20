@@ -10,7 +10,7 @@
  * governing permissions and limitations under the License.
  */
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import {
   mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync,
 } from 'node:fs';
@@ -179,4 +179,17 @@ test('without --push nothing is written to the remote', async (t) => {
   const result = await f.run('1.9.0', 'release-1-x', false);
   assert.equal(result.result, 'planned');
   assert.equal(f.remoteGit('branch', '--list', 'release-1-x'), '');
+});
+
+test('the workflow fails when the backfill script fails', () => {
+  const workflow = readFileSync(new URL('../workflows/backfill-release.yml', import.meta.url), 'utf8');
+  const step = workflow.slice(workflow.indexOf('- name: Backfill from the npm package'));
+  assert.match(step, /node \.github\/scripts\/backfill-release\.mjs .*\| tee/);
+  // GitHub runs `shell: bash` as `bash --noprofile --norc -eo pipefail`. The default shell
+  // (`bash -e`) would report tee's exit status and turn a refused backfill green.
+  assert.match(step, /^\s+shell: bash\s*$/m);
+  const pipeline = 'node -e "process.exit(3)" | tee /dev/null';
+  const run = (flags) => spawnSync('bash', ['--noprofile', '--norc', ...flags, '-c', pipeline]).status;
+  assert.equal(run(['-eo', 'pipefail']), 3);
+  assert.equal(run(['-e']), 0);
 });

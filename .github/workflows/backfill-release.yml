@@ -46,6 +46,9 @@ jobs:
         with:
           node-version: '24.x'
       - name: Backfill from the npm package
+        # bash (not the default `bash -e`) adds pipefail, so a refused backfill fails the job
+        # instead of reporting tee's exit status.
+        shell: bash
         env:
           VERSION: ${{ inputs.version }}
           BRANCH: ${{ inputs.branch }}
