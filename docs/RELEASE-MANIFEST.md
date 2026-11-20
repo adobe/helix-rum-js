@@ -21,7 +21,7 @@ Every release publishes `release-manifest.json`:
 - It's attached to the GitHub release. **GitHub release immutability is enabled** for this repository, so that copy can't be changed after publication: it is the approved reference for monitors and the collector.
 - It's also included in the `release-*` artifact branches (served via aem.live) and in the npm tarball.
 
-`tagger.sh --manifest release-manifest.json` verifies, before changing any ref, that the manifest matches this version, that every built file is listed, and that every listed file's digest matches the bytes on disk. It then publishes exactly those files plus the manifest.
+`tagger.sh --manifest release-manifest.json` verifies, before changing any ref, that the manifest matches this version and the commit being published (`source.commit` must equal `HEAD`), that every built file is listed, and that every listed file's digest matches the bytes on disk. It then publishes exactly those files plus the manifest.
 
 To check a served file by hand, compare the **decoded** bytes; aem.live always sends gzip:
 
