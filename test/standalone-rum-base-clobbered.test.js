@@ -38,6 +38,7 @@ await import('../src/standalone.js');
 describe('standalone window.RUM_BASE', () => {
   it('replaces a clobbered element with the script base', () => {
     assert.notInstanceOf(window.RUM_BASE, HTMLAnchorElement);
-    assert.strictEqual(window.RUM_BASE, `${window.location.origin}/collect`);
+    assert.instanceOf(window.RUM_BASE, URL);
+    assert.strictEqual(window.RUM_BASE.href, `${window.location.origin}/collect`);
   });
 });

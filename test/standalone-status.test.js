@@ -45,7 +45,8 @@ describe('standalone status checkpoints', () => {
       '4xx',
       { source: '', target: '429' },
     ]);
-    assert.strictEqual(window.RUM_BASE, `${window.location.origin}/collect`);
+    assert.instanceOf(window.RUM_BASE, URL);
+    assert.strictEqual(window.RUM_BASE.href, `${window.location.origin}/collect`);
     assert.deepEqual(window.RUM_PARAMS, { program: 'test-program' });
   });
 });

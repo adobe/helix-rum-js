@@ -33,6 +33,7 @@ await import('../src/standalone.js');
 
 describe('standalone window.RUM_BASE', () => {
   it('replaces an empty string with the script base', () => {
-    assert.strictEqual(window.RUM_BASE, `${window.location.origin}/collect`);
+    assert.instanceOf(window.RUM_BASE, URL);
+    assert.strictEqual(window.RUM_BASE.href, `${window.location.origin}/collect`);
   });
 });

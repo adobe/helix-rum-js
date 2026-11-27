@@ -22,7 +22,7 @@ try {
   // such as an element from DOM clobbering (<a id="RUM_BASE">), with the script's origin.
   const configuredBase = window.RUM_BASE;
   const hasBase = (typeof configuredBase === 'string' && configuredBase !== '')
-    || configuredBase instanceof URL;
+    || Object.prototype.toString.call(configuredBase) === '[object URL]';
   if (!hasBase && scriptSrc) {
     window.RUM_BASE = scriptSrc;
   }
