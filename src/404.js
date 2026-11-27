@@ -18,7 +18,14 @@ try {
   const dataAttrs = (document.currentScript && document.currentScript.dataset) ? document.currentScript.dataset : {};
   const { enhancerVersion, enhancerHash, ...scriptParams } = dataAttrs;
   sampleRUM.enhancerContext = { enhancerVersion, enhancerHash };
-  window.RUM_BASE = window.RUM_BASE || scriptSrc;
+  // Keep a configured base (a non-empty string or a URL object). Replace anything else,
+  // such as an element from DOM clobbering (<a id="RUM_BASE">), with the script's origin.
+  const configuredBase = window.RUM_BASE;
+  const hasBase = (typeof configuredBase === 'string' && configuredBase !== '')
+    || Object.prototype.toString.call(configuredBase) === '[object URL]';
+  if (!hasBase && scriptSrc) {
+    window.RUM_BASE = scriptSrc;
+  }
   window.RUM_PARAMS = window.RUM_PARAMS || scriptParams;
   const { origin = '', pathname = '' } = document.referrer ? new URL(document.referrer) : {};
   sampleRUM('404', { source: origin + pathname });

@@ -99,7 +99,14 @@ export function sampleRUM(checkpoint, data) {
           }
         });
 
-        sampleRUM.baseURL = sampleRUM.baseURL || new URL(window.RUM_BASE || '/', new URL('https://rum.hlx.page'));
+        // A configured base is a string or a URL object (from any realm, e.g. an iframe).
+        // Anything else, in particular an element from DOM clobbering
+        // (<a id="RUM_BASE" href="...">), is ignored.
+        const configuredBase = window.RUM_BASE;
+        const rumBase = typeof configuredBase === 'string'
+          || Object.prototype.toString.call(configuredBase) === '[object URL]'
+          ? configuredBase : '/';
+        sampleRUM.baseURL = sampleRUM.baseURL || new URL(rumBase, new URL('https://rum.hlx.page'));
         sampleRUM.collectBaseURL = sampleRUM.collectBaseURL || sampleRUM.baseURL;
         sampleRUM.sendPing = (ck, time, pingData = {}) => {
           const uaExtra = navigator.webdriver && !navigator.userAgent.includes('+http')
