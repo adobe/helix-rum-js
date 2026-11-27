@@ -18,7 +18,9 @@ try {
   const dataAttrs = (document.currentScript && document.currentScript.dataset) ? document.currentScript.dataset : {};
   const { enhancerVersion, enhancerHash, ...scriptParams } = dataAttrs;
   sampleRUM.enhancerContext = { enhancerVersion, enhancerHash };
-  window.RUM_BASE = window.RUM_BASE || scriptSrc;
+  if (scriptSrc) {
+    sampleRUM.baseURL = new URL(scriptSrc);
+  }
   window.RUM_PARAMS = window.RUM_PARAMS || scriptParams;
   const { origin = '', pathname = '' } = document.referrer ? new URL(document.referrer) : {};
   sampleRUM('404', { source: origin + pathname });

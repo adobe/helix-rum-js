@@ -30,6 +30,7 @@ Object.defineProperty(document, 'currentScript', {
 });
 
 await import('../src/standalone.js');
+const { sampleRUM } = await import('../src/index.js');
 
 describe('standalone status checkpoints', () => {
   afterEach(() => {
@@ -45,7 +46,7 @@ describe('standalone status checkpoints', () => {
       '4xx',
       { source: '', target: '429' },
     ]);
-    assert.strictEqual(window.RUM_BASE.href, `${window.location.origin}/collect`);
+    assert.strictEqual(sampleRUM.baseURL.href, `${window.location.origin}/collect`);
     assert.deepEqual(window.RUM_PARAMS, { program: 'test-program' });
   });
 });
