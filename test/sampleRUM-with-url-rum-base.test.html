@@ -1,0 +1,53 @@
+<html>
+
+<head>
+  <script>
+    window.RUM_BASE = new URL(window.origin);
+    const usp = new URLSearchParams(window.location.search);
+    usp.append('rum', 'on');
+    window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
+    window.sendBeaconArgs = {};
+    // eslint-disable-next-line no-underscore-dangle
+    navigator._sendBeacon = navigator.sendBeacon;
+    navigator.sendBeacon = (url, data) => {
+      window.sendBeaconArgs.url = url;
+      // we only care about the `top` checkpoint which should be the first one.
+      window.sendBeaconArgs.blob = window.sendBeaconArgs.blob || data;
+      return true;
+    };
+  </script>
+  <script type="module">
+    import { sampleRUM } from '../src/index.js';
+    // early call to sampleRUM, i.e. before load event
+    sampleRUM();
+  </script>
+</head>
+
+<body>
+  <script type="module">
+    import { runTests } from '@web/test-runner-mocha';
+    import { assert } from '@esm-bundle/chai';
+    /* eslint-env mocha */
+    runTests(async () => {
+      describe('sampleRUM - window.RUM_BASE as a URL object', () => {
+        it('keeps the URL object', () => {
+          assert.instanceOf(window.RUM_BASE, URL);
+        });
+        it('rum selected load enhancer', () => {
+          // at this stage, rum-enhancer should not loaded because load event already
+          assert.ok(document.querySelector('script[src*="rum-enhancer"]'));
+          assert.ok(!document.querySelector('script[src*="rum-enhancer"]').src.match(/rum\.hlx\.page/));
+        });
+        it('rum selected blob beacon', async () => {
+          assert.strictEqual(window.sendBeaconArgs.url, `${window.location.origin}/.rum/1`);
+          assert.strictEqual(window.sendBeaconArgs.blob.constructor.name, 'Blob');
+          assert.strictEqual(window.sendBeaconArgs.blob.type, 'application/json');
+          window.sendBeaconArgs.data = JSON.parse(await window.sendBeaconArgs.blob.text());
+          assert.strictEqual(window.sendBeaconArgs.data.checkpoint, 'top');
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -21,7 +21,12 @@ try {
   } = dataAttrs;
   const base = scriptSrc && postPath ? new URL(postPath, scriptSrc) : scriptSrc;
   sampleRUM.enhancerContext = { enhancerVersion, enhancerHash };
-  if (typeof window.RUM_BASE !== 'string' && base) {
+  // Keep a configured base (a non-empty string or a URL object). Replace anything else,
+  // such as an element from DOM clobbering (<a id="RUM_BASE">), with the script's base.
+  const configuredBase = window.RUM_BASE;
+  const hasBase = (typeof configuredBase === 'string' && configuredBase !== '')
+    || configuredBase instanceof URL;
+  if (!hasBase && base) {
     window.RUM_BASE = new URL(base).href;
   }
   window.RUM_PARAMS = window.RUM_PARAMS || scriptParams;

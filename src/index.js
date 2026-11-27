@@ -99,7 +99,11 @@ export function sampleRUM(checkpoint, data) {
           }
         });
 
-        const rumBase = typeof window.RUM_BASE === 'string' ? window.RUM_BASE : '/';
+        // A configured base is a string or a URL object. Anything else, in particular an
+        // element from DOM clobbering (<a id="RUM_BASE" href="...">), is ignored.
+        const configuredBase = window.RUM_BASE;
+        const rumBase = typeof configuredBase === 'string' || configuredBase instanceof URL
+          ? configuredBase : '/';
         sampleRUM.baseURL = sampleRUM.baseURL || new URL(rumBase, new URL('https://rum.hlx.page'));
         sampleRUM.collectBaseURL = sampleRUM.collectBaseURL || sampleRUM.baseURL;
         sampleRUM.sendPing = (ck, time, pingData = {}) => {

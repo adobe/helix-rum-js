@@ -2,7 +2,6 @@
 
 <head>
   <script>
-    window.RUM_BASE = new URL(window.origin);
     const usp = new URLSearchParams(window.location.search);
     usp.append('rum', 'on');
     window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
@@ -24,12 +23,17 @@
 </head>
 
 <body>
+  <!-- DOM clobbering: this element becomes window.RUM_BASE (an HTMLAnchorElement). -->
+  <a id="RUM_BASE" href="https://clobbered.example/">not a RUM base</a>
   <script type="module">
     import { runTests } from '@web/test-runner-mocha';
     import { assert } from '@esm-bundle/chai';
     /* eslint-env mocha */
     runTests(async () => {
       describe('sampleRUM - non-string window.RUM_BASE', () => {
+        it('is set up as a clobbered element', () => {
+          assert.instanceOf(window.RUM_BASE, HTMLAnchorElement);
+        });
         it('loads enhancer from default base URL', () => {
           assert.ok(document.querySelector('script[src*="rum-enhancer"]'));
           assert.match(document.querySelector('script[src*="rum-enhancer"]').src, /^https:\/\/rum\.hlx\.page\//);
