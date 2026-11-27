@@ -1,0 +1,46 @@
+<html>
+
+<head>
+  <script>
+    window.RUM_BASE = new URL(window.origin);
+    const usp = new URLSearchParams(window.location.search);
+    usp.append('rum', 'on');
+    window.history.replaceState({}, '', `${window.location.pathname}?${usp.toString()}`);
+    window.sendBeaconArgs = {};
+    // eslint-disable-next-line no-underscore-dangle
+    navigator._sendBeacon = navigator.sendBeacon;
+    navigator.sendBeacon = (url, data) => {
+      window.sendBeaconArgs.url = url;
+      // we only care about the `top` checkpoint which should be the first one.
+      window.sendBeaconArgs.data = window.sendBeaconArgs.data || data;
+      return true;
+    };
+  </script>
+  <script type="module">
+    import { sampleRUM } from '../src/index.js';
+    // early call to sampleRUM, i.e. before load event
+    sampleRUM();
+  </script>
+</head>
+
+<body>
+  <script type="module">
+    import { runTests } from '@web/test-runner-mocha';
+    import { assert } from '@esm-bundle/chai';
+    /* eslint-env mocha */
+    runTests(async () => {
+      describe('sampleRUM - non-string window.RUM_BASE', () => {
+        it('loads enhancer from default base URL', () => {
+          assert.ok(document.querySelector('script[src*="rum-enhancer"]'));
+          assert.match(document.querySelector('script[src*="rum-enhancer"]').src, /^https:\/\/rum\.hlx\.page\//);
+        });
+        it('sends beacon to default base URL', () => {
+          assert.strictEqual(window.sendBeaconArgs.url, 'https://rum.hlx.page/.rum/1');
+          assert.strictEqual(JSON.parse(window.sendBeaconArgs.data).checkpoint, 'top');
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -21,7 +21,9 @@ try {
   } = dataAttrs;
   const base = scriptSrc && postPath ? new URL(postPath, scriptSrc) : scriptSrc;
   sampleRUM.enhancerContext = { enhancerVersion, enhancerHash };
-  window.RUM_BASE = window.RUM_BASE || base;
+  if (typeof window.RUM_BASE !== 'string' && base) {
+    window.RUM_BASE = new URL(base).href;
+  }
   window.RUM_PARAMS = window.RUM_PARAMS || scriptParams;
 
   const [navigation] = (window.performance && window.performance.getEntriesByType('navigation')) || [];

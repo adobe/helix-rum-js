@@ -99,7 +99,8 @@ export function sampleRUM(checkpoint, data) {
           }
         });
 
-        sampleRUM.baseURL = sampleRUM.baseURL || new URL(window.RUM_BASE || '/', new URL('https://rum.hlx.page'));
+        const rumBase = typeof window.RUM_BASE === 'string' ? window.RUM_BASE : '/';
+        sampleRUM.baseURL = sampleRUM.baseURL || new URL(rumBase, new URL('https://rum.hlx.page'));
         sampleRUM.collectBaseURL = sampleRUM.collectBaseURL || sampleRUM.baseURL;
         sampleRUM.sendPing = (ck, time, pingData = {}) => {
           const uaExtra = navigator.webdriver && !navigator.userAgent.includes('+http')
