@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "package": "@adobe/helix-rum-js",
+  "version": "2.18.1",
+  "source": {
+    "commit": "bf82c9cfcc200d12c5e34dad609b9bcc39408679"
+  },
+  "files": {
+    "dist/micro.js": {
+      "integrity": "sha384-MhwLlnWELpAF1Rh8goPCLSXmHL3Cspufxnd+dI40Mfj/msnkz4tMZRwgrkrDN1lF",
+      "size": 843
+    },
+    "dist/rum-standalone-404.js": {
+      "integrity": "sha384-BIKLXEQzs34vs/rkITHhlw//xUwiZJd4IGStw7ifo00AjAtAzhjHEMTd9DL4qbn3",
+      "size": 8888
+    },
+    "dist/rum-standalone.js": {
+      "integrity": "sha384-VL1EQeCIoGy64h5JTu1w3YuZHe6QuQZWcpXaXuYO5VfmhJV8/9WdgGLF/56VceUV",
+      "size": 9669
+    }
+  }
+}
